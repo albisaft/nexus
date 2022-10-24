@@ -77,6 +77,7 @@ double K_Angriff_Springer = 0.25;
 //int Koenigsangriff_Er = 0;  //25 Koenigsangriff_Ich
 
 
+
 enum state { user, uci, gone, position };
 state status = uci;
 
@@ -2048,7 +2049,9 @@ double K_Safety_Wert = 0;//*/
             if ((n_Turm > 10) && (n_Turm < 14)) n_Turm += 1;
           }
         }
-      } n_Turm *= farbvorzeichen; Attack_Turm *= farbvorzeichen;
+      }
+      if (farbvorzeichen == _eigene_farbe) n_Turm = n_Turm/1.2;
+      n_Turm *= farbvorzeichen; Attack_Turm *= farbvorzeichen;
       n        += MobTurm * n_Turm + AttTurm * Attack_Turm;
     }
 
@@ -2163,7 +2166,9 @@ double K_Safety_Wert = 0;//*/
             if (n_Laeufer > 21) n_Laeufer += 1;
           }
         }
-      } n_Laeufer *= farbvorzeichen; Attack_Laeufer *= farbvorzeichen;
+      }
+      if (farbvorzeichen == _eigene_farbe) n_Laeufer = n_Laeufer/1.2;
+      n_Laeufer *= farbvorzeichen; Attack_Laeufer *= farbvorzeichen;
 
       n += MobLau * n_Laeufer + AttLau * Attack_Laeufer;
     }
@@ -2438,28 +2443,16 @@ int sort(denkpaar _zugstapel[200], int _n, int _stufe, int _i)  { // Sortiert Zu
   for (int j = 0; j < (sortiertiefe - 1); j++)  {                   // Sortiertiefe == wieviele Züge sollen sortiert werden?
     denkpaar temp;
 
-    if (best_one[_stufe].z.id == 0)                                 // Gibt es
-                                                                    // keinen
-                                                                    // PV-Zug?
+    if (best_one[_stufe].z.id == 0)
       break;
 
     if (sort_schema_bewertung[_stufe][j].z.id == 0)  {              // wenn es noch keinen vorsortieren Zug gibt:
       sort_schema_bewertung[_stufe][j]          = best_one[_stufe]; // nimm den PV-Zug
-      sort_schema_bewertung[_stufe][j + 1].z.id = 0;                // setze den
-                                                                    // nächstsortierten
-                                                                    // Zug auf 0
+      sort_schema_bewertung[_stufe][j + 1].z.id = 0;                // setze den nächstsortierten Zug auf 0
       break;
     }
 
-    if (best_one[_stufe].z.id == sort_schema_bewertung[_stufe][j].z.id)  { // wenn
-                                                                           // der
-                                                                           // PV-Zug
-                                                                           // mit
-                                                                           // dem
-                                                                           // vorsortierten
-                                                                           // Zug
-                                                                           // identisch
-                                                                           // ist
+    if (best_one[_stufe].z.id == sort_schema_bewertung[_stufe][j].z.id)  { // wenn der PV-Zug mit dem vorsortierten Zug identisch ist
       sort_schema_bewertung[_stufe][j].bewertung *= 9;
       break;
     }
