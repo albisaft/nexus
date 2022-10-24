@@ -233,7 +233,7 @@ beginning:
             // wichtige Initkommandos - wo man antworten muss
 
             if (command == "uci") {
-                cout << "id name NEXUS 221014 NeuNull\n";  // 750250 6000
+                cout << "id name NEXUS 221014 LMR-2\n";  // 750250 6000
                 cout << "id author Albrecht Fiebiger & Stefan Werner\n";
                 cout << "uciok\n"; }
 
@@ -396,16 +396,12 @@ beginning:
                     if (zug_nummer <= 120) Zeitfaktor = 60-zug_nummer/4;
                     else Zeitfaktor = 30;
 
-                    /*if (zug_nummer <= 52) Zeitfaktor = 51-zug_nummer/2;
-                    else Zeitfaktor = 25;*/
 
-
-                    if ((clock() - t1)*1.5 >= Restzeit/Zeitfaktor) {
+                    if ((clock() - t1)*1.5 >= Restzeit/Zeitfaktor || wert == MAX_WERT) {
                         stopp_tatsaechlich = _stopp;
                         break; }
 
-                    //       stopp += 1;  //*/
-                    //      }
+
                 }
 
 
@@ -414,10 +410,7 @@ beginning:
                                     (t2 - t1) / zug_nummer);
                 int spez;
                 denkpaar *zugstapel = new denkpaar[200];
-                /*	for (int j=21;j<99;j++) {
 
-                 deckzone_gegner[j] -= 0.5;
-                 deckzone_ich[j] -= 0.5;}*/
 
                 exit = true;
                 switch (spiel.check_end(zuege)) {

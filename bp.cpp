@@ -47,8 +47,6 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
 
         aktueller_zug[stufe] = zugstapel[spiel.getStufe()][i];
 
-        /* LMR*/
-
 
         if (((stufe +1>= _stopp)||(stufe+1 >= ende))) {
 
@@ -63,16 +61,8 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
 
             }
 
-            //  int zufallsfaktor = 3;
-            // if (wertung*farbe > 0) {zufallsfaktor = abs(wertung)*0.1 + 3;}
-            // wertung += rand() % zufallsfaktor - (zufallsfaktor-1)/2;
-            //if (((wertung*farbe > alpha  &&  wertung*-1*farbe <= beta+150-figurenwert/48) && aktueller_zug[stufe].kill && stufe < _stopp+5)) {
-
-            //   bool forcing_line = false;
-            //  if (zeit[stufe-1]-zeit[stufe-2] < 2) {forcing_line = true;}
 
             if ((((wertung*farbe > alpha-150  &&  wertung*-1*farbe <= beta+350-figurenwert/48) && aktueller_zug[stufe].kill) /*|| (aktueller_zug[stufe-2].kill && aktueller_zug[stufe-3].kill)*/ /* || forcing_line == true)*/ && stufe < _stopp)) {
-                //  if (((wertung*farbe > alpha+250  &&  wertung*-1*farbe <= beta+250-figurenwert/40) && stufe < _stopp)) {
 
                 wertung = - bp(*testspiel[stufe], farbe*-1, -beta, -alpha, stufe + 1, _stopp, 1);
 
@@ -85,18 +75,7 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
 
 
         else {
-            /*if (i > 8 && (_stopp-stufe > 3) &! aktueller_zug[stufe].kill)
-        {//cout << "stufe:" << stufe << " alpha" << alpha <<" _stopp" << _stopp << "Nullflag" << NullFlag << "\n";
 
-            wertung = - bp(*testspiel[stufe], farbe*-1, -alpha-1, -alpha, stufe + 1, _stopp- 1, 1);
-
-        }
-        else wertung = alpha + 1;
-
-
-        if(wertung > alpha){*/
-            // cout << "1 \n";
-//cout << _stopp << "\n";
 
 
             if ((NullFlag==1) && (_stopp-stufe)>2) {
@@ -118,9 +97,8 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
             if (NullFlag==1) {
                 if ((_stopp-stufe)>2) {
                     if (i > 8 && (_stopp-stufe > 3) &! aktueller_zug[stufe].kill) {
-                        //cout << "stufe:" << stufe << " alpha" << alpha <<" _stopp" << _stopp << "Nullflag" << NullFlag << "\n";
 
-                        wertung = - bp(*testspiel[stufe], farbe*-1, -alpha-1, -alpha, stufe + 1, _stopp- 1, 4);
+                        wertung = - bp(*testspiel[stufe], farbe*-1, -alpha-1, -alpha, stufe + 1, _stopp-2, 4);
 
                     }
                     else
@@ -132,9 +110,8 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
                         wertung = - bp(*testspiel[stufe], -farbe, -beta, -alpha, stufe + 1, _stopp, 4); } }
                 else {
                     if (i > 8 && (_stopp-stufe > 3) &! aktueller_zug[stufe].kill) {
-                        //cout << "stufe:" << stufe << " alpha" << alpha <<" _stopp" << _stopp << "Nullflag" << NullFlag << "\n";
 
-                        wertung = - bp(*testspiel[stufe], farbe*-1, -alpha-1, -alpha, stufe + 1, _stopp- 1, 1);
+                        wertung = - bp(*testspiel[stufe], farbe*-1, -alpha-1, -alpha, stufe + 1, _stopp-2, 1);
 
                     }
                     else
@@ -145,9 +122,8 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
                         wertung = - bp(*testspiel[stufe], farbe*-1, -beta, -alpha, stufe + 1, _stopp, 1); } } }
             else  {
                 if (i > 8 && (_stopp-stufe > 3) &! aktueller_zug[stufe].kill) {
-                    //cout << "stufe:" << stufe << " alpha" << alpha <<" _stopp" << _stopp << "Nullflag" << NullFlag << "\n";
 
-                    wertung = - bp(*testspiel[stufe], farbe*-1, -alpha-1, -alpha, stufe + 1, _stopp- 1, 2);
+                    wertung = - bp(*testspiel[stufe], farbe*-1, -alpha-1, -alpha, stufe + 1, _stopp-2, 2);
 
                 }
                 else

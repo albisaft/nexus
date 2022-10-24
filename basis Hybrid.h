@@ -2439,28 +2439,16 @@ int sort(denkpaar _zugstapel[200], int _n, int _stufe, int _i)  { // Sortiert Zu
   for (int j = 0; j < (sortiertiefe - 1); j++)  {                   // Sortiertiefe == wieviele Züge sollen sortiert werden?
     denkpaar temp;
 
-    if (best_one[_stufe].z.id == 0)                                 // Gibt es
-                                                                    // keinen
-                                                                    // PV-Zug?
+    if (best_one[_stufe].z.id == 0)
       break;
 
     if (sort_schema_bewertung[_stufe][j].z.id == 0)  {              // wenn es noch keinen vorsortieren Zug gibt:
       sort_schema_bewertung[_stufe][j]          = best_one[_stufe]; // nimm den PV-Zug
-      sort_schema_bewertung[_stufe][j + 1].z.id = 0;                // setze den
-                                                                    // nächstsortierten
-                                                                    // Zug auf 0
+      sort_schema_bewertung[_stufe][j + 1].z.id = 0;                // setze den nächstsortierten Zug auf 0
       break;
     }
 
-    if (best_one[_stufe].z.id == sort_schema_bewertung[_stufe][j].z.id)  { // wenn
-                                                                           // der
-                                                                           // PV-Zug
-                                                                           // mit
-                                                                           // dem
-                                                                           // vorsortierten
-                                                                           // Zug
-                                                                           // identisch
-                                                                           // ist
+    if (best_one[_stufe].z.id == sort_schema_bewertung[_stufe][j].z.id)  { // wenn der PV-Zug mit dem vorsortierten Zug identisch ist
       sort_schema_bewertung[_stufe][j].bewertung *= 9;
       break;
     }
