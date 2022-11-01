@@ -233,7 +233,7 @@ beginning:
             // wichtige Initkommandos - wo man antworten muss
 
             if (command == "uci") {
-                cout << "id name NEXUS 221024 Kontrolle 5\n";  // 750250 6000
+                cout << "id name NEXUS 221101 CLOCK Stefan\n";  // 750250 6000
                 cout << "id author Albrecht Fiebiger & Stefan Werner\n";
                 cout << "uciok\n"; }
 
@@ -389,8 +389,8 @@ beginning:
                     //    if (clock() - t1 > 4500)
                     //     break;
                     int Zeitfaktor = 1;
-                    if (zug_nummer <= 120) Zeitfaktor = 60-zug_nummer/4;
-                    else Zeitfaktor = 30;
+                    if (zug_nummer <= 72) Zeitfaktor = 116-zug_nummer;
+                    else Zeitfaktor = 44;
 
 
                     if ((clock() - t1)*1.5 >= Restzeit/Zeitfaktor || wert == MAX_WERT) {
