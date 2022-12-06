@@ -67,7 +67,7 @@ double AttLau    = 0.7; //???
 double AttSpr    = 0.55;   //???
 double AttBau    = 3.5;
 double AttKoe    = 2; //???
-double KSafety = 800; // ??
+double KSafety = 267; // ??
 int Kontrolle = 10;
 double K_Angriff_Turm = 0.5;
 double K_Angriff_Laeufer = 0.25;
@@ -1798,11 +1798,16 @@ inline double entwicklung(int feld[120], int farbe)    {
 
      if (feld[i] == RAND || (abs(feld[i]) > 6 && abs(feld[i])<10)) continue;
 
+<<<<<<< Updated upstream
     if (feld[i] == __STARTFELD[i]) {
 
             wertung += 2 * __STARTPUNKTE[i]; }       // -kingzone_ich[i]*10;	//4.1
     if (feld[i] == __STARTFELDx[i]) {
             wertung += 2 * __STARTPUNKTE[i]; }                                  // -kingzone_gegner[i]*10;//-kingzone_ich[i]*10;	//4.1
+=======
+    if (feld[i] == __STARTFELD[i]) { wertung += 2 * __STARTPUNKTE[i]; }       // -kingzone_ich[i]*10;	//4.1
+    if (feld[i] == __STARTFELDx[i]) {wertung -= 2 * __STARTPUNKTE[i]; }                                  // -kingzone_gegner[i]*10;//-kingzone_ich[i]*10;	//4.1
+>>>>>>> Stashed changes
     //	else wertung -= 1 * __STARTPUNKTEx[i];}//-kingzone_gegner[i]*10;*/
     if (feld[i] == __STARTFELDx2[i]) wertung += 1.7 * __STARTPUNKTEx2[i];  // +kingzone_ich[i]*10;	//1.17
     if (feld[i] == __STARTFELDx3[i]) wertung -=  1.7 * __STARTPUNKTEx3[i];  // -kingzone_gegner[i]*10;
@@ -1862,15 +1867,55 @@ for(int j=21; j<99; j++) {kingzone[j] = 0;}
         {
           //  cout << "Koenig: " << i << "\n";
 
-       kingzone[i-9] = figur/abs(figur);
-       kingzone[i-10] = figur/abs(figur);
-       kingzone[i-11] = figur/abs(figur);
-       kingzone[i-1] = figur/abs(figur);
-       kingzone[i] = figur/abs(figur);
-       kingzone[i+1] = figur/abs(figur);
-        kingzone[i+9] =figur/abs(figur);
-       kingzone[i+10] = figur/abs(figur);
-       kingzone[i+11] = figur/abs(figur);
+       kingzone[i-9] = figur/abs(figur)*3;
+       kingzone[i-10] = figur/abs(figur)*3;
+       kingzone[i-11] = figur/abs(figur)*3;
+       kingzone[i-1] = figur/abs(figur)*3;
+       kingzone[i] = figur/abs(figur)*4;
+       kingzone[i+1] = figur/abs(figur)*3;
+        kingzone[i+9] =figur/abs(figur)*3;
+       kingzone[i+10] = figur/abs(figur)*3;
+       kingzone[i+11] = figur/abs(figur)*3;
+       kingzone[i-8] = figur/abs(figur)*2;
+       kingzone[i-12] = figur/abs(figur)*2;
+       kingzone[i-2] = figur/abs(figur)*2;
+       kingzone[i+2] = figur/abs(figur)*2;
+       kingzone[i+8] = figur/abs(figur)*2;
+       kingzone[i+12] = figur/abs(figur)*2;
+        kingzone[i-19] =figur/abs(figur)*2;
+       kingzone[i-20] = figur/abs(figur)*2;
+       kingzone[i-21] = figur/abs(figur)*2;
+       kingzone[i-18] =figur/abs(figur)*2;
+       kingzone[i-22] = figur/abs(figur)*2;
+       kingzone[i+18] = figur/abs(figur)*2;
+       kingzone[i+19] =figur/abs(figur)*2;
+       kingzone[i+20] = figur/abs(figur)*2;
+       kingzone[i+21] = figur/abs(figur)*2;
+       kingzone[i+22] = figur/abs(figur)*2;
+       kingzone[i-3] = figur/abs(figur);
+       kingzone[i+3] = figur/abs(figur);
+       kingzone[i-13] = figur/abs(figur);
+       kingzone[i+13] = figur/abs(figur);
+       kingzone[i-23] = figur/abs(figur);
+       kingzone[i+23] = figur/abs(figur);
+        kingzone[i-7] =figur/abs(figur);
+       kingzone[i+7] = figur/abs(figur);
+       kingzone[i-17] = figur/abs(figur);
+       kingzone[i+17] =figur/abs(figur);
+       kingzone[i-27] = figur/abs(figur);
+       kingzone[i+27] = figur/abs(figur);
+       kingzone[i-28] =figur/abs(figur);
+       kingzone[i+28] = figur/abs(figur);
+       kingzone[i-29] = figur/abs(figur);
+       kingzone[i+29] = figur/abs(figur);
+       kingzone[i-30] = figur/abs(figur);
+       kingzone[i+30] = figur/abs(figur);
+       kingzone[i-31] = figur/abs(figur);
+       kingzone[i+31] = figur/abs(figur);
+       kingzone[i-32] = figur/abs(figur);
+       kingzone[i+32] = figur/abs(figur);
+        kingzone[i-33] =figur/abs(figur);
+       kingzone[i+33] = figur/abs(figur);
      }
 
       /* kingzone[i-19] = 1;
@@ -1935,7 +1980,7 @@ double K_Safety_Wert = 0;//*/
               break;
 
           if (farbvorzeichen == _eigene_farbe) zugzone_ich[pos2] += 10; else zugzone_du[pos2] += 10;
-            if (kingzone[pos2] == -farbvorzeichen) {if (farbvorzeichen == _eigene_farbe) {if (farbvorzeichen == 1) {Angreifer_Wert_w += KSafety; if (C_flag == 0) Anzahl_Angreifer_w += 1;} else {Angreifer_Wert_s += KSafety; if (C_flag == 0) Anzahl_Angreifer_s += 1;}; C_flag = 1;} else {if (farbvorzeichen == 1) {Angreifer_Wert_w += KSafety*0.5; if (C_flag == 0) Anzahl_Angreifer_w += 1;} else {Angreifer_Wert_s += KSafety*0.5; if (C_flag == 0) Anzahl_Angreifer_s += 1;}; C_flag = 1;}}
+            if (kingzone[pos2]/abs(kingzone[pos2]) == -farbvorzeichen) {if (farbvorzeichen == _eigene_farbe) {if (farbvorzeichen == 1) {Angreifer_Wert_w += KSafety*abs(kingzone[pos2]); if (C_flag == 0) Anzahl_Angreifer_w += 1;} else {Angreifer_Wert_s += KSafety*abs(kingzone[pos2]); if (C_flag == 0) Anzahl_Angreifer_s += 1;}; C_flag = 1;} else {if (farbvorzeichen == 1) {Angreifer_Wert_w += KSafety*0.5*abs(kingzone[pos2]); if (C_flag == 0) Anzahl_Angreifer_w += 1;} else {Angreifer_Wert_s += KSafety*0.5*abs(kingzone[pos2]); if (C_flag == 0) Anzahl_Angreifer_s += 1;}; C_flag = 1;}}
 
 //if (Angreifer_Wert_s == 11000) cout << "Dame: " << i << "\n";
        //     if (kingzone[i] == 1) Attack_Dame += KSafety;
@@ -2003,7 +2048,7 @@ double K_Safety_Wert = 0;//*/
              int zielfeldk = feld[pos2];
              if (zielfeld == zielfeldk) n -= 400*farbvorzeichen;return n;}}*/
            if (farbvorzeichen == _eigene_farbe) zugzone_ich[pos2] += 100; else zugzone_du[pos2] += 100;
-           if (kingzone[pos2] == -farbvorzeichen) {if (farbvorzeichen == _eigene_farbe) {if (farbvorzeichen == 1) {Angreifer_Wert_w += KSafety*K_Angriff_Turm; if (C_flag == 0) Anzahl_Angreifer_w += 1;} else {Angreifer_Wert_s += KSafety*K_Angriff_Turm; if (C_flag == 0) Anzahl_Angreifer_s += 1;}; C_flag = 1;} else {if (farbvorzeichen == 1) {Angreifer_Wert_w += KSafety*K_Angriff_Turm*0.5; if (C_flag == 0) Anzahl_Angreifer_w += 1;} else {Angreifer_Wert_s += KSafety*K_Angriff_Turm*0.5; if (C_flag == 0) Anzahl_Angreifer_s += 1;}; C_flag = 1;}}
+          if (kingzone[pos2]/abs(kingzone[pos2]) == -farbvorzeichen) {if (farbvorzeichen == _eigene_farbe) {if (farbvorzeichen == 1) {Angreifer_Wert_w += KSafety*abs(kingzone[pos2]); if (C_flag == 0) Anzahl_Angreifer_w += 1;} else {Angreifer_Wert_s += KSafety*abs(kingzone[pos2]); if (C_flag == 0) Anzahl_Angreifer_s += 1;}; C_flag = 1;} else {if (farbvorzeichen == 1) {Angreifer_Wert_w += KSafety*0.5*abs(kingzone[pos2]); if (C_flag == 0) Anzahl_Angreifer_w += 1;} else {Angreifer_Wert_s += KSafety*0.5*abs(kingzone[pos2]); if (C_flag == 0) Anzahl_Angreifer_s += 1;}; C_flag = 1;}}
 
 
         //     if (kingzone[i] == 1) Attack_Turm += KSafety;
@@ -2095,7 +2140,7 @@ double K_Safety_Wert = 0;//*/
              int zielfeldk = feld[pos2];
              if (zielfeld == zielfeldk) n -= 400*farbvorzeichen;return n;}}*/
          if (farbvorzeichen == _eigene_farbe) zugzone_ich[pos2] += 1000; else zugzone_du[pos2] += 1000;
-            if (kingzone[pos2] == -farbvorzeichen) {if (farbvorzeichen == _eigene_farbe) {if (farbvorzeichen == 1) {Angreifer_Wert_w += KSafety*K_Angriff_Laeufer; if (C_flag == 0) Anzahl_Angreifer_w += 1;} else {Angreifer_Wert_s += KSafety*K_Angriff_Laeufer; if (C_flag == 0) Anzahl_Angreifer_s += 1;}; C_flag = 1;} else {if (farbvorzeichen == 1) {Angreifer_Wert_w += KSafety*K_Angriff_Laeufer*0.5; if (C_flag == 0) Anzahl_Angreifer_w += 1;} else {Angreifer_Wert_s += KSafety*K_Angriff_Laeufer*0.5; if (C_flag == 0) Anzahl_Angreifer_s += 1;}; C_flag = 1;}}
+            if (kingzone[pos2]/abs(kingzone[pos2]) == -farbvorzeichen) {if (farbvorzeichen == _eigene_farbe) {if (farbvorzeichen == 1) {Angreifer_Wert_w += KSafety*abs(kingzone[pos2]); if (C_flag == 0) Anzahl_Angreifer_w += 1;} else {Angreifer_Wert_s += KSafety*abs(kingzone[pos2]); if (C_flag == 0) Anzahl_Angreifer_s += 1;}; C_flag = 1;} else {if (farbvorzeichen == 1) {Angreifer_Wert_w += KSafety*0.5*abs(kingzone[pos2]); if (C_flag == 0) Anzahl_Angreifer_w += 1;} else {Angreifer_Wert_s += KSafety*0.5*abs(kingzone[pos2]); if (C_flag == 0) Anzahl_Angreifer_s += 1;}; C_flag = 1;}}
 
 
 
@@ -2210,7 +2255,7 @@ double K_Safety_Wert = 0;//*/
              int zielfeldk = feld[pos2];
              if (zielfeld == zielfeldk) n -= 400*farbvorzeichen;return n;}}*/
       if (farbvorzeichen == _eigene_farbe) zugzone_ich[pos2] += 1000; else zugzone_du[pos2] += 1000;
-       if (kingzone[pos2] == -farbvorzeichen) {if (farbvorzeichen == _eigene_farbe) {if (farbvorzeichen == 1) {Angreifer_Wert_w += KSafety*K_Angriff_Springer; if (C_flag == 0) Anzahl_Angreifer_w += 1;} else {Angreifer_Wert_s += KSafety*K_Angriff_Springer; if (C_flag == 0) Anzahl_Angreifer_s += 1;}; C_flag = 1;} else {if (farbvorzeichen == 1) {Angreifer_Wert_w += KSafety*K_Angriff_Springer*0.5; if (C_flag == 0) Anzahl_Angreifer_w += 1;} else {Angreifer_Wert_s += KSafety*K_Angriff_Springer*0.5; if (C_flag == 0) Anzahl_Angreifer_s += 1;}; C_flag = 1;}}
+       if (kingzone[pos2]/abs(kingzone[pos2]) == -farbvorzeichen) {if (farbvorzeichen == _eigene_farbe) {if (farbvorzeichen == 1) {Angreifer_Wert_w += KSafety*abs(kingzone[pos2]); if (C_flag == 0) Anzahl_Angreifer_w += 1;} else {Angreifer_Wert_s += KSafety*abs(kingzone[pos2]); if (C_flag == 0) Anzahl_Angreifer_s += 1;}; C_flag = 1;} else {if (farbvorzeichen == 1) {Angreifer_Wert_w += KSafety*0.5*abs(kingzone[pos2]); if (C_flag == 0) Anzahl_Angreifer_w += 1;} else {Angreifer_Wert_s += KSafety*0.5*abs(kingzone[pos2]); if (C_flag == 0) Anzahl_Angreifer_s += 1;}; C_flag = 1;}}
 
 
 
