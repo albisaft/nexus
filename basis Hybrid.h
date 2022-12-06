@@ -633,7 +633,7 @@ denkpaar zugstapel[ende + 2][200];
 denkpaar best_one[ende + 2];
 int sort_schema[ende][200];
 denkpaar sort_schema_bewertung[ende][200];
-int bewertet;               // MaÔ¨Ç f¬∏r die Partieeinheit
+int bewertet;               // Maß für die Partieeinheit
 int timeline;               // Entscheidung Endspiel oder ErÀÜffnung, Einfluss
                             // auf Bewertung und Suchtiefe
 spiel_status partie_status; // Ereoffnung, Mittelspiel....
@@ -2421,8 +2421,8 @@ double K_Safety_Wert = 0;//*/
     int Kontrolle_du = 0;
 
     for (int i=21; i < 99; i++) {
-     if (zugzone_ich[i] > zugzone_du[i]) {Kontrolle_ich += 1; if ((zugzone_ich[i+1] > zugzone_du[i+1]) || (zugzone_ich[i-1] > zugzone_du[i-1] ) || (zugzone_ich[i+10] > zugzone_du[i+10] ) || (zugzone_ich[i-10] > zugzone_du[i-10] )) Koordination_ich += 1; if ((zugzone_ich[i+1] == zugzone_du[i+1]) || (zugzone_ich[i-1] == zugzone_du[i-1] ) || (zugzone_ich[i+10] == zugzone_du[i+10] ) || (zugzone_ich[i-10] == zugzone_du[i-10] )) Koordination_ich += 0.5; }
-        if (zugzone_du[i] > zugzone_ich[i]) {Kontrolle_du += 1; if ((zugzone_du[i+1] > zugzone_ich[i+1]) || (zugzone_du[i-1] > zugzone_ich[i-1] ) || (zugzone_du[i+10] >  zugzone_ich[i+10] ) || (zugzone_du[i-10] > zugzone_ich[i-10] )) Koordination_du += 1; if ((zugzone_du[i+1] == zugzone_ich[i+1]) || (zugzone_du[i-1] == zugzone_ich[i-1] ) || (zugzone_du[i+10] == zugzone_ich[i+10] ) || (zugzone_du[i-10] == zugzone_ich[i-10] )) Koordination_du += 0.5; }
+     if (zugzone_ich[i] > zugzone_du[i]) {Kontrolle_ich += 1; if ((zugzone_ich[i+1] > zugzone_du[i+1]) || (zugzone_ich[i-1] > zugzone_du[i-1] ) || (zugzone_ich[i+10] > zugzone_du[i+10] ) || (zugzone_ich[i-10] > zugzone_du[i-10] )) Koordination_ich += 1; if ((zugzone_ich[i+1] == zugzone_du[i+1]) || (zugzone_ich[i-1] == zugzone_du[i-1] ) || (zugzone_ich[i+10] == zugzone_du[i+10] ) || (zugzone_ich[i-10] == zugzone_du[i-10] )) Koordination_ich += 0.5; if (kingzone[i] == -eigene_farbe) Koordination_ich += 1;}
+        if (zugzone_du[i] > zugzone_ich[i]) {Kontrolle_du += 1; if ((zugzone_du[i+1] > zugzone_ich[i+1]) || (zugzone_du[i-1] > zugzone_ich[i-1] ) || (zugzone_du[i+10] >  zugzone_ich[i+10] ) || (zugzone_du[i-10] > zugzone_ich[i-10] )) Koordination_du += 1; if ((zugzone_du[i+1] == zugzone_ich[i+1]) || (zugzone_du[i-1] == zugzone_ich[i-1] ) || (zugzone_du[i+10] == zugzone_ich[i+10] ) || (zugzone_du[i-10] == zugzone_ich[i-10] )) Koordination_du += 0.5; if (kingzone[i] == eigene_farbe) Koordination_du += 1;}
 
     }
 
