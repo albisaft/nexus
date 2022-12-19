@@ -51,8 +51,8 @@ int sortiertiefe = 15; // Sortiertiefe - wieviele Z¬∏ge werden sortiert
 //int figurenwert_schwarz = 0;
 int figurenwert = 0;
 
-int KooIch       = 365;  //???
-int KooEr        = 50;  //???
+int    KooIch    = 365;  //???
+int    KooEr     = 50;  //???
 double AttackIch = 5;
 double AttackEr  = 3;
 int    DefIch1   = 80;
@@ -67,11 +67,12 @@ double AttLau    = 0.7; //???
 double AttSpr    = 0.55;   //???
 double AttBau    = 3.5;
 double AttKoe    = 2; //???
-double KSafety = 800; // ??
-int Kontrolle = 10;
+double KSafety   = 800; // ??
+int    Kontrolle = 10;
 double K_Angriff_Turm = 0.5;
 double K_Angriff_Laeufer = 0.25;
 double K_Angriff_Springer = 0.25;
+int    Figurensicherheit = 65;
 
 
 //double K_Angriff_Bauer = 0.05;//*/
@@ -633,7 +634,7 @@ denkpaar zugstapel[ende + 2][200];
 denkpaar best_one[ende + 2];
 int sort_schema[ende][200];
 denkpaar sort_schema_bewertung[ende][200];
-int bewertet;               // MaÔ¨Ç f¬∏r die Partieeinheit
+int bewertet;               // Maß für die Partieeinheit
 int timeline;               // Entscheidung Endspiel oder ErÀÜffnung, Einfluss
                             // auf Bewertung und Suchtiefe
 spiel_status partie_status; // Ereoffnung, Mittelspiel....
@@ -1800,7 +1801,6 @@ inline double entwicklung(int feld[120], int farbe)    {
 
     if (feld[i] == __STARTFELD[i])  wertung += 2 * __STARTPUNKTE[i];        // -kingzone_ich[i]*10;	//4.1
     if (feld[i] == __STARTFELDx[i]) wertung -= 2 * __STARTPUNKTEx[i];                                   // -kingzone_gegner[i]*10;//-kingzone_ich[i]*10;	//4.1
-
     //	else wertung -= 1 * __STARTPUNKTEx[i];}//-kingzone_gegner[i]*10;*/
     if (feld[i] == __STARTFELDx2[i]) wertung += 1.7 * __STARTPUNKTEx2[i];  // +kingzone_ich[i]*10;	//1.17
     if (feld[i] == __STARTFELDx3[i]) wertung -=  1.7 * __STARTPUNKTEx3[i];  // -kingzone_gegner[i]*10;
@@ -1917,6 +1917,7 @@ double K_Safety_Wert = 0;//*/
 
     if ((figur == W_D)) {
       int Attack_Dame = 0;
+      int FS_Dame = 0;
 
       for (int richtung = 0; richtung <= bewegung[figur][0]; richtung++)  {
         for (int weite = 0; weite <= bewegung[figur][1]; weite++)  {
@@ -1979,14 +1980,18 @@ double K_Safety_Wert = 0;//*/
 
         }
       }
-      Attack_Dame *= farbvorzeichen;
+      //Wie sicher steht meine Dame?
+      if (((feld[i+21*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+21*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER))||((feld[i+19*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+19*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+9*farbvorzeichen]==LEER))) FS_Dame -= Figurensicherheit;
+
+      Attack_Dame *= farbvorzeichen; FS_Dame *= farbvorzeichen;
     //  cout << MobDame * n_Dame + AttDame * Attack_Dame << "\n";
-      n           += AttDame * Attack_Dame;
+      n           += AttDame * Attack_Dame + FS_Dame;
     }
 
     if ((figur == W_T) || (figur == W_Tr)) {
       int n_Turm      = -10;
       int Attack_Turm = 0;
+      int FS_Turm = 0;
 
       for (int richtung = 0; richtung <= bewegung[figur][0]; richtung++)  {
         for (int weite = 0; weite <= bewegung[figur][1]; weite++)  {
@@ -2072,13 +2077,19 @@ double K_Safety_Wert = 0;//*/
             if ((n_Turm > 10) && (n_Turm < 14)) n_Turm += 1;
           }
         }
-      } n_Turm *= farbvorzeichen; Attack_Turm *= farbvorzeichen;
-      n        += MobTurm * n_Turm + AttTurm * Attack_Turm;
+      }
+       //Wie sicher steht mein Turm?
+      if (((feld[i+21*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+21*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER))||((feld[i+19*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+19*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+9*farbvorzeichen]==LEER))) FS_Turm -= Figurensicherheit;
+
+
+      n_Turm *= farbvorzeichen; Attack_Turm *= farbvorzeichen; FS_Turm *= farbvorzeichen;
+      n        += MobTurm * n_Turm + AttTurm * Attack_Turm + FS_Turm;
     }
 
     if ((figur == W_L)) {
       int n_Laeufer      = -15;
       int Attack_Laeufer = 0;
+      int FS_Laeufer = 0;
 
       for (int richtung = 0; richtung <= bewegung[figur][0]; richtung++)  {
         for (int weite = 0; weite <= bewegung[figur][1]; weite++)  {
@@ -2187,13 +2198,17 @@ double K_Safety_Wert = 0;//*/
             if (n_Laeufer > 21) n_Laeufer += 1;
           }
         }
-      } n_Laeufer *= farbvorzeichen; Attack_Laeufer *= farbvorzeichen;
+      }
+      if (((feld[i+21*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+21*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER))||((feld[i+19*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+19*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+9*farbvorzeichen]==LEER))) FS_Laeufer -= Figurensicherheit;
 
-      n += MobLau * n_Laeufer + AttLau * Attack_Laeufer;
+      n_Laeufer *= farbvorzeichen; Attack_Laeufer *= farbvorzeichen; FS_Laeufer *= farbvorzeichen;
+
+      n += MobLau * n_Laeufer + AttLau * Attack_Laeufer + FS_Laeufer;
     }
 
     if ((figur == W_P)) {
       int Attack_Pferd = 0;
+      int FS_Pferd = 0;
 
       for (int richtung = 0; richtung <= bewegung[figur][0]; richtung++)  {
         for (int weite = 0; weite <= bewegung[figur][1]; weite++)  {
@@ -2256,13 +2271,17 @@ double K_Safety_Wert = 0;//*/
       //   Attack_Pferd += kingzone_gegner[pos2] * Koenigsangriff_Ich;
        //   }//*/
         }
-      } Attack_Pferd *= farbvorzeichen;
+      }
+      if (((feld[i+21*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+21*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER))||((feld[i+19*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+19*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+9*farbvorzeichen]==LEER))) FS_Pferd -= Figurensicherheit;
 
-      n += AttSpr * Attack_Pferd;
+      Attack_Pferd *= farbvorzeichen; FS_Pferd *= farbvorzeichen;
+
+      n += AttSpr * Attack_Pferd + FS_Pferd;
     }
 
     if (((figur == W_B) || (figur == W_Bx))) {
       int Attack_Bauer = 0;
+
     /*   if (farbvorzeichen == 1)
                 {if (OpenLines_weiss[i%10-2] == 1 && OpenLines_weiss[i%10] == 1) Attack_Bauer -= 200;}
         else {if (OpenLines_schwarz[i%10-2] == 1 && OpenLines_schwarz[i%10] == 1) Attack_Bauer -= 200;}*/
@@ -2335,6 +2354,7 @@ double K_Safety_Wert = 0;//*/
 
     if (((figur == W_K) || (figur == W_Kr))) {
       int Attack_Koenig = 0;
+      int FS_Koenig = 0;
      //  int KSafety = 0;
 
       for (int richtung = 0; richtung <= bewegung[figur][0]; richtung++)  {
@@ -2402,10 +2422,13 @@ double K_Safety_Wert = 0;//*/
                        if (OpenLines_schwarz[i%10-1] == 1) Attack_Koenig -= figurenwert/2;//*/
        //   }//
         }
-      } Attack_Koenig *= farbvorzeichen;
+      }
+      if (((feld[i+21*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+21*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER))||((feld[i+19*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+19*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+9*farbvorzeichen]==LEER))) FS_Koenig -= Figurensicherheit;
+
+      Attack_Koenig *= farbvorzeichen; FS_Koenig *= farbvorzeichen;
 
 
-      n += AttKoe * Attack_Koenig/* + KSafety*/; // + KSafety;
+      n += AttKoe * Attack_Koenig + FS_Koenig/* + KSafety*/; // + KSafety;
     }
 
   }
