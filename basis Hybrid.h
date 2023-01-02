@@ -2033,10 +2033,11 @@ double K_Safety_Wert = 0;//*/
 
                 Attack_Turm +=
                   (abs(zielfeld) * materialwert[abs(zielfeld)] - 40) * AttackIch;
+                  break;
               }
               else { Attack_Turm += DefIch1;
 
-                     if (abs(zielfeld) < 6) Attack_Turm -= DefIch2; } // Gegner deckt seine Figuren
+                     if (abs(zielfeld) < 6) {Attack_Turm -= DefIch2; break;}} // Gegner deckt seine Figuren
 
             } else  {
               if (zielfeld / _eigene_farbe < 0) {                     // Ich greife Gegner an
@@ -2051,12 +2052,13 @@ double K_Safety_Wert = 0;//*/
 
                 if (zielfigur == W_K || zielfigur == W_Kr) break;
                 Attack_Turm += (abs(zielfeld) * materialwert[abs(zielfeld)]) /  AttackEr;
+                break;
               }
               else  { Attack_Turm += DefEr1;
 
-                     if (abs(zielfeld) < 6) Attack_Turm -= DefEr2; }
+                     if (abs(zielfeld) < 6) {Attack_Turm -= DefEr2; break;}}
             } // Ich decke meine Figuren
-            break;
+       //     break;
           }
 
           if (farbvorzeichen != _eigene_farbe)  {
@@ -2135,10 +2137,11 @@ double K_Safety_Wert = 0;//*/
 
                 Attack_Laeufer +=
                   (abs(zielfeld) * materialwert[abs(zielfeld)] - 40) * AttackIch;
+                  break;
               }
               else { Attack_Laeufer += DefIch1;
 
-                     if (abs(zielfeld) < 6) Attack_Laeufer -= DefIch2; } // Gegner
+                     if (abs(zielfeld) < 6) {Attack_Laeufer -= DefIch2; break;}} // Gegner
                                                                          // deckt
                                                                          // seine
                                                                          // Figuren
@@ -2164,12 +2167,13 @@ double K_Safety_Wert = 0;//*/
                 if (zielfigur == W_K || zielfigur == W_Kr) break;
                 Attack_Laeufer += (abs(zielfeld) * materialwert[abs(zielfeld)]) /
                                   AttackEr;
+                                  break;
               }
               else  { Attack_Laeufer += DefEr1;
 
-                     if (abs(zielfeld) < 6) Attack_Laeufer -= DefEr2; }
+                     if (abs(zielfeld) < 6) {Attack_Laeufer -= DefEr2; break;}}
             } // Ich decke meine Figuren
-            break;
+           // break;
           }
 
           if (farbvorzeichen != _eigene_farbe)  {
