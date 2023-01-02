@@ -234,7 +234,7 @@ beginning:
 
             if (command == "uci") {
 
-                cout << "id name NEXUS 221219 FS 65\n";  // 750250 6000
+                cout << "id name NEXUS 230102 KonKoo Relevanz\n";  // 750250 6000
                 cout << "id author Albrecht Fiebiger & Stefan Werner\n";
                 cout << "uciok\n"; }
 
