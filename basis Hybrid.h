@@ -1951,8 +1951,9 @@ double K_Safety_Wert = 0;//*/
                 if (schlagzone_gegner[pos2] != 1) schlagzone_gegner[pos2] = 1;
                 else Attack_Dame += KooIch;
             //    Attack_Dame += kingzone_ich[pos2] * Koenigsangriff_Er;
+                Attack_Dame += 160 * AttackIch;
+                if (abs(zielfeld) > 9 && abs(zielfeld) < 12) Attack_Dame += 160 * AttackIch;
 
-                Attack_Dame += (abs(zielfeld) * materialwert[abs(zielfeld)] - 40) * AttackIch;
 
 
 
@@ -1968,8 +1969,8 @@ double K_Safety_Wert = 0;//*/
               //  Attack_Dame += kingzone_gegner[pos2] * Koenigsangriff_Ich;
 
                if (zielfigur == W_K || zielfigur == W_Kr) break;
-                Attack_Dame += (abs(zielfeld) * materialwert[abs(zielfeld)]) /
-                               AttackEr;
+                Attack_Dame += 160 / AttackEr;
+                if (abs(zielfeld) > 9 && abs(zielfeld) < 12) Attack_Dame += 160 / AttackEr;
               }
               else { Attack_Dame += DefEr1;
 
@@ -2031,8 +2032,8 @@ double K_Safety_Wert = 0;//*/
 
                 if ((n_Turm > 10) && (n_Turm < 14)) n_Turm += 1;
 
-                Attack_Turm +=
-                  (abs(zielfeld) * materialwert[abs(zielfeld)] - 40) * AttackIch;
+                Attack_Turm += 160 * AttackIch;
+                if (abs(zielfeld) > 8 && abs(zielfeld) < 12) Attack_Turm += 160 * AttackIch;
               }
               else { Attack_Turm += DefIch1;
 
@@ -2050,7 +2051,8 @@ double K_Safety_Wert = 0;//*/
                 if ((n_Turm > 10) && (n_Turm < 14)) n_Turm += 1;
 
                 if (zielfigur == W_K || zielfigur == W_Kr) break;
-                Attack_Turm += (abs(zielfeld) * materialwert[abs(zielfeld)]) /  AttackEr;
+                Attack_Turm += 160 /  AttackEr;
+                if (abs(zielfeld) > 8 && abs(zielfeld) < 12) Attack_Turm += 160 / AttackEr;
               }
               else  { Attack_Turm += DefEr1;
 
@@ -2133,8 +2135,8 @@ double K_Safety_Wert = 0;//*/
 
                 if (n_Laeufer > 21) n_Laeufer += 1;
 
-                Attack_Laeufer +=
-                  (abs(zielfeld) * materialwert[abs(zielfeld)] - 40) * AttackIch;
+                Attack_Laeufer += 160 * AttackIch;
+                if (abs(zielfeld) > 7) Attack_Laeufer += 160 * AttackIch;
               }
               else { Attack_Laeufer += DefIch1;
 
@@ -2162,8 +2164,8 @@ double K_Safety_Wert = 0;//*/
                 if (n_Laeufer > 21) n_Laeufer += 1;
 
                 if (zielfigur == W_K || zielfigur == W_Kr) break;
-                Attack_Laeufer += (abs(zielfeld) * materialwert[abs(zielfeld)]) /
-                                  AttackEr;
+                Attack_Laeufer += 160 / AttackEr;
+                if (abs(zielfeld) > 7) Attack_Laeufer += 160 / AttackEr;
               }
               else  { Attack_Laeufer += DefEr1;
 
@@ -2242,7 +2244,9 @@ double K_Safety_Wert = 0;//*/
                 if (schlagzone_gegner[pos2] != 1) schlagzone_gegner[pos2] = 1;
                 else Attack_Pferd += KooIch;
           //      Attack_Pferd += kingzone_ich[pos2]/* * Koenigsangriff_Er*/;
-                Attack_Pferd += (abs(zielfeld) * materialwert[abs(zielfeld)] - 40) * AttackIch;
+                Attack_Pferd += 160 * AttackIch;
+                if (abs(zielfeld) > 7) Attack_Pferd += 160 * AttackIch;
+
               }
               else { Attack_Pferd += DefIch1;
 
@@ -2254,7 +2258,8 @@ double K_Safety_Wert = 0;//*/
 
                 if (zielfigur == W_K || zielfigur == W_Kr) break;
           //      Attack_Pferd += kingzone_gegner[pos2] * Koenigsangriff_Ich;
-                Attack_Pferd += (abs(zielfeld) * materialwert[abs(zielfeld)]) / AttackEr;
+                Attack_Pferd += 160 / AttackEr;
+                if (abs(zielfeld) > 7) Attack_Pferd += 160 / AttackEr;
               }
               else  { Attack_Pferd += DefEr1;
 
@@ -2315,7 +2320,8 @@ double K_Safety_Wert = 0;//*/
                 if (schlagzone_gegner[pos2] != 1) schlagzone_gegner[pos2] = 1;
                 else Attack_Bauer += KooIch;
        //         Attack_Bauer += kingzone_ich[pos2]/* * Koenigsangriff_Er*/;
-                Attack_Bauer += (abs(zielfeld) * materialwert[abs(zielfeld)] - 40) * AttackIch;
+                Attack_Bauer += 160 * AttackIch;
+                if (abs(zielfeld) > 5) Attack_Bauer += 160 * AttackIch;
               }
               else {
                     Attack_Bauer += DefIch1 / 2;
@@ -2329,7 +2335,8 @@ double K_Safety_Wert = 0;//*/
 
                 if (zielfigur == W_K || zielfigur == W_Kr) break;
         //        Attack_Bauer += kingzone_gegner[pos2] * Koenigsangriff_Ich;
-                Attack_Bauer += (abs(zielfeld) * materialwert[abs(zielfeld)]) / AttackEr;
+                Attack_Bauer += 160 / AttackEr;
+                if (abs(zielfeld) > 5) Attack_Bauer += 160 / AttackEr;
               }
               else {
                     Attack_Bauer += DefEr1 / 2;
