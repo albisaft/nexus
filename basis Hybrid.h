@@ -571,19 +571,19 @@ RAND,	17, 10,  3, -7, -7,  3, 10, 17,RAND,
 RAND,	32, 26,  15,  6,  6,  15, 26, 32,		RAND,
 RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
 RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND};//*/
-/*double Zentrum[120] =
+double Zentrum[120] =
 {RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
 RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-RAND,	1,1,1,1,1,1,1,1,RAND,
-RAND,	1,2,2,2,2,2,2,1,RAND,
-RAND,	1,2,3,3,3,3,2,1,RAND,
-RAND,	1,2,3,4,4,3,2,1,RAND,
-RAND,	1,2,3,4,4,3,2,1,RAND,
-RAND,	1,2,3,3,3,3,2,1,RAND,
-RAND,	1,2,2,2,2,2,2,1,RAND,
-RAND,	1,1,1,1,1,1,1,1,RAND,
+RAND,	0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,RAND,
+RAND,	0.5,1,1,1,1,1,1,0.5,RAND,
+RAND,	0.5,1,1.5,1.5,1.5,1.5,1,0.5,RAND,
+RAND,	0.5,1,1.5,2,2,1.5,1,0.5,RAND,
+RAND,	0.5,1,1.5,2,2,1.5,1,0.5,RAND,
+RAND,	0.5,1,1.5,1.5,1.5,1.5,1,0.5,RAND,
+RAND,	0.5,1,1,1,1,1,1,0.5,RAND,
+RAND,	0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,RAND,
 RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND};*/
+RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND};//*/
 
 double materialwert[15] = // Materialwert 1.15
 {
@@ -2443,8 +2443,8 @@ double K_Safety_Wert = 0;//*/
 
     for (int i=21; i < 99; i++) {
 
-     if (zugzone_ich[i] > zugzone_du[i] && (zugzone_du[i] > 0 || feld[i] != 0)) {Kontrolle_ich += 1; if ((zugzone_ich[i+1] > zugzone_du[i+1]) || (zugzone_ich[i-1] > zugzone_du[i-1] ) || (zugzone_ich[i+10] > zugzone_du[i+10] ) || (zugzone_ich[i-10] > zugzone_du[i-10] )) Koordination_ich += 1; if ((zugzone_ich[i+1] == zugzone_du[i+1]) || (zugzone_ich[i-1] == zugzone_du[i-1] ) || (zugzone_ich[i+10] == zugzone_du[i+10] ) || (zugzone_ich[i-10] == zugzone_du[i-10] )) Koordination_ich += 0.5; }
-        if (zugzone_du[i] > zugzone_ich[i] && (zugzone_ich[i] > 0 || feld[i] != 0)) {Kontrolle_du += 1; if ((zugzone_du[i+1] > zugzone_ich[i+1]) || (zugzone_du[i-1] > zugzone_ich[i-1] ) || (zugzone_du[i+10] >  zugzone_ich[i+10] ) || (zugzone_du[i-10] > zugzone_ich[i-10] )) Koordination_du += 1; if ((zugzone_du[i+1] == zugzone_ich[i+1]) || (zugzone_du[i-1] == zugzone_ich[i-1] ) || (zugzone_du[i+10] == zugzone_ich[i+10] ) || (zugzone_du[i-10] == zugzone_ich[i-10] )) Koordination_du += 0.5; }
+     if (zugzone_ich[i] > zugzone_du[i] && (zugzone_du[i] > 0 || feld[i] != 0)) {Kontrolle_ich += Zentrum[i]; if ((zugzone_ich[i+1] > zugzone_du[i+1]) || (zugzone_ich[i-1] > zugzone_du[i-1] ) || (zugzone_ich[i+10] > zugzone_du[i+10] ) || (zugzone_ich[i-10] > zugzone_du[i-10] )) Koordination_ich += Zentrum[i]; if ((zugzone_ich[i+1] == zugzone_du[i+1]) || (zugzone_ich[i-1] == zugzone_du[i-1] ) || (zugzone_ich[i+10] == zugzone_du[i+10] ) || (zugzone_ich[i-10] == zugzone_du[i-10] )) Koordination_ich += Zentrum[i] * 0.5; }
+        if (zugzone_du[i] > zugzone_ich[i] && (zugzone_ich[i] > 0 || feld[i] != 0)) {Kontrolle_du += Zentrum[i]; if ((zugzone_du[i+1] > zugzone_ich[i+1]) || (zugzone_du[i-1] > zugzone_ich[i-1] ) || (zugzone_du[i+10] >  zugzone_ich[i+10] ) || (zugzone_du[i-10] > zugzone_ich[i-10] )) Koordination_du += Zentrum[i]; if ((zugzone_du[i+1] == zugzone_ich[i+1]) || (zugzone_du[i-1] == zugzone_ich[i-1] ) || (zugzone_du[i+10] == zugzone_ich[i+10] ) || (zugzone_du[i-10] == zugzone_ich[i-10] )) Koordination_du += Zentrum[i] * 0.5; }
 
     }
 
