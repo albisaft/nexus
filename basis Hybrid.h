@@ -1981,7 +1981,7 @@ double K_Safety_Wert = 0;//*/
         }
       }
       //Wie sicher steht meine Dame?
-      if (((feld[i+21*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+21*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER))||((feld[i+19*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+19*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+9*farbvorzeichen]==LEER))) FS_Dame -= Figurensicherheit;
+      if ((((feld[i+31*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER)&&(feld[i+21*farbvorzeichen]==LEER)||(feld[i+29*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+19*farbvorzeichen]==LEER)&&(feld[i+29*farbvorzeichen]==LEER)||feld[i+21*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+21*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER))||((feld[i+19*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+19*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+9*farbvorzeichen]==LEER))) FS_Dame -= Figurensicherheit;
 
       Attack_Dame *= farbvorzeichen; FS_Dame *= farbvorzeichen;
     //  cout << MobDame * n_Dame + AttDame * Attack_Dame << "\n";
@@ -2079,7 +2079,7 @@ double K_Safety_Wert = 0;//*/
         }
       }
        //Wie sicher steht mein Turm?
-      if (((feld[i+21*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+21*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER))||((feld[i+19*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+19*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+9*farbvorzeichen]==LEER))) FS_Turm -= Figurensicherheit;
+      if ((((feld[i+31*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER)&&(feld[i+21*farbvorzeichen]==LEER)||(feld[i+29*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+19*farbvorzeichen]==LEER)&&(feld[i+29*farbvorzeichen]==LEER)||feld[i+21*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+21*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER))||((feld[i+19*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+19*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+9*farbvorzeichen]==LEER))) FS_Turm -= Figurensicherheit;
 
 
       n_Turm *= farbvorzeichen; Attack_Turm *= farbvorzeichen; FS_Turm *= farbvorzeichen;
@@ -2199,7 +2199,7 @@ double K_Safety_Wert = 0;//*/
           }
         }
       }
-      if (((feld[i+21*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+21*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER))||((feld[i+19*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+19*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+9*farbvorzeichen]==LEER))) FS_Laeufer -= Figurensicherheit;
+      if ((((feld[i+31*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER)&&(feld[i+21*farbvorzeichen]==LEER)||(feld[i+29*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+19*farbvorzeichen]==LEER)&&(feld[i+29*farbvorzeichen]==LEER)||feld[i+21*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+21*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER))||((feld[i+19*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+19*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+9*farbvorzeichen]==LEER))) FS_Laeufer -= Figurensicherheit;
 
       n_Laeufer *= farbvorzeichen; Attack_Laeufer *= farbvorzeichen; FS_Laeufer *= farbvorzeichen;
 
@@ -2272,7 +2272,7 @@ double K_Safety_Wert = 0;//*/
        //   }//*/
         }
       }
-      if (((feld[i+21*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+21*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER))||((feld[i+19*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+19*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+9*farbvorzeichen]==LEER))) FS_Pferd -= Figurensicherheit;
+      if (((feld[i+31*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER)&&(feld[i+21*farbvorzeichen]==LEER)||(feld[i+29*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+19*farbvorzeichen]==LEER)&&(feld[i+29*farbvorzeichen]==LEER)||(feld[i+21*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+21*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER))||((feld[i+19*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+19*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+9*farbvorzeichen]==LEER))) FS_Pferd -= Figurensicherheit;
 
       Attack_Pferd *= farbvorzeichen; FS_Pferd *= farbvorzeichen;
 
