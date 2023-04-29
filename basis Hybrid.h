@@ -59,7 +59,7 @@ int    DefIch1   = 80;
 int    DefIch2   = 80;  //???
 int    DefEr1    = 60;
 int    DefEr2    = 170;
-double AttDame   = 0.11;   //???
+double AttDame   = 0.11; //???
 int    MobTurm   = 9; //???
 double AttTurm   = 0.5; //???
 double MobLau    = 17.5; //???
@@ -73,6 +73,7 @@ double K_Angriff_Turm = 0.5;
 double K_Angriff_Laeufer = 0.25;
 double K_Angriff_Springer = 0.25;
 int    Figurensicherheit = 65;
+int     BS_Wichtung = 125;
 
 
 //double K_Angriff_Bauer = 0.05;//*/
@@ -2281,6 +2282,7 @@ double K_Safety_Wert = 0;//*/
 
     if (((figur == W_B) || (figur == W_Bx))) {
       int Attack_Bauer = 0;
+      int Bauernstruktur = 0;
 
     /*   if (farbvorzeichen == 1)
                 {if (OpenLines_weiss[i%10-2] == 1 && OpenLines_weiss[i%10] == 1) Attack_Bauer -= 200;}
@@ -2339,6 +2341,7 @@ double K_Safety_Wert = 0;//*/
             break;
           }
 
+        if (feld[i-1*farbvorzeichen] == W_Bx*farbvorzeichen || feld[i+1*farbvorzeichen] == W_Bx*farbvorzeichen || feld[i-11*farbvorzeichen] == W_Bx*farbvorzeichen || feld[i-11*farbvorzeichen] == W_B*farbvorzeichen || feld[i-9*farbvorzeichen] == W_Bx*farbvorzeichen || feld[i-9*farbvorzeichen] == W_B*farbvorzeichen || feld[i-21*farbvorzeichen] == W_Bx*farbvorzeichen || feld[i-19*farbvorzeichen] == W_Bx*farbvorzeichen) {Bauernstruktur += BS_Wichtung; }
        //   if (farbvorzeichen != _eigene_farbe)  {
           //         Attack_Bauer += kingzone_ich[pos2]/* * Koenigsangriff_Er*/;
 
@@ -2348,8 +2351,9 @@ double K_Safety_Wert = 0;//*/
        //   }//*/
         }
       } Attack_Bauer *= farbvorzeichen;
+      Bauernstruktur *= farbvorzeichen;
 
-      n += AttBau * Attack_Bauer;
+      n += AttBau * Attack_Bauer + Bauernstruktur;
     }
 
     if (((figur == W_K) || (figur == W_Kr))) {
