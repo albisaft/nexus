@@ -60,7 +60,7 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
             }
 
 
-            if ((((wertung*farbe > alpha-150  &&  wertung*-1*farbe <= beta+350-figurenwert/48) && aktueller_zug[stufe].kill) /*|| (aktueller_zug[stufe-2].kill && aktueller_zug[stufe-3].kill)*/ /* || forcing_line == true)*/ && stufe < _stopp + 2)) {
+            if ((((wertung*farbe + materialwert[aktueller_zug[stufe].zielfigur] + 200 > alpha) && aktueller_zug[stufe].kill) /*|| (aktueller_zug[stufe-2].kill && aktueller_zug[stufe-3].kill)*/ /* || forcing_line == true)*/ && stufe < _stopp + 2)) {
 
                 wertung = - bp(*testspiel[stufe], farbe*-1, -beta, -alpha, stufe + 1, _stopp, 1);
 
