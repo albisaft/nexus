@@ -1821,6 +1821,8 @@ inline double entwicklung(int feld[120], int farbe)    {
 inline double material(int feld[120], int farbe)  {
   double wert = 0;
   int    figur;
+  int Marker_L_w = 0;
+  int Marker_L_s = 0;
  //figurenwert_weiss = 0;
   //  figurenwert_schwarz = 0;
   figurenwert = 0;
@@ -1829,7 +1831,10 @@ for(int j=21; j<99; j++) {kingzone[j] = 0;}
     figur = feld[i];
 
     if ((figur == RAND) || (figur == LEER)) continue;
-    wert += figur * materialwert[abs(figur)];
+
+    if (figur == W_L) {wert += figur * materialwert[abs(figur)] + Marker_L_w; Marker_L_w = 50;}
+    if (figur == -W_L) {wert += figur * materialwert[abs(figur)] + Marker_L_s; Marker_L_s = -50;}
+    if (abs(figur) != W_L) wert += figur * materialwert[abs(figur)];
 
  if (abs(figur) != W_K&&abs(figur) != W_Kr){
 //    if (figur>0) figurenwert_weiss += abs(figur) * materialwert[abs(figur)];
