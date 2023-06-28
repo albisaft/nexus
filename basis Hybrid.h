@@ -60,7 +60,7 @@ int    DefIch2   = 80;  //???
 int    DefEr1    = 60;
 int    DefEr2    = 170;
 double AttDame   = 0.11;   //???
-int    MobTurm   = 9; //???
+int    MobTurm   = 11; //???
 double AttTurm   = 0.5; //???
 double MobLau    = 17.5; //???
 double AttLau    = 0.7; //???
@@ -1802,8 +1802,8 @@ inline double entwicklung(int feld[120], int farbe)    {
     if (feld[i] == __STARTFELD[i])  wertung += 2 * __STARTPUNKTE[i];        // -kingzone_ich[i]*10;	//4.1
     if (feld[i] == __STARTFELDx[i]) wertung -= 2 * __STARTPUNKTEx[i];                                   // -kingzone_gegner[i]*10;//-kingzone_ich[i]*10;	//4.1
     //	else wertung -= 1 * __STARTPUNKTEx[i];}//-kingzone_gegner[i]*10;*/
-    if (feld[i] == __STARTFELDx2[i]) wertung += 1.7 * __STARTPUNKTEx2[i];  // +kingzone_ich[i]*10;	//1.17
-    if (feld[i] == __STARTFELDx3[i]) wertung -=  1.7 * __STARTPUNKTEx3[i];  // -kingzone_gegner[i]*10;
+    if (feld[i] == __STARTFELDx2[i]) {wertung += 1.7 * __STARTPUNKTEx2[i];} //if (i>58 && (feld[i-9] == W_B || feld[i-11]==W_B)) wertung += 50;}  // +kingzone_ich[i]*10;	//1.17
+    if (feld[i] == __STARTFELDx3[i]) {wertung -=  1.7 * __STARTPUNKTEx3[i];} //if (i<60 && (feld[i+9] == S_B || feld[i+11]==S_B)) wertung += 50;}  // -kingzone_gegner[i]*10;
     //REST PSQ
 /*    if (feld[i] == __STARTFELDx4[i]) wertung += 0.55* __STARTPUNKTEx4[i];  // +kingzone_ich[i]*10;	//1.17
     if (feld[i] == __STARTFELDx5[i]) wertung -=  0.55* __STARTPUNKTEx5[i];//*/
@@ -2237,8 +2237,7 @@ double K_Safety_Wert = 0;//*/
                 break;*/
 
             if (farbvorzeichen != _eigene_farbe)  {
-              if (zielfeld / _eigene_farbe > 0) { // Gegner greift meine Figur
-                                                  // an
+              if (zielfeld / _eigene_farbe > 0) { // Gegner greift meine Figur an
                 if (schlagzone_gegner[pos2] != 1) schlagzone_gegner[pos2] = 1;
                 else Attack_Pferd += KooIch;
           //      Attack_Pferd += kingzone_ich[pos2]/* * Koenigsangriff_Er*/;
