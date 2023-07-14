@@ -593,13 +593,13 @@ double materialwert[15] = // Materialwert 1.15
   33.3,                   // en passant Bauer 3
   2250,                   // Superbauer 4
   20,                     // Bauer 5
-  64,                     // Pferd 6
-  57.142857,              // Läufer 7
-  75,                     // Turm 8
-  133.3333333,            // Dame 9
+  54.166667,                     // Pferd 6
+  46.428571,              // Läufer 7
+  62.5,                     // Turm 8
+  108.3333333,            // Dame 9
   3058,                   // König 10
   2780,                   // Rochade König 11
-  50,                     // Rochade Turm 12
+  41.666667,                     // Rochade Turm 12
 };
 
 
@@ -1821,6 +1821,8 @@ inline double entwicklung(int feld[120], int farbe)    {
 inline double material(int feld[120], int farbe)  {
   double wert = 0;
   int    figur;
+  int Marker_L_w = 0;
+  int Marker_L_s = 0;
  //figurenwert_weiss = 0;
   //  figurenwert_schwarz = 0;
   figurenwert = 0;
@@ -1829,7 +1831,10 @@ for(int j=21; j<99; j++) {kingzone[j] = 0;}
     figur = feld[i];
 
     if ((figur == RAND) || (figur == LEER)) continue;
-    wert += figur * materialwert[abs(figur)];
+
+    if (figur == W_L) {wert += figur * materialwert[abs(figur)] + Marker_L_w; Marker_L_w = 50;}
+    if (figur == -W_L) {wert += figur * materialwert[abs(figur)] + Marker_L_s; Marker_L_s = -50;}
+    if (abs(figur) != W_L) wert += figur * materialwert[abs(figur)];
 
  if (abs(figur) != W_K&&abs(figur) != W_Kr){
 //    if (figur>0) figurenwert_weiss += abs(figur) * materialwert[abs(figur)];
@@ -1879,6 +1884,7 @@ for(int j=21; j<99; j++) {kingzone[j] = 0;}
 
   return wert;
 }
+
 
 inline int zuganzahl(int feld[120], int _eigene_farbe)  { // Zaehlt Zuege von
                                                           // Offizieren und
