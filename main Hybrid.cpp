@@ -233,7 +233,7 @@ beginning:
             // wichtige Initkommandos - wo man antworten muss
 
             if (command == "uci") {
-                cout << "id name NEXUS 230616 MT 11\n";  // 750250 6000
+                cout << "id name NEXUS 230717 Fastmove 3\n";  // 750250 6000
                 cout << "id author Albrecht Fiebiger & Stefan Werner\n";
                 cout << "uciok\n"; }
 
@@ -319,6 +319,7 @@ beginning:
               //  cout << Restzeit << "\n";
                 t1 = clock();
                 spiel.setStufe(0);
+                int favorite[1][stopp] = {0};
                 for(int i=21; i<99; i++) {
                     for(int j=21; j<99; j++) {
                         historyMoves[i][j] = 0; } }
@@ -346,6 +347,8 @@ beginning:
                                 {*/
                     wert = bp(spiel, spiel.Farbe, -MAX_WERT, MAX_WERT, 0, _stopp, 1);//}
 
+                    favorite[0][_stopp] = bester_zug[0].z.pos.pos1;
+                    favorite[1][_stopp] = bester_zug[0].z.pos.pos2;
 
 
 
@@ -393,7 +396,7 @@ beginning:
                     else Zeitfaktor = 30;
 
 
-                    if ((clock() - t1) * 1.7 >= Restzeit / Zeitfaktor || wert == MAX_WERT) {
+                    if ((clock() - t1) * 1.7 >= Restzeit / Zeitfaktor || wert == MAX_WERT || (favorite[0][_stopp] == favorite[0][_stopp-1] && favorite[1][_stopp] == favorite[1][_stopp-1] && favorite[0][_stopp] == favorite[0][_stopp-2] && favorite[1][_stopp] == favorite[1][_stopp-2]&& favorite[0][_stopp] == favorite[0][_stopp-3] && favorite[1][_stopp] == favorite[1][_stopp-3])) {
                         stopp_tatsaechlich = _stopp;
                         break; }
 
