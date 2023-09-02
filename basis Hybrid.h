@@ -593,15 +593,9 @@ double materialwert[15] = // Materialwert 1.15
   33.3,                   // en passant Bauer 3
   2250,                   // Superbauer 4
   20,                     // Bauer 5
-<<<<<<< Updated upstream
-  54.166667,                     // Pferd 6
-  46.428571,              // Läufer 7
-  62.5,                     // Turm 8
-=======
   54.166667,              // Pferd 6
   46.428571,              // Läufer 7
   62.5,                   // Turm 8
->>>>>>> Stashed changes
   108.3333333,            // Dame 9
   3058,                   // König 10
   2780,                   // Rochade König 11
