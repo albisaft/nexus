@@ -54,13 +54,13 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
 
             wertung += (double) 1.5 *    material   (Feld[testspiel[stufe]->getStufe()], farbe); //8.75-9		90
             if (alpha < wertung*farbe + 10) {
-                wertung += (double) 1.55 *      entwicklung(Feld[testspiel[stufe]->getStufe()], farbe);		//0.375-0.4		-->160		1.6
+                wertung += (double) 1.55 *  entwicklung(Feld[testspiel[stufe]->getStufe()], farbe);		//0.375-0.4		-->160		1.6
                 wertung += (double) 0.09 *  zuganzahl  (Feld[testspiel[stufe]->getStufe()], farbe); //0,8;0.076
 
             }
 
 
-            if ((((wertung*farbe > alpha-50) && aktueller_zug[stufe].kill) /*|| (aktueller_zug[stufe-2].kill && aktueller_zug[stufe-3].kill)*/ /* || forcing_line == true)*/ && stufe < _stopp + 2)) {
+            if ((((wertung*farbe > alpha-50 && wertung*farbe < beta + 500) && aktueller_zug[stufe].kill) /*|| (aktueller_zug[stufe-2].kill && aktueller_zug[stufe-3].kill)*/ /* || forcing_line == true)*/ && stufe < _stopp + 2)) {
 
                 wertung = - bp(*testspiel[stufe], farbe*-1, -beta, -alpha, stufe + 1, _stopp, 1);
 

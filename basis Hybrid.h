@@ -52,7 +52,7 @@ int sortiertiefe = 15; // Sortiertiefe - wieviele Z¬∏ge werden sortiert
 int figurenwert = 0;
 
 int    KooIch    = 365;  //???
-int    KooEr     = 50;  //???
+int    KooEr     = 50;
 double AttackIch = 5;
 double AttackEr  = 3;
 int    DefIch1   = 80;
