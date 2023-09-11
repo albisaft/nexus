@@ -73,6 +73,7 @@ double K_Angriff_Turm = 0.5;
 double K_Angriff_Laeufer = 0.25;
 double K_Angriff_Springer = 0.25;
 int    Figurensicherheit = 65;
+int    Malus_FigurenVorEigenenBauern = 50;
 
 
 //double K_Angriff_Bauer = 0.05;//*/
@@ -593,9 +594,9 @@ double materialwert[15] = // Materialwert 1.15
   33.3,                   // en passant Bauer 3
   2250,                   // Superbauer 4
   20,                     // Bauer 5
-  54.166667,                     // Pferd 6
+  54.166667,              // Pferd 6
   46.428571,              // Läufer 7
-  62.5,                     // Turm 8
+  62.5,                   // Turm 8
   108.3333333,            // Dame 9
   3058,                   // König 10
   2780,                   // Rochade König 11
@@ -1572,10 +1573,8 @@ int Spielfeld::zuggenerator()  {
       if ((Feld[Stufe][95] == S_Kr) && (Feld[Stufe][94] == LEER) &&
           (Feld[Stufe][93] == LEER) && (Feld[Stufe][92] == LEER) &&
           (Feld[Stufe][91] == S_Tr))  {
-        if (!test_drohung(Feld[Stufe], Farbe,
-                          95) &&
-            !test_drohung(Feld[Stufe], Farbe,
-                          94) && !test_drohung(Feld[Stufe], Farbe, 93))  {
+        if (!test_drohung(Feld[Stufe], Farbe, 95) &&
+            !test_drohung(Feld[Stufe], Farbe, 94) && !test_drohung(Feld[Stufe], Farbe, 93))  {
           add_verwandelung(Farbe, 93, W_K,  n);
           add_verwandelung(Farbe, 94, W_T,  n);
           add_verwandelung(Farbe, 91, LEER, n);
@@ -1586,10 +1585,8 @@ int Spielfeld::zuggenerator()  {
     if (Farbe > 0) {
       if ((Feld[Stufe][25] == W_Kr) && (Feld[Stufe][26] == LEER) &&
           (Feld[Stufe][27] == LEER) && (Feld[Stufe][28] == W_Tr))  {
-        if (!test_drohung(Feld[Stufe], Farbe,
-                          25) &&
-            !test_drohung(Feld[Stufe], Farbe,
-                          26) && !test_drohung(Feld[Stufe], Farbe, 27))  {
+        if (!test_drohung(Feld[Stufe], Farbe, 25) &&
+            !test_drohung(Feld[Stufe], Farbe, 26) && !test_drohung(Feld[Stufe], Farbe, 27))  {
           add_verwandelung(Farbe, 27, W_K,  n);
           add_verwandelung(Farbe, 26, W_T,  n);
           add_verwandelung(Farbe, 28, LEER, n);
@@ -1600,10 +1597,8 @@ int Spielfeld::zuggenerator()  {
       if ((Feld[Stufe][25] == W_Kr) && (Feld[Stufe][24] == LEER) &&
           (Feld[Stufe][23] == LEER) && (Feld[Stufe][22] == LEER) &&
           (Feld[Stufe][21] == W_Tr))  {
-        if (!test_drohung(Feld[Stufe], Farbe,
-                          25) &&
-            !test_drohung(Feld[Stufe], Farbe,
-                          24) && !test_drohung(Feld[Stufe], Farbe, 23))  {
+        if (!test_drohung(Feld[Stufe], Farbe, 25) &&
+            !test_drohung(Feld[Stufe], Farbe, 24) && !test_drohung(Feld[Stufe], Farbe, 23))  {
           add_verwandelung(Farbe, 23, W_K,  n);
           add_verwandelung(Farbe, 24, W_T,  n);
           add_verwandelung(Farbe, 21, LEER, n);
@@ -1874,6 +1869,7 @@ for(int j=21; j<99; j++) {kingzone[j] = 0;}
         kingzone[i+9] =figur/abs(figur);
        kingzone[i+10] = figur/abs(figur);
        kingzone[i+11] = figur/abs(figur);
+
      }
 
       /* kingzone[i-19] = 1;
@@ -2286,11 +2282,15 @@ double K_Safety_Wert = 0;//*/
 
     if (((figur == W_B) || (figur == W_Bx))) {
       int Attack_Bauer = 0;
+      int FigVorBauern = 0;
 
     /*   if (farbvorzeichen == 1)
                 {if (OpenLines_weiss[i%10-2] == 1 && OpenLines_weiss[i%10] == 1) Attack_Bauer -= 200;}
         else {if (OpenLines_schwarz[i%10-2] == 1 && OpenLines_schwarz[i%10] == 1) Attack_Bauer -= 200;}*/
         // if (feld[i+1] == feld[i]) n += 200;
+
+        if ((i + farbvorzeichen * 10)/farbvorzeichen > 0) FigVorBauern -= Malus_FigurenVorEigenenBauern;
+
       for (int richtung = 0; richtung <= bewegung[13][0]; richtung++)  {
         for (int weite = 0; weite <= bewegung[13][1]; weite++)  {
           pos2 = i + farbvorzeichen * bewegung[13][2 + richtung] * (weite + 1);
@@ -2354,7 +2354,7 @@ double K_Safety_Wert = 0;//*/
         }
       } Attack_Bauer *= farbvorzeichen;
 
-      n += AttBau * Attack_Bauer;
+      n += AttBau * Attack_Bauer + FigVorBauern;
     }
 
     if (((figur == W_K) || (figur == W_Kr))) {
