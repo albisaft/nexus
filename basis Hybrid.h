@@ -68,7 +68,7 @@ double AttSpr    = 0.55;   //???
 double AttBau    = 3.5;
 double AttKoe    = 2; //???
 double KSafety   = 800; // ??
-int    Kontrolle = 13;
+int    Kontrolle = 52;
 double K_Angriff_Turm = 0.5;
 double K_Angriff_Laeufer = 0.25;
 double K_Angriff_Springer = 0.25;
@@ -593,9 +593,9 @@ double materialwert[15] = // Materialwert 1.15
   33.3,                   // en passant Bauer 3
   2250,                   // Superbauer 4
   20,                     // Bauer 5
-  54.166667,                     // Pferd 6
+  54.166667,              // Pferd 6
   46.428571,              // Läufer 7
-  62.5,                     // Turm 8
+  62.5,                   // Turm 8
   108.3333333,            // Dame 9
   3058,                   // König 10
   2780,                   // Rochade König 11
@@ -639,8 +639,8 @@ int timeline;               // Entscheidung Endspiel oder ErÀÜffnung, Einfluss
                             // auf Bewertung und Suchtiefe
 spiel_status partie_status; // Ereoffnung, Mittelspiel....
 double				  kingzone[120];
-double				  zugzone_ich[120];
-double				  zugzone_du[120];
+int				  zugzone_ich[120];
+int				  zugzone_du[120];
 // double					OpenLines_weiss[8] = {1,1,1,1,1,1,1,1};
  // double					OpenLines_schwarz[8] = {1,1,1,1,1,1,1,1};
  //double     OpenLines[8] = {1,1,1,1,1,1,1,1};
@@ -1572,10 +1572,8 @@ int Spielfeld::zuggenerator()  {
       if ((Feld[Stufe][95] == S_Kr) && (Feld[Stufe][94] == LEER) &&
           (Feld[Stufe][93] == LEER) && (Feld[Stufe][92] == LEER) &&
           (Feld[Stufe][91] == S_Tr))  {
-        if (!test_drohung(Feld[Stufe], Farbe,
-                          95) &&
-            !test_drohung(Feld[Stufe], Farbe,
-                          94) && !test_drohung(Feld[Stufe], Farbe, 93))  {
+        if (!test_drohung(Feld[Stufe], Farbe, 95) &&
+            !test_drohung(Feld[Stufe], Farbe, 94) && !test_drohung(Feld[Stufe], Farbe, 93))  {
           add_verwandelung(Farbe, 93, W_K,  n);
           add_verwandelung(Farbe, 94, W_T,  n);
           add_verwandelung(Farbe, 91, LEER, n);
@@ -1586,10 +1584,8 @@ int Spielfeld::zuggenerator()  {
     if (Farbe > 0) {
       if ((Feld[Stufe][25] == W_Kr) && (Feld[Stufe][26] == LEER) &&
           (Feld[Stufe][27] == LEER) && (Feld[Stufe][28] == W_Tr))  {
-        if (!test_drohung(Feld[Stufe], Farbe,
-                          25) &&
-            !test_drohung(Feld[Stufe], Farbe,
-                          26) && !test_drohung(Feld[Stufe], Farbe, 27))  {
+        if (!test_drohung(Feld[Stufe], Farbe, 25) &&
+            !test_drohung(Feld[Stufe], Farbe, 26) && !test_drohung(Feld[Stufe], Farbe, 27))  {
           add_verwandelung(Farbe, 27, W_K,  n);
           add_verwandelung(Farbe, 26, W_T,  n);
           add_verwandelung(Farbe, 28, LEER, n);
@@ -1600,10 +1596,8 @@ int Spielfeld::zuggenerator()  {
       if ((Feld[Stufe][25] == W_Kr) && (Feld[Stufe][24] == LEER) &&
           (Feld[Stufe][23] == LEER) && (Feld[Stufe][22] == LEER) &&
           (Feld[Stufe][21] == W_Tr))  {
-        if (!test_drohung(Feld[Stufe], Farbe,
-                          25) &&
-            !test_drohung(Feld[Stufe], Farbe,
-                          24) && !test_drohung(Feld[Stufe], Farbe, 23))  {
+        if (!test_drohung(Feld[Stufe], Farbe, 25) &&
+            !test_drohung(Feld[Stufe], Farbe, 24) && !test_drohung(Feld[Stufe], Farbe, 23))  {
           add_verwandelung(Farbe, 23, W_K,  n);
           add_verwandelung(Farbe, 24, W_T,  n);
           add_verwandelung(Farbe, 21, LEER, n);
@@ -1874,6 +1868,7 @@ for(int j=21; j<99; j++) {kingzone[j] = 0;}
         kingzone[i+9] =figur/abs(figur);
        kingzone[i+10] = figur/abs(figur);
        kingzone[i+11] = figur/abs(figur);
+
      }
 
       /* kingzone[i-19] = 1;
@@ -1939,7 +1934,7 @@ double K_Safety_Wert = 0;//*/
             if (zielfeld == RAND) // Aus!
               break;
 
-          if (farbvorzeichen == _eigene_farbe) zugzone_ich[pos2] += 10; else zugzone_du[pos2] += 10;
+          if (farbvorzeichen == _eigene_farbe) zugzone_ich[pos2] += 11; else zugzone_du[pos2] += 11;
             if (kingzone[pos2] == -farbvorzeichen) {if (farbvorzeichen == _eigene_farbe) {if (farbvorzeichen == 1) {Angreifer_Wert_w += KSafety; if (C_flag == 0) Anzahl_Angreifer_w += 1;} else {Angreifer_Wert_s += KSafety; if (C_flag == 0) Anzahl_Angreifer_s += 1;}; C_flag = 1;} else {if (farbvorzeichen == 1) {Angreifer_Wert_w += KSafety*0.5; if (C_flag == 0) Anzahl_Angreifer_w += 1;} else {Angreifer_Wert_s += KSafety*0.5; if (C_flag == 0) Anzahl_Angreifer_s += 1;}; C_flag = 1;}}
 
 //if (Angreifer_Wert_s == 11000) cout << "Dame: " << i << "\n";
@@ -2011,7 +2006,7 @@ double K_Safety_Wert = 0;//*/
              pos2 = i + farbvorzeichen * bewegung[W_K][2+richtung] * (weite+1);
              int zielfeldk = feld[pos2];
              if (zielfeld == zielfeldk) n -= 400*farbvorzeichen;return n;}}*/
-           if (farbvorzeichen == _eigene_farbe) zugzone_ich[pos2] += 100; else zugzone_du[pos2] += 100;
+           if (farbvorzeichen == _eigene_farbe) zugzone_ich[pos2] += 101; else zugzone_du[pos2] += 101;
            if (kingzone[pos2] == -farbvorzeichen) {if (farbvorzeichen == _eigene_farbe) {if (farbvorzeichen == 1) {Angreifer_Wert_w += KSafety*K_Angriff_Turm; if (C_flag == 0) Anzahl_Angreifer_w += 1;} else {Angreifer_Wert_s += KSafety*K_Angriff_Turm; if (C_flag == 0) Anzahl_Angreifer_s += 1;}; C_flag = 1;} else {if (farbvorzeichen == 1) {Angreifer_Wert_w += KSafety*K_Angriff_Turm*0.5; if (C_flag == 0) Anzahl_Angreifer_w += 1;} else {Angreifer_Wert_s += KSafety*K_Angriff_Turm*0.5; if (C_flag == 0) Anzahl_Angreifer_s += 1;}; C_flag = 1;}}
 
 
@@ -2109,7 +2104,7 @@ double K_Safety_Wert = 0;//*/
              pos2 = i + farbvorzeichen * bewegung[W_K][2+richtung] * (weite+1);
              int zielfeldk = feld[pos2];
              if (zielfeld == zielfeldk) n -= 400*farbvorzeichen;return n;}}*/
-         if (farbvorzeichen == _eigene_farbe) zugzone_ich[pos2] += 1000; else zugzone_du[pos2] += 1000;
+         if (farbvorzeichen == _eigene_farbe) zugzone_ich[pos2] += 1001; else zugzone_du[pos2] += 1001;
             if (kingzone[pos2] == -farbvorzeichen) {if (farbvorzeichen == _eigene_farbe) {if (farbvorzeichen == 1) {Angreifer_Wert_w += KSafety*K_Angriff_Laeufer; if (C_flag == 0) Anzahl_Angreifer_w += 1;} else {Angreifer_Wert_s += KSafety*K_Angriff_Laeufer; if (C_flag == 0) Anzahl_Angreifer_s += 1;}; C_flag = 1;} else {if (farbvorzeichen == 1) {Angreifer_Wert_w += KSafety*K_Angriff_Laeufer*0.5; if (C_flag == 0) Anzahl_Angreifer_w += 1;} else {Angreifer_Wert_s += KSafety*K_Angriff_Laeufer*0.5; if (C_flag == 0) Anzahl_Angreifer_s += 1;}; C_flag = 1;}}
 
 
@@ -2228,7 +2223,7 @@ double K_Safety_Wert = 0;//*/
              pos2 = i + farbvorzeichen * bewegung[W_K][2+richtung] * (weite+1);
              int zielfeldk = feld[pos2];
              if (zielfeld == zielfeldk) n -= 400*farbvorzeichen;return n;}}*/
-      if (farbvorzeichen == _eigene_farbe) zugzone_ich[pos2] += 1000; else zugzone_du[pos2] += 1000;
+      if (farbvorzeichen == _eigene_farbe) zugzone_ich[pos2] += 1001; else zugzone_du[pos2] += 1001;
        if (kingzone[pos2] == -farbvorzeichen) {if (farbvorzeichen == _eigene_farbe) {if (farbvorzeichen == 1) {Angreifer_Wert_w += KSafety*K_Angriff_Springer; if (C_flag == 0) Anzahl_Angreifer_w += 1;} else {Angreifer_Wert_s += KSafety*K_Angriff_Springer; if (C_flag == 0) Anzahl_Angreifer_s += 1;}; C_flag = 1;} else {if (farbvorzeichen == 1) {Angreifer_Wert_w += KSafety*K_Angriff_Springer*0.5; if (C_flag == 0) Anzahl_Angreifer_w += 1;} else {Angreifer_Wert_s += KSafety*K_Angriff_Springer*0.5; if (C_flag == 0) Anzahl_Angreifer_s += 1;}; C_flag = 1;}}
 
 
@@ -2306,7 +2301,7 @@ double K_Safety_Wert = 0;//*/
     //    if (kingzone[pos2] == -farbvorzeichen && farbvorzeichen == _eigene_farbe) {if (farbvorzeichen == 1) {Angreifer_Wert_w += KSafety*K_Angriff_Bauer; if (C_flag == 0) Anzahl_Angreifer_w += 1;} else {Angreifer_Wert_s += KSafety*K_Angriff_Bauer; if (C_flag == 0) Anzahl_Angreifer_s += 1;}; C_flag = 1;}
      //   if (kingzone[pos2] == -farbvorzeichen && farbvorzeichen != _eigene_farbe) {if (farbvorzeichen == 1) {Angreifer_Wert_w += KSafety*K_Angriff_Bauer*0.2; if (C_flag == 0) Anzahl_Angreifer_w += 1;} else {Angreifer_Wert_s += KSafety*K_Angriff_Bauer; if (C_flag == 0) Anzahl_Angreifer_s += 1;}; C_flag = 1;}
 //       if (kingzone[i] == 1) Attack_Bauer += KSafety;
-        if (farbvorzeichen == _eigene_farbe) zugzone_ich[pos2] += 10000; else zugzone_du[pos2] += 10000;
+        if (farbvorzeichen == _eigene_farbe) zugzone_ich[pos2] += 10001; else zugzone_du[pos2] += 10001;
           if (zielfeld != LEER)  {
             int zielfigur = abs(zielfeld);
 
@@ -2447,8 +2442,9 @@ double K_Safety_Wert = 0;//*/
 
     for (int i=21; i < 99; i++) {
 
-     if (zugzone_ich[i] > zugzone_du[i] && (zugzone_du[i] > 0 || feld[i] != 0)) {Kontrolle_ich += 1; if (feld[i] != 0 && feld[i]/abs(feld[i]) != _eigene_farbe) Kontrolle_ich += 1; if ((zugzone_ich[i+1] > zugzone_du[i+1]) || (zugzone_ich[i-1] > zugzone_du[i-1] ) || (zugzone_ich[i+10] > zugzone_du[i+10] ) || (zugzone_ich[i-10] > zugzone_du[i-10] )) Koordination_ich += 1; if ((zugzone_ich[i+1] == zugzone_du[i+1]) || (zugzone_ich[i-1] == zugzone_du[i-1] ) || (zugzone_ich[i+10] == zugzone_du[i+10] ) || (zugzone_ich[i-10] == zugzone_du[i-10] )) Koordination_ich += 0.5; }
-        if (zugzone_du[i] > zugzone_ich[i] && (zugzone_ich[i] > 0 || feld[i] != 0)) {Kontrolle_du += 1; if (feld[i] != 0 && feld[i]/abs(feld[i]) == _eigene_farbe) Kontrolle_du += 1; if ((zugzone_du[i+1] > zugzone_ich[i+1]) || (zugzone_du[i-1] > zugzone_ich[i-1] ) || (zugzone_du[i+10] >  zugzone_ich[i+10] ) || (zugzone_du[i-10] > zugzone_ich[i-10] )) Koordination_du += 1; if ((zugzone_du[i+1] == zugzone_ich[i+1]) || (zugzone_du[i-1] == zugzone_ich[i-1] ) || (zugzone_du[i+10] == zugzone_ich[i+10] ) || (zugzone_du[i-10] == zugzone_ich[i-10] )) Koordination_du += 0.5; }
+        if (zugzone_ich[i] >= zugzone_du[i] && ((zugzone_ich[i] > zugzone_du[i] && zugzone_du[i] > 0 && zugzone_ich[i]%10 > 1)|| (feld[i] != 0 && zugzone_ich[i]%10 >= zugzone_du[i]%10))) {Kontrolle_ich += 1; }
+        if (zugzone_du[i] >= zugzone_ich[i] && ((zugzone_du[i] > zugzone_ich[i] && zugzone_ich[i] > 0 && zugzone_du[i]%10 > 1)|| (feld[i] != 0 && zugzone_du[i]%10 >= zugzone_ich[i]%10))) {Kontrolle_du += 1; }
+        if (zugzone_ich[i]%10 == zugzone_du[i]%10 && zugzone_ich[i]%10 == 1 && feld[i] == 0) {if (n > 0) {n += Kontrolle;} else n -= Kontrolle;}
 
     }
 
@@ -2456,7 +2452,7 @@ double K_Safety_Wert = 0;//*/
   //   if (Raumzaehler_ich > Raumzaehler_du) {n += (Raumzaehler_ich / Raumzaehler_du * _eigene_farbe-1)*6; }
   //   if (Raumzaehler_du > Raumzaehler_ich) {n += (Raumzaehler_du / Raumzaehler_ich * -_eigene_farbe-1)*6; }
 
-   n += (Koordination_ich - Koordination_du) * _eigene_farbe * 58 + (Kontrolle_ich - Kontrolle_du) * _eigene_farbe * Kontrolle;
+   n += (Kontrolle_ich - Kontrolle_du) * _eigene_farbe * Kontrolle;
   return n;
 }
 
