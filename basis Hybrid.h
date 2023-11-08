@@ -415,32 +415,32 @@ double __STARTPUNKTE[120] =
   RAND, RAND, RAND,  RAND,   RAND,  RAND, RAND, RAND,  RAND,   RAND,
   RAND, RAND, RAND,  RAND,   RAND,  RAND, RAND, RAND,  RAND,   RAND };
 double __STARTPUNKTEx2[120] = // Weiße Springer
-{ RAND, RAND, RAND, RAND,  RAND,   RAND,   RAND,    RAND,  RAND,  RAND,
-  RAND, RAND, RAND, RAND,  RAND,   RAND,   RAND,    RAND,  RAND,  RAND,
-  RAND, -53,  -42,  -32,   -21,    -21,    -32,     -42,   -53,   RAND,
-  RAND, -42,  -32,  -10,   0,      0,      -10,     -32,   -42,   RAND,
-  RAND, -21,  -10,  0,     0,      0,      0,       -10,   -21,   RAND,
-  RAND, -18,  0,    3,     21,     21,     3,        0,    -18,   RAND,
-  RAND, -18,  0,    10,    21,     21,     10,       0,    -18,   RAND,
-  RAND, -21,  5,    10,    16,     16,     10,       5,    -21,   RAND,
-  RAND, -42,  -32,  -10,   0,      0,      -10,      -32,  -42,   RAND,
-  RAND, -53,  -42,  -32,   -21,    -21,    -32,      -42,  -53,   RAND,
-  RAND, RAND, RAND, RAND,  RAND,   RAND,   RAND,     RAND, RAND,  RAND,
-  RAND, RAND, RAND, RAND,  RAND,   RAND,   RAND,     RAND, RAND,  RAND };
+{ RAND,  RAND,  RAND,  RAND,  RAND,   RAND,   RAND,   RAND,   RAND,  RAND,
+  RAND,  RAND,  RAND,  RAND,  RAND,   RAND,   RAND,   RAND,   RAND,  RAND,
+  RAND,  -50,   -40,   -30,   -25,    -25,    -30,    -40,    -50,   RAND,
+  RAND,  -35,   -25,   -15,   -10,    -10,    -15,    -25,    -35,   RAND,
+  RAND,  -20,   -10,   0,     5,      5,      0,      -10,    -20,   RAND,
+  RAND,  -10,   0,     10,    15,     15,     10,     0,      -10,   RAND,
+  RAND,  -5,    5,     15,    20,     20,     15,     5,      -5,    RAND,
+  RAND,  -5,    5,     15,    20,     20,     15,     5,      -5,    RAND,
+  RAND,  -20,   -10,   0,     5,      5,      0,      -10,    -20,   RAND,
+  RAND,  -135,  -25,   -15,   -10,    -10,    -15,    -25,    -135,  RAND,
+  RAND,  RAND,  RAND,  RAND,  RAND,   RAND,   RAND,   RAND,   RAND,  RAND,
+  RAND,  RAND,  RAND,  RAND,  RAND,   RAND,   RAND,   RAND,   RAND,  RAND };
 
 double __STARTPUNKTEx3[120] =
-{ RAND, RAND, RAND, RAND,  RAND,   RAND,   RAND,     RAND, RAND, RAND,
-  RAND, RAND, RAND, RAND,  RAND,   RAND,   RAND,     RAND, RAND, RAND,
-  RAND, -53,  -42,  -32,   -21,    -21,    -32,      -42,  -53,  RAND,
-  RAND, -42,  -32,  -10,   0,      0,      -10,      -32,  -42,  RAND,
-  RAND, -21,  5,    10,    16,     16,     10,       5,    -21,  RAND,
-  RAND, -18,  0,    10,    21,     21,     10,       0,    -18,  RAND,
-  RAND, -18,  0,    3,     21,     21,     3,        0,    -18,  RAND,
-  RAND, -21,  -10,  0,     0,      0,      0,        -10,  -21,  RAND,
-  RAND, -42,  -32,  -10,   0,      0,      -10,      -32,  -42,  RAND,
-  RAND, -53,  -42,  -32,   -21,    -21,    -32,      -42,  -53,  RAND,
-  RAND, RAND, RAND, RAND,  RAND,   RAND,   RAND,     RAND, RAND, RAND,
-  RAND, RAND, RAND, RAND,  RAND,   RAND,   RAND,     RAND, RAND, RAND };
+  RAND,  RAND,  RAND,  RAND,  RAND,   RAND,   RAND,   RAND,   RAND,  RAND,
+  RAND,  RAND,  RAND,  RAND,  RAND,   RAND,   RAND,   RAND,   RAND,  RAND,
+  RAND,  -135,  -25,   -15,   -10,    -10,    -15,    -25,    -135,  RAND,
+  RAND,  -20,   -10,   0,     5,      5,      0,      -10,    -20,   RAND,
+  RAND,  -5,    5,     15,    20,     20,     15,     5,      -5,    RAND,
+  RAND,  -5,    5,     15,    20,     20,     15,     5,      -5,    RAND,
+  RAND,  -10,   0,     10,    15,     15,     10,     0,      -10,   RAND,
+  RAND,  -20,   -10,   0,     5,      5,      0,      -10,    -20,   RAND,
+  RAND,  -35,   -25,   -15,   -10,    -10,    -15,    -25,    -35,   RAND,
+  RAND,  -50,   -40,   -30,   -25,    -25,    -30,    -40,    -50,   RAND,
+  RAND,  RAND,  RAND,  RAND,  RAND,   RAND,   RAND,   RAND,   RAND,  RAND,
+  RAND,  RAND,  RAND,  RAND,  RAND,   RAND,   RAND,   RAND,   RAND,  RAND,
   /*double __STARTPUNKTEx4[120] = //Wei√üe L√§ufer
 {RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
 RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
@@ -1802,8 +1802,8 @@ inline double entwicklung(int feld[120], int farbe)    {
     if (feld[i] == __STARTFELD[i])  wertung += 2 * __STARTPUNKTE[i];        // -kingzone_ich[i]*10;	//4.1
     if (feld[i] == __STARTFELDx[i]) wertung -= 2 * __STARTPUNKTEx[i];                                   // -kingzone_gegner[i]*10;//-kingzone_ich[i]*10;	//4.1
     //	else wertung -= 1 * __STARTPUNKTEx[i];}//-kingzone_gegner[i]*10;*/
-    if (feld[i] == __STARTFELDx2[i]) {wertung += 1.7 * __STARTPUNKTEx2[i];} //if (i>58 && (feld[i-9] == W_B || feld[i-11]==W_B)) wertung += 50;}  // +kingzone_ich[i]*10;	//1.17
-    if (feld[i] == __STARTFELDx3[i]) {wertung -=  1.7 * __STARTPUNKTEx3[i];} //if (i<60 && (feld[i+9] == S_B || feld[i+11]==S_B)) wertung += 50;}  // -kingzone_gegner[i]*10;
+    if (feld[i] == __STARTFELDx2[i]) {wertung += 2 * __STARTPUNKTEx2[i];} //if (i>58 && (feld[i-9] == W_B || feld[i-11]==W_B)) wertung += 50;}  // +kingzone_ich[i]*10;	//1.17
+    if (feld[i] == __STARTFELDx3[i]) {wertung -=  2 * __STARTPUNKTEx3[i];} //if (i<60 && (feld[i+9] == S_B || feld[i+11]==S_B)) wertung += 50;}  // -kingzone_gegner[i]*10;
     //REST PSQ
 /*    if (feld[i] == __STARTFELDx4[i]) wertung += 0.55* __STARTPUNKTEx4[i];  // +kingzone_ich[i]*10;	//1.17
     if (feld[i] == __STARTFELDx5[i]) wertung -=  0.55* __STARTPUNKTEx5[i];//*/
