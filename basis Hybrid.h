@@ -427,9 +427,8 @@ double __STARTPUNKTEx2[120] = // Weiße Springer
   RAND,  -135,  -25,   -15,   -10,    -10,    -15,    -25,    -135,  RAND,
   RAND,  RAND,  RAND,  RAND,  RAND,   RAND,   RAND,   RAND,   RAND,  RAND,
   RAND,  RAND,  RAND,  RAND,  RAND,   RAND,   RAND,   RAND,   RAND,  RAND };
-
 double __STARTPUNKTEx3[120] =
-  RAND,  RAND,  RAND,  RAND,  RAND,   RAND,   RAND,   RAND,   RAND,  RAND,
+{ RAND,  RAND,  RAND,  RAND,  RAND,   RAND,   RAND,   RAND,   RAND,  RAND,
   RAND,  RAND,  RAND,  RAND,  RAND,   RAND,   RAND,   RAND,   RAND,  RAND,
   RAND,  -135,  -25,   -15,   -10,    -10,    -15,    -25,    -135,  RAND,
   RAND,  -20,   -10,   0,     5,      5,      0,      -10,    -20,   RAND,
@@ -440,7 +439,7 @@ double __STARTPUNKTEx3[120] =
   RAND,  -35,   -25,   -15,   -10,    -10,    -15,    -25,    -35,   RAND,
   RAND,  -50,   -40,   -30,   -25,    -25,    -30,    -40,    -50,   RAND,
   RAND,  RAND,  RAND,  RAND,  RAND,   RAND,   RAND,   RAND,   RAND,  RAND,
-  RAND,  RAND,  RAND,  RAND,  RAND,   RAND,   RAND,   RAND,   RAND,  RAND,
+  RAND,  RAND,  RAND,  RAND,  RAND,   RAND,   RAND,   RAND,   RAND,  RAND };
   /*double __STARTPUNKTEx4[120] = //Wei√üe L√§ufer
 {RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
 RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
@@ -593,13 +592,13 @@ double materialwert[15] = // Materialwert 1.15
   33.3,                   // en passant Bauer 3
   2250,                   // Superbauer 4
   20,                     // Bauer 5
-  54.166667,                     // Pferd 6
-  46.428571,              // Läufer 7
-  62.5,                     // Turm 8
-  108.3333333,            // Dame 9
+  66.666667,              // Pferd 6
+  57.142857,              // Läufer 7
+  75,                   // Turm 8
+  133.3333333,            // Dame 9
   3058,                   // König 10
   2780,                   // Rochade König 11
-  41.666667,                     // Rochade Turm 12
+  50,                     // Rochade Turm 12
 };
 
 
@@ -1572,10 +1571,8 @@ int Spielfeld::zuggenerator()  {
       if ((Feld[Stufe][95] == S_Kr) && (Feld[Stufe][94] == LEER) &&
           (Feld[Stufe][93] == LEER) && (Feld[Stufe][92] == LEER) &&
           (Feld[Stufe][91] == S_Tr))  {
-        if (!test_drohung(Feld[Stufe], Farbe,
-                          95) &&
-            !test_drohung(Feld[Stufe], Farbe,
-                          94) && !test_drohung(Feld[Stufe], Farbe, 93))  {
+        if (!test_drohung(Feld[Stufe], Farbe, 95) &&
+            !test_drohung(Feld[Stufe], Farbe, 94) && !test_drohung(Feld[Stufe], Farbe, 93))  {
           add_verwandelung(Farbe, 93, W_K,  n);
           add_verwandelung(Farbe, 94, W_T,  n);
           add_verwandelung(Farbe, 91, LEER, n);
@@ -1586,10 +1583,8 @@ int Spielfeld::zuggenerator()  {
     if (Farbe > 0) {
       if ((Feld[Stufe][25] == W_Kr) && (Feld[Stufe][26] == LEER) &&
           (Feld[Stufe][27] == LEER) && (Feld[Stufe][28] == W_Tr))  {
-        if (!test_drohung(Feld[Stufe], Farbe,
-                          25) &&
-            !test_drohung(Feld[Stufe], Farbe,
-                          26) && !test_drohung(Feld[Stufe], Farbe, 27))  {
+        if (!test_drohung(Feld[Stufe], Farbe, 25) &&
+            !test_drohung(Feld[Stufe], Farbe, 26) && !test_drohung(Feld[Stufe], Farbe, 27))  {
           add_verwandelung(Farbe, 27, W_K,  n);
           add_verwandelung(Farbe, 26, W_T,  n);
           add_verwandelung(Farbe, 28, LEER, n);
@@ -1600,10 +1595,8 @@ int Spielfeld::zuggenerator()  {
       if ((Feld[Stufe][25] == W_Kr) && (Feld[Stufe][24] == LEER) &&
           (Feld[Stufe][23] == LEER) && (Feld[Stufe][22] == LEER) &&
           (Feld[Stufe][21] == W_Tr))  {
-        if (!test_drohung(Feld[Stufe], Farbe,
-                          25) &&
-            !test_drohung(Feld[Stufe], Farbe,
-                          24) && !test_drohung(Feld[Stufe], Farbe, 23))  {
+        if (!test_drohung(Feld[Stufe], Farbe, 25) &&
+            !test_drohung(Feld[Stufe], Farbe, 24) && !test_drohung(Feld[Stufe], Farbe, 23))  {
           add_verwandelung(Farbe, 23, W_K,  n);
           add_verwandelung(Farbe, 24, W_T,  n);
           add_verwandelung(Farbe, 21, LEER, n);
@@ -1874,6 +1867,7 @@ for(int j=21; j<99; j++) {kingzone[j] = 0;}
         kingzone[i+9] =figur/abs(figur);
        kingzone[i+10] = figur/abs(figur);
        kingzone[i+11] = figur/abs(figur);
+
      }
 
       /* kingzone[i-19] = 1;
