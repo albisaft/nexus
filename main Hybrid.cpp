@@ -233,7 +233,7 @@ beginning:
             // wichtige Initkommandos - wo man antworten muss
 
             if (command == "uci") {
-                cout << "id name NEXUS 231108 Mat alt\n";  // 750250 6000
+                cout << "id name NEXUS 231212 KonAlt 16\n";  // 750250 6000
                 cout << "id author Albrecht Fiebiger & Stefan Werner\n";
                 cout << "uciok\n"; }
 
