@@ -1795,8 +1795,8 @@ inline double entwicklung(int feld[120], int farbe)    {
     if (feld[i] == __STARTFELD[i])  wertung += 2 * __STARTPUNKTE[i];        // -kingzone_ich[i]*10;	//4.1
     if (feld[i] == __STARTFELDx[i]) wertung -= 2 * __STARTPUNKTEx[i];                                   // -kingzone_gegner[i]*10;//-kingzone_ich[i]*10;	//4.1
     //	else wertung -= 1 * __STARTPUNKTEx[i];}//-kingzone_gegner[i]*10;*/
-    if (feld[i] == __STARTFELDx2[i]) {wertung += 2 * __STARTPUNKTEx2[i];} //if (i>58 && (feld[i-9] == W_B || feld[i-11]==W_B)) wertung += 50;}  // +kingzone_ich[i]*10;	//1.17
-    if (feld[i] == __STARTFELDx3[i]) {wertung -=  2 * __STARTPUNKTEx3[i];} //if (i<60 && (feld[i+9] == S_B || feld[i+11]==S_B)) wertung += 50;}  // -kingzone_gegner[i]*10;
+    if (feld[i] == __STARTFELDx2[i]) {wertung += 2 * __STARTPUNKTEx2[i];}// if (i>61 && (__STARTPUNKTEx2[i]>10) && (feld[i-9] == W_B || feld[i-11]==W_B)) wertung += 75;}  // +kingzone_ich[i]*10;	//1.17
+    if (feld[i] == __STARTFELDx3[i]) {wertung -=  2 * __STARTPUNKTEx3[i];}//if (i<58 && (__STARTPUNKTEx3[i]>10) && (feld[i+9] == S_B || feld[i+11]==S_B)) wertung -= 75;}  // -kingzone_gegner[i]*10;
     //REST PSQ
 /*    if (feld[i] == __STARTFELDx4[i]) wertung += 0.55* __STARTPUNKTEx4[i];  // +kingzone_ich[i]*10;	//1.17
     if (feld[i] == __STARTFELDx5[i]) wertung -=  0.55* __STARTPUNKTEx5[i];//*/
@@ -1825,8 +1825,8 @@ for(int j=21; j<99; j++) {kingzone[j] = 0;}
 
     if ((figur == RAND) || (figur == LEER)) continue;
 
-    if (figur == W_L) {wert += figur * materialwert[abs(figur)] + Marker_L_w; Marker_L_w = 50;}
-    if (figur == -W_L) {wert += figur * materialwert[abs(figur)] + Marker_L_s; Marker_L_s = -50;}
+    if (figur == W_L) {wert += figur * materialwert[abs(figur)] + Marker_L_w; Marker_L_w = 40;}
+    if (figur == -W_L) {wert += figur * materialwert[abs(figur)] + Marker_L_s; Marker_L_s = -40;}
     if (abs(figur) != W_L) wert += figur * materialwert[abs(figur)];
 
  if (abs(figur) != W_K&&abs(figur) != W_Kr){
