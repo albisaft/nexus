@@ -52,28 +52,28 @@ int sortiertiefe = 15; // Sortiertiefe - wieviele Z¬∏ge werden sortiert
 int figurenwert = 0;
 
 int    KooIch    = 365;  //???
-int    KooEr     = 50;
+int    KooEr     = 50;    //???
 double AttackIch = 5;
 double AttackEr  = 3;
 int    DefIch1   = 80;
-int    DefIch2   = 80;  //???
+int    DefIch2   = 80;
 int    DefEr1    = 60;
 int    DefEr2    = 170;
 double AttDame   = 0.11;   //???
-int    MobTurm   = 15; //???
-double AttTurm   = 0.5; //???
-double MobLau    = 17.5; //???
-double AttLau    = 0.7; //???
-double AttSpr    = 0.55;   //???
+int    MobTurm   = 15;
+double AttTurm   = 0.5;
+double MobLau    = 17.5;
+double AttLau    = 0.7;
+double AttSpr    = 0.55;
 double AttBau    = 3.5;
-double AttKoe    = 2; //???
+double AttKoe    = 2;
 double KSafety   = 800; // ??
 int    Kontrolle = 16;
 double K_Angriff_Turm = 0.5;
 double K_Angriff_Laeufer = 0.25;
 double K_Angriff_Springer = 0.25;
 int    Figurensicherheit = 65;
-
+int    IsolaniScore = 15;
 
 //double K_Angriff_Bauer = 0.05;//*/
 //double KSafe = 0.04;
@@ -1792,9 +1792,9 @@ inline double entwicklung(int feld[120], int farbe)    {
 
      if (feld[i] == RAND || (abs(feld[i]) > 6 && abs(feld[i])<10)) continue;
 
-    if (feld[i] == __STARTFELD[i])  wertung += 2 * __STARTPUNKTE[i];        // -kingzone_ich[i]*10;	//4.1
-    if (feld[i] == __STARTFELDx[i]) wertung -= 2 * __STARTPUNKTEx[i];                                   // -kingzone_gegner[i]*10;//-kingzone_ich[i]*10;	//4.1
-    //	else wertung -= 1 * __STARTPUNKTEx[i];}//-kingzone_gegner[i]*10;*/
+     if (feld[i] == W_Bx || feld[i] == W_B)  {wertung += 2 * __STARTPUNKTE[i]; if ((feld[i-1] != W_B && feld[i-1] != W_Bx) && (feld[i+1] != W_B && feld[i+1] != W_Bx) && (feld[i-11] != W_B && feld[i-11] != W_Bx) && (feld[i-9] != W_B && feld[i-9] != W_Bx) && (feld[i-21] != W_B && feld[i-21] != W_Bx) && (feld[i-19] != W_B && feld[i-19] != W_Bx)) wertung -= IsolaniScore; }       // -kingzone_ich[i]*10;	//4.1
+    if (feld[i] == S_Bx || feld[i] == S_B) {wertung -= 2 * __STARTPUNKTEx[i]; if ((feld[i-1] != S_B && feld[i-1] != S_Bx) && (feld[i+1] != S_B && feld[i+1] != S_Bx) && (feld[i+11] != S_B && feld[i+11] != S_Bx) && (feld[i+9] != S_B && feld[i+9] != S_Bx) && (feld[i+21] != S_B && feld[i+21] != S_Bx) && (feld[i+19] != S_B && feld[i+19] != S_Bx)) wertung += IsolaniScore; }                                // -kingzone_gegner[i]*10;//-kingzone_ich[i]*10;	//4.1
+   //	else wertung -= 1 * __STARTPUNKTEx[i];}//-kingzone_gegner[i]*10;*/
     if (feld[i] == __STARTFELDx2[i]) {wertung += 2 * __STARTPUNKTEx2[i];}// if (i>61 && (__STARTPUNKTEx2[i]>10) && (feld[i-9] == W_B || feld[i-11]==W_B)) wertung += 75;}  // +kingzone_ich[i]*10;	//1.17
     if (feld[i] == __STARTFELDx3[i]) {wertung -=  2 * __STARTPUNKTEx3[i];}//if (i<58 && (__STARTPUNKTEx3[i]>10) && (feld[i+9] == S_B || feld[i+11]==S_B)) wertung -= 75;}  // -kingzone_gegner[i]*10;
     //REST PSQ
