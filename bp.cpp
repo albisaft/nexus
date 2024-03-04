@@ -52,7 +52,7 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
             wertung = rand() % 3 - 1;
             //wertung = 0;
 
-            wertung += (double) 1.5 *    material   (Feld[testspiel[stufe]->getStufe()], farbe); //8.75-9		90
+            wertung += (double) 1.5 * material   (Feld[testspiel[stufe]->getStufe()], farbe); //8.75-9		90
             if (alpha < wertung*farbe + 10) {
                 wertung += (double) 1.55 *  entwicklung(Feld[testspiel[stufe]->getStufe()], farbe);		//0.375-0.4		-->160		1.6
                 wertung += (double) 0.09 *  zuganzahl  (Feld[testspiel[stufe]->getStufe()], farbe); //0,8;0.076

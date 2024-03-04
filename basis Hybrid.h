@@ -68,7 +68,7 @@ double AttSpr    = 0.55;
 double AttBau    = 3.5;
 double AttKoe    = 2;
 double KSafety   = 800; // ??
-int    Kontrolle = 16;
+int    Kontrolle = 120;
 double K_Angriff_Turm = 0.5;
 double K_Angriff_Laeufer = 0.25;
 double K_Angriff_Springer = 0.25;
@@ -2441,8 +2441,8 @@ double K_Safety_Wert = 0;//*/
 
     for (int i=21; i < 99; i++) {
 
-     if (zugzone_ich[i] > zugzone_du[i] && (zugzone_du[i] > 0 || feld[i] != 0)) {Kontrolle_ich += 1; if (feld[i] != 0 && feld[i]/abs(feld[i]) != _eigene_farbe) Kontrolle_ich += 1; if ((zugzone_ich[i+1] > zugzone_du[i+1]) || (zugzone_ich[i-1] > zugzone_du[i-1] ) || (zugzone_ich[i+10] > zugzone_du[i+10] ) || (zugzone_ich[i-10] > zugzone_du[i-10] )) Koordination_ich += 1; if ((zugzone_ich[i+1] == zugzone_du[i+1]) || (zugzone_ich[i-1] == zugzone_du[i-1] ) || (zugzone_ich[i+10] == zugzone_du[i+10] ) || (zugzone_ich[i-10] == zugzone_du[i-10] )) Koordination_ich += 0.5; }
-        if (zugzone_du[i] > zugzone_ich[i] && (zugzone_ich[i] > 0 || feld[i] != 0)) {Kontrolle_du += 1; if (feld[i] != 0 && feld[i]/abs(feld[i]) == _eigene_farbe) Kontrolle_du += 1; if ((zugzone_du[i+1] > zugzone_ich[i+1]) || (zugzone_du[i-1] > zugzone_ich[i-1] ) || (zugzone_du[i+10] >  zugzone_ich[i+10] ) || (zugzone_du[i-10] > zugzone_ich[i-10] )) Koordination_du += 1; if ((zugzone_du[i+1] == zugzone_ich[i+1]) || (zugzone_du[i-1] == zugzone_ich[i-1] ) || (zugzone_du[i+10] == zugzone_ich[i+10] ) || (zugzone_du[i-10] == zugzone_ich[i-10] )) Koordination_du += 0.5; }
+     if (zugzone_ich[i] > zugzone_du[i] && (zugzone_du[i] > 0 || feld[i] != 0) && (i-60)/_eigene_farbe > 0) {Kontrolle_ich += 1; if (feld[i] != 0 && feld[i]/abs(feld[i]) != _eigene_farbe) Kontrolle_ich += 1; if ((zugzone_ich[i+1] > zugzone_du[i+1]) || (zugzone_ich[i-1] > zugzone_du[i-1] ) || (zugzone_ich[i+10] > zugzone_du[i+10] ) || (zugzone_ich[i-10] > zugzone_du[i-10] )) Koordination_ich += 1; if ((zugzone_ich[i+1] == zugzone_du[i+1]) || (zugzone_ich[i-1] == zugzone_du[i-1] ) || (zugzone_ich[i+10] == zugzone_du[i+10] ) || (zugzone_ich[i-10] == zugzone_du[i-10] )) Koordination_ich += 0.5; }
+        if (zugzone_du[i] > zugzone_ich[i] && (zugzone_ich[i] > 0 || feld[i] != 0) (i-60)/_eigene_farbe < 0) {Kontrolle_du += 1; if (feld[i] != 0 && feld[i]/abs(feld[i]) == _eigene_farbe) Kontrolle_du += 1; if ((zugzone_du[i+1] > zugzone_ich[i+1]) || (zugzone_du[i-1] > zugzone_ich[i-1] ) || (zugzone_du[i+10] >  zugzone_ich[i+10] ) || (zugzone_du[i-10] > zugzone_ich[i-10] )) Koordination_du += 1; if ((zugzone_du[i+1] == zugzone_ich[i+1]) || (zugzone_du[i-1] == zugzone_ich[i-1] ) || (zugzone_du[i+10] == zugzone_ich[i+10] ) || (zugzone_du[i-10] == zugzone_ich[i-10] )) Koordination_du += 0.5; }
 
     }
 
