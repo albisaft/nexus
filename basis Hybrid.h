@@ -1804,8 +1804,8 @@ inline double entwicklung(int feld[120], int farbe)    {
     if (feld[i] == __STARTFELDx7[i]) wertung -=  __STARTPUNKTEx7[i];
     if (feld[i] == __STARTFELDx8[i]) wertung +=  __STARTPUNKTEx8[i];  // +kingzone_ich[i]*10;	//1.17
     if (feld[i] == __STARTFELDx9[i]) wertung -=  __STARTPUNKTEx9[i];*/
-    if (feld[i] == __STARTFELDx10[i]) wertung +=  (figurenwert-4100)*0.0006*__STARTPUNKTEx10[i];  // +kingzone_ich[i]*10;	//1.17
-    if (feld[i] == __STARTFELDx11[i]) wertung -=  (figurenwert-4100)*0.0006*__STARTPUNKTEx11[i];//*/
+    if (feld[i] == __STARTFELDx10[i]) wertung +=  (figurenwert-4100)*0.0005*__STARTPUNKTEx10[i];  // +kingzone_ich[i]*10;	//1.17
+    if (feld[i] == __STARTFELDx11[i]) wertung -=  (figurenwert-4100)*0.0005*__STARTPUNKTEx11[i];//*/
 
 	}
   return wertung;
