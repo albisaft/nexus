@@ -53,7 +53,7 @@ int figurenwert = 0;
 
 int    KooIch    = 365;  //???
 int    KooEr     = 50;    //???
-double AttackIch = 5;
+double AttackIch = 3;
 double AttackEr  = 3;
 int    DefIch1   = 80;
 int    DefIch2   = 80;
