@@ -233,7 +233,7 @@ beginning:
             // wichtige Initkommandos - wo man antworten muss
 
             if (command == "uci") {
-                cout << "id name NEXUS 240608 LE 180\n";  // 750250 6000
+                cout << "id name NEXUS 240717 Mat 1.55\n";  // 750250 6000
                 cout << "id author Albrecht Fiebiger & Stefan Werner\n";
                 cout << "uciok\n"; }
 
@@ -428,7 +428,7 @@ beginning:
                 default: {
                     cout << "Unbekanntes Spielende!";
                     break; } }
-                cout << "info depth " << stopp_tatsaechlich << " score cp " << wert/1.5 << " pv " << grundfeld_bezeichnungen[bester_zug[0].z.pos.pos1]
+                cout << "info depth " << stopp_tatsaechlich << " score cp " << wert/1.55 << " pv " << grundfeld_bezeichnungen[bester_zug[0].z.pos.pos1]
                      << grundfeld_bezeichnungen[bester_zug[0].z.pos.pos2] << " " << grundfeld_bezeichnungen[bester_zug[1].z.pos.pos1]
                      << grundfeld_bezeichnungen[bester_zug[1].z.pos.pos2] << " " << grundfeld_bezeichnungen[bester_zug[2].z.pos.pos1]
                      << grundfeld_bezeichnungen[bester_zug[2].z.pos.pos2] << " " << grundfeld_bezeichnungen[bester_zug[3].z.pos.pos1]

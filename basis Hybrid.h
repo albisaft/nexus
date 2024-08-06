@@ -388,7 +388,7 @@ int __STARTFELDx11[120] = // Schwarzer K√∂nig
   RAND, RAND, RAND, RAND, RAND, RAND,  RAND,  RAND,  RAND,  RAND };//*/
 
 
-int __STARTPUNKTEx[120] = // Wei√üe bauern
+int __STARTPUNKTEx[120] = // Wei√üe bauern Cuckoo
 { RAND, RAND,  RAND,  RAND,   RAND,  RAND,  RAND,  RAND, RAND,  RAND,
   RAND, RAND,  RAND,  RAND,   RAND,  RAND,  RAND,  RAND, RAND,  RAND,
   RAND, 0,     0,     0,      0,     0,  	0,     0,    0,     RAND,
@@ -414,7 +414,7 @@ double __STARTPUNKTE[120] =
   RAND, 0,    0,     0,      0,     0,    0,    0,     0,      RAND,
   RAND, RAND, RAND,  RAND,   RAND,  RAND, RAND, RAND,  RAND,   RAND,
   RAND, RAND, RAND,  RAND,   RAND,  RAND, RAND, RAND,  RAND,   RAND };
-double __STARTPUNKTEx2[120] = // Weiße Springer
+double __STARTPUNKTEx2[120] = // Weiße Springer Pawel
 { RAND,  RAND,  RAND,  RAND,  RAND,   RAND,   RAND,   RAND,   RAND,  RAND,
   RAND,  RAND,  RAND,  RAND,  RAND,   RAND,   RAND,   RAND,   RAND,  RAND,
   RAND,  -50,   -40,   -30,   -25,    -25,    -30,    -40,    -50,   RAND,
