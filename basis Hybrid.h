@@ -392,8 +392,8 @@ int __STARTPUNKTEx[120] = // Wei√üe bauern Cuckoo
 { RAND, RAND,  RAND,  RAND,   RAND,  RAND,  RAND,  RAND, RAND,  RAND,
   RAND, RAND,  RAND,  RAND,   RAND,  RAND,  RAND,  RAND, RAND,  RAND,
   RAND, 0,     0,     0,      0,     0,  	0,     0,    0,     RAND,
+  RAND, 200,   200,   200,    200,   200,	200,   200,  200,   RAND,
   RAND, 100,   100,   100,    100,   100,	100,   100,  100,   RAND,
-  RAND, 50,    50,    50,     50,    50,    50,    50,   50,    RAND,
   RAND, -5,    4,     10,     20,    20,    10,    4,    -5,    RAND,
   RAND, -6,    4,     5,      16,    16,    5,     4,    -6,    RAND,
   RAND, -6,    4,     2,      5,     5,     2,     4,    -6,    RAND,
@@ -409,8 +409,8 @@ double __STARTPUNKTE[120] =
   RAND, -6,   4,     2,      5,     5,    2,    4,     -6,     RAND,
   RAND, -6,   4,     5,      16,    16,   5,    4,     -6,     RAND,
   RAND, -5,   4,     10,     20,    20,   10,   4,     -5,     RAND,
-  RAND, 50,   50,    50,     50,    50,   50,   50,    50,     RAND,
-  RAND, 100,  100,   100,    100,   100,  100,  100,   100,    RAND,
+  RAND, 100,   100,   100,    100,   100,	100,   100,  100,   RAND,
+  RAND, 200,   200,   200,    200,   200,	200,   200,  200,   RAND,
   RAND, 0,    0,     0,      0,     0,    0,    0,     0,      RAND,
   RAND, RAND, RAND,  RAND,   RAND,  RAND, RAND, RAND,  RAND,   RAND,
   RAND, RAND, RAND,  RAND,   RAND,  RAND, RAND, RAND,  RAND,   RAND };
@@ -1792,11 +1792,11 @@ inline double entwicklung(int feld[120], int farbe)    {
 
      if (feld[i] == RAND || (abs(feld[i]) > 6 && abs(feld[i])<10)) continue;
 
-     if (feld[i] == W_Bx || feld[i] == W_B)  {wertung += 2 * __STARTPUNKTE[i]; if ((feld[i-1] != W_B && feld[i-1] != W_Bx) && (feld[i+1] != W_B && feld[i+1] != W_Bx) && (feld[i-11] != W_B && feld[i-11] != W_Bx) && (feld[i-9] != W_B && feld[i-9] != W_Bx) && (feld[i-21] != W_B && feld[i-21] != W_Bx) && (feld[i-19] != W_B && feld[i-19] != W_Bx)) wertung -= IsolaniScore; }       // -kingzone_ich[i]*10;	//4.1
-    if (feld[i] == S_Bx || feld[i] == S_B) {wertung -= 2 * __STARTPUNKTEx[i]; if ((feld[i-1] != S_B && feld[i-1] != S_Bx) && (feld[i+1] != S_B && feld[i+1] != S_Bx) && (feld[i+11] != S_B && feld[i+11] != S_Bx) && (feld[i+9] != S_B && feld[i+9] != S_Bx) && (feld[i+21] != S_B && feld[i+21] != S_Bx) && (feld[i+19] != S_B && feld[i+19] != S_Bx)) wertung += IsolaniScore; }                                // -kingzone_gegner[i]*10;//-kingzone_ich[i]*10;	//4.1
+     if (feld[i] == W_Bx || feld[i] == W_B)  {wertung += __STARTPUNKTE[i]; if ((feld[i-1] != W_B && feld[i-1] != W_Bx) && (feld[i+1] != W_B && feld[i+1] != W_Bx) && (feld[i-11] != W_B && feld[i-11] != W_Bx) && (feld[i-9] != W_B && feld[i-9] != W_Bx) && (feld[i-21] != W_B && feld[i-21] != W_Bx) && (feld[i-19] != W_B && feld[i-19] != W_Bx)) wertung -= IsolaniScore; }       // -kingzone_ich[i]*10;	//4.1
+    if (feld[i] == S_Bx || feld[i] == S_B) {wertung -= __STARTPUNKTEx[i]; if ((feld[i-1] != S_B && feld[i-1] != S_Bx) && (feld[i+1] != S_B && feld[i+1] != S_Bx) && (feld[i+11] != S_B && feld[i+11] != S_Bx) && (feld[i+9] != S_B && feld[i+9] != S_Bx) && (feld[i+21] != S_B && feld[i+21] != S_Bx) && (feld[i+19] != S_B && feld[i+19] != S_Bx)) wertung += IsolaniScore; }                                // -kingzone_gegner[i]*10;//-kingzone_ich[i]*10;	//4.1
    //	else wertung -= 1 * __STARTPUNKTEx[i];}//-kingzone_gegner[i]*10;*/
-    if (feld[i] == __STARTFELDx2[i]) {wertung += 2 * __STARTPUNKTEx2[i];}// if (i>61 && (__STARTPUNKTEx2[i]>10) && (feld[i-9] == W_B || feld[i-11]==W_B)) wertung += 75;}  // +kingzone_ich[i]*10;	//1.17
-    if (feld[i] == __STARTFELDx3[i]) {wertung -=  2 * __STARTPUNKTEx3[i];}//if (i<58 && (__STARTPUNKTEx3[i]>10) && (feld[i+9] == S_B || feld[i+11]==S_B)) wertung -= 75;}  // -kingzone_gegner[i]*10;
+    if (feld[i] == __STARTFELDx2[i]) {wertung += __STARTPUNKTEx2[i];}// if (i>61 && (__STARTPUNKTEx2[i]>10) && (feld[i-9] == W_B || feld[i-11]==W_B)) wertung += 75;}  // +kingzone_ich[i]*10;	//1.17
+    if (feld[i] == __STARTFELDx3[i]) {wertung -= __STARTPUNKTEx3[i];}//if (i<58 && (__STARTPUNKTEx3[i]>10) && (feld[i+9] == S_B || feld[i+11]==S_B)) wertung -= 75;}  // -kingzone_gegner[i]*10;
     //REST PSQ
 /*    if (feld[i] == __STARTFELDx4[i]) wertung += 0.55* __STARTPUNKTEx4[i];  // +kingzone_ich[i]*10;	//1.17
     if (feld[i] == __STARTFELDx5[i]) wertung -=  0.55* __STARTPUNKTEx5[i];//*/
