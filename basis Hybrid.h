@@ -73,7 +73,7 @@ double K_Angriff_Turm = 0.5;
 double K_Angriff_Laeufer = 0.25;
 double K_Angriff_Springer = 0.25;
 int    Figurensicherheit = 180;
-int    IsolaniScore = 15;
+int    IsolaniScore = 11;
 
 //double K_Angriff_Bauer = 0.05;//*/
 //double KSafe = 0.04;
