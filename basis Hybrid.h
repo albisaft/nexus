@@ -2447,16 +2447,13 @@ double K_Safety_Wert = 0;//*/
     }
 
 
-  //   if (Raumzaehler_ich > Raumzaehler_du) {n += (Raumzaehler_ich / Raumzaehler_du * _eigene_farbe-1)*6; }
-  //   if (Raumzaehler_du > Raumzaehler_ich) {n += (Raumzaehler_du / Raumzaehler_ich * -_eigene_farbe-1)*6; }
-
    n += (Koordination_ich - Koordination_du) * _eigene_farbe * 58 + (Kontrolle_ich - Kontrolle_du) * _eigene_farbe * Kontrolle;
   return n;
 }
 
 int sort(denkpaar _zugstapel[200], int _n, int _stufe, int _i)  { // Sortiert Zugstapel neu nach Schema
   int zid;
-  int m = _i; // Wieviele Z¬∏ge sind umsortiert?
+  int m = _i; // Wieviele Zuege sind umsortiert?
   int best_wert = 0;
   denkpaar temp;
 
