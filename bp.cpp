@@ -94,7 +94,7 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
 
             if (NullFlag==1) {
                 if ((_stopp-stufe)>2) {
-                    if (i > 8 &! aktueller_zug[stufe].kill) {
+                    if (i > 4 &! aktueller_zug[stufe].kill) {
 
                         wertung = - bp(*testspiel[stufe], farbe*-1, -alpha-1, -alpha, stufe + 1, _stopp-2, 4);
 
@@ -107,7 +107,7 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
 
                         wertung = - bp(*testspiel[stufe], -farbe, -beta, -alpha, stufe + 1, _stopp, 4); } }
                 else {
-                    if (i > 8 && (_stopp-stufe > 2) &! aktueller_zug[stufe].kill) {
+                    if (i > 4 && (_stopp-stufe > 2) &! aktueller_zug[stufe].kill) {
 
                         wertung = - bp(*testspiel[stufe], farbe*-1, -alpha-1, -alpha, stufe + 1, _stopp-2, 1);
 
@@ -119,7 +119,7 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
                     if(wertung > alpha) {
                         wertung = - bp(*testspiel[stufe], farbe*-1, -beta, -alpha, stufe + 1, _stopp, 1); } } }
             else  {
-                if (i > 8 && (_stopp-stufe > 2) &! aktueller_zug[stufe].kill) {
+                if (i > 4 && (_stopp-stufe > 2) &! aktueller_zug[stufe].kill) {
 
                     wertung = - bp(*testspiel[stufe], farbe*-1, -alpha-1, -alpha, stufe + 1, _stopp-2, 2);
 
