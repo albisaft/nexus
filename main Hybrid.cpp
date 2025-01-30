@@ -103,7 +103,6 @@ int main(int argc, char **argv) {
     feldtyp *xbrettchen = new feldtyp;
     denkpaar *xzugstapel = new denkpaar[200];
 
-
     bool exit = false;
     int pos1;
     int pos2;
@@ -232,7 +231,7 @@ beginning:
             // wichtige Initkommandos - wo man antworten muss
 
             if (command == "uci") {
-                cout << "id name NEXUS 241217 i4\n";  // 750250 6000
+                cout << "id name NEXUS 241229 FB 25\n";  // 750250 6000
                 cout << "id author Albrecht Fiebiger & Stefan Werner\n";
                 cout << "uciok\n"; }
 
