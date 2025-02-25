@@ -991,11 +991,9 @@ howitends Spielfeld::check_end(vector<string>& _zuege)  {
                 /*test = 1;*/ return matt;   // verloren
             }
         }
-        return patt;                                               // kein zug
-    }                                                           // moeglich  (was
-    // ist mit remis
-    // bei
-    // gefesselten
+        return patt;                                               // kein zug  moeglich  (was ist mit remis bei gefesselten
+
+    }
 
     if (zuege_wied(_zuege))
         return remis;
@@ -2113,8 +2111,7 @@ inline int zuganzahl(int feld[120], int _eigene_farbe)  { // Zaehlt Zuege von
 
                                 if (zielfigur == W_K || zielfigur == W_Kr)
                                     break;
-                                Attack_Dame += (abs(zielfeld) * materialwert[abs(zielfeld)]) /
-                                               AttackEr;
+                                Attack_Dame += (abs(zielfeld) * materialwert[abs(zielfeld)]) / AttackEr;
                             } else {
                                 Attack_Dame += DefEr1;
 
@@ -2128,8 +2125,9 @@ inline int zuganzahl(int feld[120], int _eigene_farbe)  { // Zaehlt Zuege von
                 }
             }
             //Wie sicher steht meine Dame?
-            if ((((feld[i+31*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER)&&(feld[i+21*farbvorzeichen]==LEER)||(feld[i+29*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+19*farbvorzeichen]==LEER)&&(feld[i+29*farbvorzeichen]==LEER)||feld[i+21*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+21*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER))||((feld[i+19*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+19*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+9*farbvorzeichen]==LEER)))
+             if ((feld[i+31*farbvorzeichen] == -W_Bx*farbvorzeichen && feld[i+11*farbvorzeichen]==LEER && feld[i+21*farbvorzeichen]==LEER) || (feld[i+29*farbvorzeichen] == -W_Bx*farbvorzeichen && feld[i+19*farbvorzeichen]==LEER && feld[i+29*farbvorzeichen]==LEER) || ((feld[i+21*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+21*farbvorzeichen] == -W_Bx*farbvorzeichen)&&feld[i+11*farbvorzeichen]==LEER) || ((feld[i+19*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+19*farbvorzeichen] == -W_Bx*farbvorzeichen) && feld[i+9*farbvorzeichen]==LEER) || feld[i+18*farbvorzeichen] == -W_L*farbvorzeichen || feld[i+22*farbvorzeichen] == -W_L*farbvorzeichen)
                 FS_Dame -= Figurensicherheit;
+
 
             Attack_Dame *= farbvorzeichen;
             FS_Dame *= farbvorzeichen;
@@ -2331,13 +2329,9 @@ inline int zuganzahl(int feld[120], int _eigene_farbe)  { // Zaehlt Zuege von
                         }
                     }
 
-
-
                     //     if (kingzone[i] == 1) Attack_Laeufer += KSafety;
                     if (zielfeld != LEER)  {
                         int zielfigur = abs(zielfeld);
-
-
 
                         /*   if (abs(zielfeld) == W_K)
                             break;*/
@@ -2365,23 +2359,14 @@ inline int zuganzahl(int feld[120], int _eigene_farbe)  { // Zaehlt Zuege von
                                 if (n_Laeufer > 21)
                                     n_Laeufer += 1;
 
-                                Attack_Laeufer +=
-                                    (abs(zielfeld) * materialwert[abs(zielfeld)] - 40) * AttackIch;
+                                Attack_Laeufer += (abs(zielfeld) * materialwert[abs(zielfeld)] - 40) * AttackIch;
                             } else {
                                 Attack_Laeufer += DefIch1;
 
-                                if (abs(zielfeld) < 6)
-                                    Attack_Laeufer -= DefIch2;
-                            } // Gegner
-                            // deckt
-                            // seine
-                            // Figuren
-                            //    1
+                                if (abs(zielfeld) < 6) Attack_Laeufer -= DefIch2;
+                            } // Gegner deckt seine Figuren
                         } else  {
-                            if (zielfeld / _eigene_farbe < 0) {                        // Ich
-                                // greife
-                                // Gegner
-                                // an
+                            if (zielfeld / _eigene_farbe < 0) {  // Ich greife Gegner an
                                 if (schlagzone_ich[pos2] != 1)
                                     schlagzone_ich[pos2] = 1;
                                 else
@@ -2406,13 +2391,13 @@ inline int zuganzahl(int feld[120], int _eigene_farbe)  { // Zaehlt Zuege von
                                     break;
                                 Attack_Laeufer += (abs(zielfeld) * materialwert[abs(zielfeld)]) /
                                                   AttackEr;
-                            } else  {
+                            } else  { // Ich decke meine Figuren
                                 Attack_Laeufer += DefEr1;
 
                                 if (abs(zielfeld) < 6)
                                     Attack_Laeufer -= DefEr2;
                             }
-                        } // Ich decke meine Figuren
+                        }
                         break;
                     }
 

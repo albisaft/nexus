@@ -178,27 +178,6 @@ int main(int argc, char **argv) {
 
     spiel.to_feldtyp(xbrettchen);
 
-    /*
-        disp_cleanest(grundfeld);
-        if (argc > 1) {
-            cout << "read " << argv[1] << " as csv file for start position";
-            string path_startfeld_csv = argv[1];
-            fstream file(path_startfeld_csv, ios::in);
-            typedef vector< vector<string> > csvVector;
-            csvVector csvData;
-
-            readCSV(file, csvData);
-
-            for(csvVector::iterator i = csvData.begin(); i != csvData.end(); ++i)
-       {
-                for(vector<string>::iterator j = i->begin(); j != i->end(); ++j) {
-                    cout << *j << " ";
-                    //if (*j
-                    }
-                }
-            }
-    */
-
 
     // UCI Protokoll
     if (!_user)
@@ -231,7 +210,7 @@ beginning:
             // wichtige Initkommandos - wo man antworten muss
 
             if (command == "uci") {
-                cout << "id name NEXUS 241229 FB 25\n";  // 750250 6000
+                cout << "id name NEXUS 250131 FS Dame neu\n";  // 750250 6000
                 cout << "id author Albrecht Fiebiger & Stefan Werner\n";
                 cout << "uciok\n"; }
 
