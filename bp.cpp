@@ -18,8 +18,6 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
     double wertung;
 
 
-    srand (time(NULL));
-
     //  make_schema(zugstapel[spiel.getStufe()], spiel.n, stufe);
 
     spiel.makeZugstapel();
@@ -60,7 +58,7 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
             }
 
 
-            if ((((wertung*farbe > alpha-50 && wertung*farbe < beta + 500) && aktueller_zug[stufe].kill) /*|| (aktueller_zug[stufe-2].kill && aktueller_zug[stufe-3].kill)*/ /* || forcing_line == true)*/ && stufe < _stopp + 2)) {
+            if ((wertung*farbe > alpha-50 && wertung*farbe < beta + 500) && aktueller_zug[stufe].kill && stufe < _stopp + 2) {
 
                 wertung = - bp(*testspiel[stufe], farbe*-1, -beta, -alpha, stufe + 1, _stopp, 1);
 

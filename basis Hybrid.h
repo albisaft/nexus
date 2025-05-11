@@ -42,11 +42,11 @@ struct feldtyp  {
 double historyMoves[120][120];
 
 int eigene_farbe = 1;  // Sicht des Computers --1-0
-int stopp        = 5;  // normale Suchtiefe, wird ver‚Ä∞ndert
+int stopp        = 5;  // normale Suchtiefe, wird ver‚Ä8ndert
 int stopp_tatsaechlich = 0;
 
 const int ende   = 15; // maximale Suchtiefe
-int sortiertiefe = 15; // Sortiertiefe - wieviele Z¬∏ge werden sortiert
+int sortiertiefe = 15; // Sortiertiefe - wieviele Z¬?ge werden sortiert
 //int figurenwert_weiss = 0;
 //int figurenwert_schwarz = 0;
 int figurenwert = 0;
@@ -59,7 +59,7 @@ int    DefIch1   = 80;
 int    DefIch2   = 200;
 int    DefEr1    = 60;
 int    DefEr2    = 170;
-double AttDame   = 0.11;   //???
+double AttDame   = 0.11;
 int    MobTurm   = 15;
 double AttTurm   = 0.5;
 double MobLau    = 17.5;
@@ -236,7 +236,7 @@ int grundfeld[120] = {
                          RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND};
 
    /*                BEWERTUNG                 */
-int __STARTFELD[120] = { // Wei√üer Bauer
+/*int __STARTFELD[120] = { // Weivüer Bauer
     RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
     RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
     RAND, LEER, LEER, LEER, LEER, LEER, LEER, LEER, LEER, RAND,
@@ -264,7 +264,7 @@ int __STARTFELDx[120] = { // Schwarzer Bauer
     RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
     RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND
 };
-int __STARTFELDx2[120] = { // Wei√üer Springer
+int __STARTFELDx2[120] = { // Weivüer Springer
     RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
     RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
     RAND, W_P,  W_P,  W_P,  W_P,  W_P,  W_P,  W_P,  W_P,  RAND,
@@ -292,7 +292,7 @@ int __STARTFELDx3[120] = { // Schwarzer Springer
     RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
     RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND
 };
-/*int __STARTFELDx4[120] = // Wei√üer L√§ufer
+/*int __STARTFELDx4[120] = // Weivüer Lv§ufer
 { RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
   RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
   RAND, W_L,  W_L,  W_L,  W_L,  W_L,  W_L,  W_L,  W_L,  RAND,
@@ -305,7 +305,7 @@ int __STARTFELDx3[120] = { // Schwarzer Springer
   RAND, W_L,  W_L,  W_L,  W_L,  W_L,  W_L,  W_L,  W_L,  RAND,
   RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
   RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND };
-int __STARTFELDx5[120] = // Schwarzer L√§ufer
+int __STARTFELDx5[120] = // Schwarzer Lv§ufer
 { RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
   RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
   RAND, S_L,  S_L,  S_L,  S_L,  S_L,  S_L,  S_L,  S_L,  RAND,
@@ -318,7 +318,7 @@ int __STARTFELDx5[120] = // Schwarzer L√§ufer
   RAND, S_L,  S_L,  S_L,  S_L,  S_L,  S_L,  S_L,  S_L,  RAND,
   RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
   RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND };
-/*int __STARTFELDx6[120] = // Wei√üer Turm
+/*int __STARTFELDx6[120] = // Weivüer Turm
 { RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
   RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
   RAND, W_T,  W_T,  W_T,  W_T,  W_T,  W_T,  W_T,  W_T,  RAND,
@@ -344,7 +344,7 @@ int __STARTFELDx7[120] = // Schwarzer Turm
   RAND, S_T,  S_T,  S_T,  S_T,  S_T,  S_T,  S_T,  S_T,  RAND,
   RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
   RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND };
-int __STARTFELDx8[120] = // Wei√üe Dame
+int __STARTFELDx8[120] = // Weivüe Dame
 { RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
   RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
   RAND, W_D,  W_D,  W_D,  W_D,  W_D,  W_D,  W_D,  W_D,  RAND,
@@ -369,8 +369,8 @@ int __STARTFELDx9[120] = // Schwarze Dame
   RAND, S_D,  S_D,  S_D,  S_D,  S_D,  S_D,  S_D,  S_D,  RAND,
   RAND, S_D,  S_D,  S_D,  S_D,  S_D,  S_D,  S_D,  S_D,  RAND,
   RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
-  RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND };*/
-int __STARTFELDx10[120] = { // Wei√üer K√∂nig
+  RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND };
+int __STARTFELDx10[120] = { // Weivüer Kv?nig
     RAND, RAND, RAND, RAND, RAND, RAND,  RAND,  RAND,  RAND,  RAND,
     RAND, RAND, RAND, RAND, RAND, RAND,  RAND,  RAND,  RAND,  RAND,
     RAND, W_K,  W_K,  W_K,  W_K,  W_Kr,  W_K,   W_K,   W_K,   RAND,
@@ -384,7 +384,7 @@ int __STARTFELDx10[120] = { // Wei√üer K√∂nig
     RAND, RAND, RAND, RAND, RAND, RAND,  RAND,  RAND,  RAND,  RAND,
     RAND, RAND, RAND, RAND, RAND, RAND,  RAND,  RAND,  RAND,  RAND
 };
-int __STARTFELDx11[120] = { // Schwarzer K√∂nig
+int __STARTFELDx11[120] = { // Schwarzer Kv?nig
     RAND, RAND, RAND, RAND, RAND, RAND,  RAND,  RAND,  RAND,  RAND,
     RAND, RAND, RAND, RAND, RAND, RAND,  RAND,  RAND,  RAND,  RAND,
     RAND, S_K,  S_K,  S_K,  S_K,  S_K,   S_K,   S_K,   S_K,   RAND,
@@ -400,7 +400,7 @@ int __STARTFELDx11[120] = { // Schwarzer K√∂nig
 };//*/
 
 
-int __STARTPUNKTEx[120] = { // Wei√üe bauern Cuckoo
+/*int __STARTPUNKTEx[120] = { // Weivüe bauern Cuckoo
     RAND, RAND,  RAND,  RAND,   RAND,  RAND,  RAND,  RAND, RAND,  RAND,
     RAND, RAND,  RAND,  RAND,   RAND,  RAND,  RAND,  RAND, RAND,  RAND,
     RAND, 0,     0,     0,      0,     0,  	0,     0,    0,     RAND,
@@ -413,7 +413,7 @@ int __STARTPUNKTEx[120] = { // Wei√üe bauern Cuckoo
     RAND, 0,     0,     0,      0,     0,     0,     0,    0,     RAND,
     RAND, RAND,  RAND,  RAND,   RAND,  RAND,  RAND,  RAND, RAND,  RAND,
     RAND, RAND,  RAND,  RAND,   RAND,  RAND,  RAND,  RAND, RAND,  RAND
-};
+};*/
 double __STARTPUNKTE[120] = {
     RAND, RAND, RAND,  RAND,   RAND,  RAND, RAND, RAND,  RAND,   RAND,
     RAND, RAND, RAND,  RAND,   RAND,  RAND, RAND, RAND,  RAND,   RAND,
@@ -442,7 +442,7 @@ double __STARTPUNKTEx2[120] = { // Weiße Springer Pawel
     RAND,  RAND,  RAND,  RAND,  RAND,   RAND,   RAND,   RAND,   RAND,  RAND,
     RAND,  RAND,  RAND,  RAND,  RAND,   RAND,   RAND,   RAND,   RAND,  RAND
 };
-double __STARTPUNKTEx3[120] = {
+/*double __STARTPUNKTEx3[120] = {
     RAND,  RAND,  RAND,  RAND,  RAND,   RAND,   RAND,   RAND,   RAND,  RAND,
     RAND,  RAND,  RAND,  RAND,  RAND,   RAND,   RAND,   RAND,   RAND,  RAND,
     RAND,  -135,  -25,   -15,   -10,    -10,    -15,    -25,    -135,  RAND,
@@ -455,8 +455,8 @@ double __STARTPUNKTEx3[120] = {
     RAND,  -50,   -40,   -30,   -25,    -25,    -30,    -40,    -50,   RAND,
     RAND,  RAND,  RAND,  RAND,  RAND,   RAND,   RAND,   RAND,   RAND,  RAND,
     RAND,  RAND,  RAND,  RAND,  RAND,   RAND,   RAND,   RAND,   RAND,  RAND
-};
-/*double __STARTPUNKTEx4[120] = //Wei√üe L√§ufer
+};*/
+/*double __STARTPUNKTEx4[120] = //Weivüe Lv§ufer
 {RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
 RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
 RAND,-5, -5, -7, -5, -5, -7, -5, -5,	RAND,
@@ -482,7 +482,7 @@ RAND,0,  4,  2,  2,  2,  2,  4,  0,RAND,
 RAND,-5, -5, -7, -5, -5, -7, -5, -5,	RAND,
 RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
 RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND};
-/*double __STARTPUNKTEx6[120] = //T√ºrme
+/*double __STARTPUNKTEx6[120] = //Tvºrme
 {RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
 RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
 RAND,	0,  3,  5,  5,  5,  5,  3,  0,		RAND,
@@ -534,7 +534,7 @@ RAND,-5,  0,  5,  5,  5,  5,  0, -5,RAND,
 RAND,-10, -5,  0,  0,  0,  0, -5,-10,	RAND,
 RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
 RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND};*/
-double __STARTPUNKTEx10[120] = { //K√∂nig
+double __STARTPUNKTEx10[120] = { //Kv?nig
     RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
     RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
     RAND,	24, 24,  9,  0,  0,  9, 24, 24,		RAND,
@@ -548,7 +548,7 @@ double __STARTPUNKTEx10[120] = { //K√∂nig
     RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
     RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND
 };
-double __STARTPUNKTEx11[120] = {
+/*double __STARTPUNKTEx11[120] = {
     RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
     RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
     RAND,	-22,-35,-40,-40,-40,-40,-35,-22,RAND,
@@ -562,7 +562,7 @@ double __STARTPUNKTEx11[120] = {
     RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
     RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND
 };//*/
-/*double __STARTPUNKTEx10[120] = //K√∂nig
+/*double __STARTPUNKTEx10[120] = //Kv?nig
 {RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
 RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
 RAND,	32, 26,  15,  6,  6,  15, 26, 32,		RAND,
@@ -1873,7 +1873,7 @@ inline double entwicklung(int feld[120], int farbe)    {
         }       // -kingzone_ich[i]*10;	//4.1
 
         if (feld[i] == S_Bx || feld[i] == S_B) {
-            wertung -= __STARTPUNKTEx[i];
+            wertung -= __STARTPUNKTE[119 - i];
             // ************************************************************
             // ** ISOLANI SCHWARZ **
             // ************************************************************
@@ -1885,11 +1885,11 @@ inline double entwicklung(int feld[120], int farbe)    {
             if (i < 60 && feld[i-10] != W_B && feld[i-10] != W_Bx && feld[i-20] != W_B && feld[i-20] != W_Bx && feld[i-30] != W_Bx && feld[i-9] != W_B && feld[i-9] != W_Bx && feld[i-19] != W_B && feld[i-19] != W_Bx && feld[i-29] != W_Bx && feld[i-11] != W_B && feld[i-11] != W_Bx && feld[i-21] != W_B && feld[i-21] != W_Bx && feld[i-31] != W_Bx)
                 wertung -= FreibauerScore;
         } //	else wertung -= 1 * __STARTPUNKTEx[i];}//-kingzone_gegner[i]*10;*/
-        if (feld[i] == __STARTFELDx2[i]) {
+        if (feld[i] == W_P) {
             wertung += __STARTPUNKTEx2[i];   // +kingzone_ich[i]*10;	//1.17
         }// if (i>61 && (__STARTPUNKTEx2[i]>10) && (feld[i-9] == W_B || feld[i-11]==W_B)) wertung += 75;}
-        if (feld[i] == __STARTFELDx3[i]) {
-            wertung -= __STARTPUNKTEx3[i];   // -kingzone_gegner[i]*10;
+        if (feld[i] == S_P) {
+            wertung -= __STARTPUNKTEx2[119 - i];   // -kingzone_gegner[i]*10;
         }//if (i<58 && (__STARTPUNKTEx3[i]>10) && (feld[i+9] == S_B || feld[i+11]==S_B)) wertung -= 75;}
         //REST PSQ
         /*    if (feld[i] == __STARTFELDx4[i]) wertung += 0.55* __STARTPUNKTEx4[i];  // +kingzone_ich[i]*10;	//1.17
@@ -1898,10 +1898,10 @@ inline double entwicklung(int feld[120], int farbe)    {
           if (feld[i] == __STARTFELDx7[i]) wertung -=  __STARTPUNKTEx7[i];
           if (feld[i] == __STARTFELDx8[i]) wertung +=  __STARTPUNKTEx8[i];  // +kingzone_ich[i]*10;	//1.17
           if (feld[i] == __STARTFELDx9[i]) wertung -=  __STARTPUNKTEx9[i];*/
-        if (feld[i] == __STARTFELDx10[i])
+        if (feld[i] == W_K || feld[i] == W_Kr)
             wertung +=  (figurenwert-4100)*0.0005*__STARTPUNKTEx10[i];  // +kingzone_ich[i]*10;	//1.17
-        if (feld[i] == __STARTFELDx11[i])
-            wertung -=  (figurenwert-4100)*0.0005*__STARTPUNKTEx11[i];//*/
+        if (feld[i] == S_K || feld[i] == S_Kr)
+            wertung -=  (figurenwert-4100)*0.0005*__STARTPUNKTEx10[119 - i];//*/
 
     }
     return wertung;
@@ -2072,8 +2072,6 @@ inline int zuganzahl(int feld[120], int _eigene_farbe)  { // Zaehlt Zuege von
                         }
                     }
 
-//if (Angreifer_Wert_s == 11000) cout << "Dame: " << i << "\n";
-                    //     if (kingzone[i] == 1) Attack_Dame += KSafety;
 
                     if (zielfeld != LEER)  {
                         int zielfigur = abs(zielfeld);
@@ -2389,8 +2387,7 @@ inline int zuganzahl(int feld[120], int _eigene_farbe)  { // Zaehlt Zuege von
 
                                 if (zielfigur == W_K || zielfigur == W_Kr)
                                     break;
-                                Attack_Laeufer += (abs(zielfeld) * materialwert[abs(zielfeld)]) /
-                                                  AttackEr;
+                                Attack_Laeufer += (abs(zielfeld) * materialwert[abs(zielfeld)]) /  AttackEr;
                             } else  { // Ich decke meine Figuren
                                 Attack_Laeufer += DefEr1;
 
@@ -2682,7 +2679,7 @@ inline int zuganzahl(int feld[120], int _eigene_farbe)  { // Zaehlt Zuege von
                                 //    Attack_Koenig += kingzone_ich[pos2]/* * Koenigsangriff_Er*/;
                                 Attack_Koenig += (abs(zielfeld) * materialwert[abs(zielfeld)] - 40) * AttackIch;
                             } else {
-                                Attack_Koenig += DefIch1;/*if (abs(zielfeld)<6) Attack_Koenig += figurenwert/2;*/
+                                Attack_Koenig += DefIch1;//if (abs(zielfeld)<6) Attack_Koenig -= DefIch2;
                             }
                             // Gegner deckt seine Figuren    1
                         } else  {
@@ -2697,7 +2694,7 @@ inline int zuganzahl(int feld[120], int _eigene_farbe)  { // Zaehlt Zuege von
                                 //      Attack_Koenig += kingzone_gegner[pos2] * Koenigsangriff_Ich;
                                 Attack_Koenig += (abs(zielfeld) * materialwert[abs(zielfeld)]) / AttackEr;
                             } else  {
-                                Attack_Koenig += DefEr1;/*if (abs(zielfeld)<6) Attack_Koenig += figurenwert/2;*/
+                                Attack_Koenig += DefEr1;//if (abs(zielfeld)<6) Attack_Koenig -= DefEr2;
                             }
 
                         } // Ich decke meine Figuren
@@ -2765,103 +2762,34 @@ inline int zuganzahl(int feld[120], int _eigene_farbe)  { // Zaehlt Zuege von
     return n;
 }
 
-int sort(denkpaar _zugstapel[200], int _n, int _stufe, int _i)  { // Sortiert Zugstapel neu nach Schema
-    int zid;
-    int m = _i; // Wieviele Zuege sind umsortiert?
-    int best_wert = 0;
-    denkpaar temp;
+int sort(denkpaar _zugstapel[200], int _n, int _stufe, int _i) {
+    // Annahme: Der beste Zug ist zunächst der an der aktuellen Position _i.
+    int best_index = _i;
 
-
-    for (int j = _i; j < _n; ++j)  {
-        _zugstapel[j].order += historyMoves[_zugstapel[j].z.pos.pos1][_zugstapel[j].z.pos.pos2]*0.005;
-        // if (historyMoves[_zugstapel[j].z.pos.pos1][_zugstapel[j].z.pos.pos2] >= 100) cout << historyMoves[_zugstapel[j].z.pos.pos1][_zugstapel[j].z.pos.pos2] << "\n";
-        if (_zugstapel[j].z.id == best_one[_stufe].z.id)
-            _zugstapel[j].order += 225;
-
-        if (_zugstapel[j].order > best_wert /*|| historyMoves[_zugstapel[j].z.pos.pos1][_zugstapel[j].z.pos.pos2] > best_wert*/) {
-            best_wert = _zugstapel[j].order;
-
-            temp          = _zugstapel[j];  // Vertausche den Zug
-            _zugstapel[j] = _zugstapel[m];
-            _zugstapel[m] = temp;
-            // m++;
-            //  break; // und weiter...
+    // Durchlaufe alle Züge ab Position _i.
+    for (int j = _i; j < _n; ++j) {
+        // Aktualisiere den 'order'-Wert des aktuellen Zugs _zugstapel[j]
+        // basierend auf History-Heuristik und PV-Move-Bonus.
+        _zugstapel[j].order += historyMoves[_zugstapel[j].z.pos.pos1][_zugstapel[j].z.pos.pos2] * 0.005;
+        if (_zugstapel[j].z.id == best_one[_stufe].z.id) {
+            _zugstapel[j].order += 225; // Starker Bonus für den erwarteten besten Zug (PV-Move)
         }
 
-
+        // Wenn der aktuelle Zug (nach Aktualisierung seines 'order'-Werts)
+        // besser ist als der bisher beste gefundene Zug, merke dir seinen Index.
+        if (_zugstapel[j].order > _zugstapel[best_index].order) {
+            best_index = j; // Nur den Index merken, noch nicht tauschen!
+        }
     }
 
-    return 0;
-}
-
-/*int make_schema(denkpaar _zugstapel[200], int _n, int _stufe)  {
-  for (int j = 0; j < (sortiertiefe - 1); j++)  {                   // Sortiertiefe == wieviele Züge sollen sortiert werden?
-    denkpaar temp;
-
-    if (best_one[_stufe].z.id == 0)                                 // Gibt es keinen PV-Zug?
-      break;
-
-    if (sort_schema_bewertung[_stufe][j].z.id == 0)  {              // wenn es noch keinen vorsortieren Zug gibt:
-      sort_schema_bewertung[_stufe][j]          = best_one[_stufe]; // nimm den PV-Zug
-      sort_schema_bewertung[_stufe][j + 1].z.id = 0;                // setze den nächstsortierten Zug auf 0
-      break;
+    // Nachdem alle Züge geprüft wurden, tausche den besten gefundenen Zug
+    // (an _zugstapel[best_index]) an die Position _zugstapel[_i],
+    // falls er nicht schon dort ist.
+    if (best_index != _i) {
+        denkpaar temp = _zugstapel[_i];
+        _zugstapel[_i] = _zugstapel[best_index];
+        _zugstapel[best_index] = temp;
     }
 
-    if (best_one[_stufe].z.id == sort_schema_bewertung[_stufe][j].z.id)  { // wenn der PV-Zug mit dem vorsortierten Zug identisch ist
-      sort_schema_bewertung[_stufe][j].bewertung *= 9;
-      break;
-    }
-
-    /*cout << "Vorsortierung:" <<
-       grundfeld_bezeichnungen[best_one[_stufe].z.pos.pos1] <<
-       grundfeld_bezeichnungen[best_one[_stufe].z.pos.pos2] << "\n*/
-/* if (best_one[_stufe].bewertung >
-     sort_schema_bewertung[_stufe][j].bewertung)  {
-   // Wenn Bewertung des best_one besser --> einordnen
-   temp                             = sort_schema_bewertung[_stufe][j];
-   sort_schema_bewertung[_stufe][j] = best_one[_stufe];
-   int i;
-
-   for (i = 1; i < (sortiertiefe - j); i++)  {
-     // Nach hinten schieben
-     if (!sort_schema_bewertung[_stufe][j + i].z.id == 0)  {
-       sort_schema_bewertung[_stufe][j + i] = temp;
-       temp                                 =
-         sort_schema_bewertung[_stufe][j + i + 1];
-     } else  {
-       sort_schema_bewertung[_stufe][j + i] = temp;
-       break;
-     }
-   }
-   sort_schema_bewertung[_stufe][j + 1 + i].z.id = 0;
-   break; // Abrechen, nachdem  e i n  zug eingeordnet ist.
-   //	cout << best_one[_stufe].z.id << "\n";
- }        // */
-/* }
-
- /*for (int l = 0; l < 200; l++)  {
-   if (sort_schema_bewertung[_stufe][l].z.id == 0)  {
-     sort_schema[_stufe][l] = 0;
-     break;
-   }
-   sort_schema[_stufe][l] = sort_schema_bewertung[_stufe][l].z.id;
- }
- return 0;
+    return 0; // Erfolgsindikator
 }
-
-int move_sort_schema(int c = 6)  { // Schema 2 Z¬∏ge nach vorn schieben
- for (int i = 0; i < c; i++)  {
-   for (int e = 1; e < ende; e++)  {
-     for (int j = 0; j < sortiertiefe; j++)  {
-       sort_schema_bewertung[e - 1][j] = sort_schema_bewertung[e][j]; // übernimm sort_schema-bewertung eine Stufe niedriger
-       //	sort_schema_bewertung[e-1][j].bewertung *= 0,1; //multipliziere
-       // es mit 0,0000000001
-       sort_schema[e - 1][j] = sort_schema[e][j];                     // übernimm das Schema eine Stufe niedriger
-
-       /*	sort_schema_bewertung[e-1][j].z.id  = 0;
-          sort_schema[e-1][j]			  = 0;		*/
-/*   }
- }
-}
-return 0;
-}*/
