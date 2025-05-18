@@ -153,7 +153,6 @@ const char *grundfeld_bezeichnungen[120] = {
     "RAND"
 };
 
-  RAND, RAND, RAND, RAND, RAND, RAND,  RAND,  RAND,  RAND,   RAND };//*/
 int grundfeld[120] = {
     RAND, RAND, RAND, RAND, RAND, RAND,  RAND,  RAND,  RAND,   RAND,
     RAND, RAND, RAND, RAND, RAND, RAND,  RAND,  RAND,  RAND,   RAND,
