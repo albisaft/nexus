@@ -153,31 +153,6 @@ const char *grundfeld_bezeichnungen[120] = {
     "RAND"
 };
 
-/* int grundfeld[120] =
-{ RAND, RAND, RAND, RAND, RAND, RAND,  RAND,  RAND,  RAND,   RAND,
-  RAND, RAND, RAND, RAND, RAND, RAND,  RAND,  RAND,  RAND,   RAND,
-  RAND, LEER, LEER, W_K, LEER, LEER,  LEER,  LEER,  LEER,   RAND,
-  RAND, LEER, LEER, LEER, LEER, LEER,  LEER,  LEER,  LEER,   RAND,
-  RAND, LEER, LEER, LEER, LEER, LEER,  LEER,  LEER,  LEER,   RAND,
-  RAND, LEER, LEER, LEER, LEER, LEER,  LEER,  LEER,  LEER,   RAND,
-  RAND, LEER, LEER, LEER, LEER, LEER,  LEER,  LEER,  LEER,   RAND,
-  RAND, LEER, LEER, LEER, LEER, LEER,  LEER,  LEER,  LEER,   RAND,
-  RAND, LEER, LEER, LEER, LEER, LEER,  LEER,  LEER,  LEER,   RAND,
-  RAND, LEER, LEER, S_K, S_L, LEER,  LEER,  LEER,  S_D,   RAND,
-  RAND, RAND, RAND, RAND, RAND, RAND,  RAND,  RAND,  RAND,   RAND,
-  RAND, RAND, RAND, RAND, RAND, RAND,  RAND,  RAND,  RAND,   RAND };//*/
-/*int grundfeld[120] =
-{ RAND, RAND, RAND, RAND, RAND, RAND,  RAND,  RAND,  RAND,   RAND,
-  RAND, RAND, RAND, RAND, RAND, RAND,  RAND,  RAND,  RAND,   RAND,
-  RAND, LEER, LEER, W_K,  W_T,  LEER,  LEER,  LEER,  W_Tr,   RAND,
-  RAND, W_Bx, W_Bx, W_Bx, W_L,  LEER,  W_Bx,  LEER,  LEER,   RAND,
-  RAND, LEER, LEER, W_P,  LEER, W_B,   W_D,   LEER,  LEER,   RAND,
-  RAND, LEER, LEER, LEER, W_B,  LEER,  LEER,  W_B,  LEER,   RAND,
-  RAND, LEER, LEER, LEER, S_B,  LEER,  LEER,  S_B,  W_B,   RAND,
-  RAND, LEER, LEER, S_B, S_L, S_B,  S_P,  W_L,  S_B,   RAND,
-  RAND, S_Bx, S_Bx, LEER, S_P, S_K,  LEER,  S_Bx,  LEER,   RAND,
-  RAND, S_Tr, LEER,  LEER,  S_D,  LEER,  LEER,  LEER,   S_Tr,   RAND,
-  RAND, RAND, RAND, RAND, RAND, RAND,  RAND,  RAND,  RAND,   RAND,
   RAND, RAND, RAND, RAND, RAND, RAND,  RAND,  RAND,  RAND,   RAND };//*/
 int grundfeld[120] = {
     RAND, RAND, RAND, RAND, RAND, RAND,  RAND,  RAND,  RAND,   RAND,
@@ -195,226 +170,10 @@ int grundfeld[120] = {
 }; // */
 
 
-/*
-   bool in_array(const std::string &value, const std::vector<string> &array)
-   {
-    return std::find(array.begin(), array.end(), value) != array.end();
-   }
 
-   void readCSV(istream &input, vector< vector<string> > &output)
-   {
-   string csvLine;
-    // read every line from the stream
-    while( getline(input, csvLine) )
-    {
-            istringstream csvStream(csvLine);
-           vector<string> csvColumn;
-            string csvElement;
-            // read every element from the line that is seperated by commas
-            // and put it into the vector or strings
-            while( getline(csvStream, csvElement, ',') )
-            {
-                    csvColumn.push_back(csvElement);
-            }
-            output.push_back(csvColumn);
-    }
-   }
- */
+   /*           PST - Figuren-Felder-Tabellen                */
 
-/*int grundfeld[120] =
-   {RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-                         RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-                         RAND,	W_Tr,	LEER,	W_L,	W_D,	W_Kr,	W_L,	LEER,	W_Tr,	RAND,
-                         RAND,	W_Bx,	W_Bx,	W_Bx,	LEER,	LEER,	W_Bx,	W_Bx,	W_Bx,	RAND,
-                         RAND,	LEER,	LEER,	W_P,	LEER,	LEER,	W_P,	LEER,	LEER,	RAND,
-                         RAND,	LEER,	S_P,	LEER,	LEER,	LEER,	LEER,	LEER,	LEER,	RAND,
-                         RAND,	LEER,	LEER,	LEER,	W_B,	LEER,	LEER,	LEER,	LEER,	RAND,
-                         RAND,	LEER,	LEER,	LEER,	LEER,	LEER,	S_P,	LEER,	LEER,	RAND,
-                         RAND,	S_Bx,	S_Bx,	S_Bx,	S_Bx,	S_D,	S_Bx,	S_Bx,	S_Bx,	RAND,
-                         RAND,	S_Tr,	LEER,	S_L,	LEER,	S_Kr,	S_L,	LEER,	S_Tr,	RAND,
-                         RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-                         RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND};
-
-   /*                BEWERTUNG                 */
-/*int __STARTFELD[120] = { // Weivüer Bauer
-    RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
-    RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
-    RAND, LEER, LEER, LEER, LEER, LEER, LEER, LEER, LEER, RAND,
-    RAND, W_Bx, W_Bx, W_Bx, W_Bx, W_Bx, W_Bx, W_Bx, W_Bx, RAND,
-    RAND, W_B,  W_B,  W_B,  W_B,  W_B,  W_B,  W_B,  W_B,  RAND,
-    RAND, W_B,  W_B,  W_B,  W_B,  W_B,  W_B,  W_B,  W_B,  RAND,
-    RAND, W_B,  W_B,  W_B,  W_B,  W_B,  W_B,  W_B,  W_B,  RAND,
-    RAND, W_B,  W_B,  W_B,  W_B,  W_B,  W_B,  W_B,  W_B,  RAND,
-    RAND, W_B,  W_B,  W_B,  W_B,  W_B,  W_B,  W_B,  W_B,  RAND,
-    RAND, LEER, LEER, LEER, LEER, LEER, LEER, LEER, LEER, RAND,
-    RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
-    RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND
-};
-int __STARTFELDx[120] = { // Schwarzer Bauer
-    RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
-    RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
-    RAND, LEER, LEER, LEER, LEER, LEER, LEER, LEER, LEER, RAND,
-    RAND, S_B,  S_B,  S_B,  S_B,  S_B,  S_B,  S_B,  S_B,  RAND,
-    RAND, S_B,  S_B,  S_B,  S_B,  S_B,  S_B,  S_B,  S_B,  RAND,
-    RAND, S_B,  S_B,  S_B,  S_B,  S_B,  S_B,  S_B,  S_B,  RAND,
-    RAND, S_B,  S_B,  S_B,  S_B,  S_B,  S_B,  S_B,  S_B,  RAND,
-    RAND, S_B,  S_B,  S_B,  S_B,  S_B,  S_B,  S_B,  S_B,  RAND,
-    RAND, S_Bx, S_Bx, S_Bx, S_Bx, S_Bx, S_Bx, S_Bx, S_Bx, RAND,
-    RAND, LEER, LEER, LEER, LEER, LEER, LEER, LEER, LEER, RAND,
-    RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
-    RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND
-};
-int __STARTFELDx2[120] = { // Weivüer Springer
-    RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
-    RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
-    RAND, W_P,  W_P,  W_P,  W_P,  W_P,  W_P,  W_P,  W_P,  RAND,
-    RAND, W_P,  W_P,  W_P,  W_P,  W_P,  W_P,  W_P,  W_P,  RAND,
-    RAND, W_P,  W_P,  W_P,  W_P,  W_P,  W_P,  W_P,  W_P,  RAND,
-    RAND, W_P,  W_P,  W_P,  W_P,  W_P,  W_P,  W_P,  W_P,  RAND,
-    RAND, W_P,  W_P,  W_P,  W_P,  W_P,  W_P,  W_P,  W_P,  RAND,
-    RAND, W_P,  W_P,  W_P,  W_P,  W_P,  W_P,  W_P,  W_P,  RAND,
-    RAND, W_P,  W_P,  W_P,  W_P,  W_P,  W_P,  W_P,  W_P,  RAND,
-    RAND, W_P,  W_P,  W_P,  W_P,  W_P,  W_P,  W_P,  W_P,  RAND,
-    RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
-    RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND
-};
-int __STARTFELDx3[120] = { // Schwarzer Springer
-    RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
-    RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
-    RAND, S_P,  S_P,  S_P,  S_P,  S_P,  S_P,  S_P,  S_P,  RAND,
-    RAND, S_P,  S_P,  S_P,  S_P,  S_P,  S_P,  S_P,  S_P,  RAND,
-    RAND, S_P,  S_P,  S_P,  S_P,  S_P,  S_P,  S_P,  S_P,  RAND,
-    RAND, S_P,  S_P,  S_P,  S_P,  S_P,  S_P,  S_P,  S_P,  RAND,
-    RAND, S_P,  S_P,  S_P,  S_P,  S_P,  S_P,  S_P,  S_P,  RAND,
-    RAND, S_P,  S_P,  S_P,  S_P,  S_P,  S_P,  S_P,  S_P,  RAND,
-    RAND, S_P,  S_P,  S_P,  S_P,  S_P,  S_P,  S_P,  S_P,  RAND,
-    RAND, S_P,  S_P,  S_P,  S_P,  S_P,  S_P,  S_P,  S_P,  RAND,
-    RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
-    RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND
-};
-/*int __STARTFELDx4[120] = // Weivüer Lv§ufer
-{ RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
-  RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
-  RAND, W_L,  W_L,  W_L,  W_L,  W_L,  W_L,  W_L,  W_L,  RAND,
-  RAND, W_L,  W_L,  W_L,  W_L,  W_L,  W_L,  W_L,  W_L,  RAND,
-  RAND, W_L,  W_L,  W_L,  W_L,  W_L,  W_L,  W_L,  W_L,  RAND,
-  RAND, W_L,  W_L,  W_L,  W_L,  W_L,  W_L,  W_L,  W_L,  RAND,
-  RAND, W_L,  W_L,  W_L,  W_L,  W_L,  W_L,  W_L,  W_L,  RAND,
-  RAND, W_L,  W_L,  W_L,  W_L,  W_L,  W_L,  W_L,  W_L,  RAND,
-  RAND, W_L,  W_L,  W_L,  W_L,  W_L,  W_L,  W_L,  W_L,  RAND,
-  RAND, W_L,  W_L,  W_L,  W_L,  W_L,  W_L,  W_L,  W_L,  RAND,
-  RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
-  RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND };
-int __STARTFELDx5[120] = // Schwarzer Lv§ufer
-{ RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
-  RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
-  RAND, S_L,  S_L,  S_L,  S_L,  S_L,  S_L,  S_L,  S_L,  RAND,
-  RAND, S_L,  S_L,  S_L,  S_L,  S_L,  S_L,  S_L,  S_L,  RAND,
-  RAND, S_L,  S_L,  S_L,  S_L,  S_L,  S_L,  S_L,  S_L,  RAND,
-  RAND, S_L,  S_L,  S_L,  S_L,  S_L,  S_L,  S_L,  S_L,  RAND,
-  RAND, S_L,  S_L,  S_L,  S_L,  S_L,  S_L,  S_L,  S_L,  RAND,
-  RAND, S_L,  S_L,  S_L,  S_L,  S_L,  S_L,  S_L,  S_L,  RAND,
-  RAND, S_L,  S_L,  S_L,  S_L,  S_L,  S_L,  S_L,  S_L,  RAND,
-  RAND, S_L,  S_L,  S_L,  S_L,  S_L,  S_L,  S_L,  S_L,  RAND,
-  RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
-  RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND };
-/*int __STARTFELDx6[120] = // Weivüer Turm
-{ RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
-  RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
-  RAND, W_T,  W_T,  W_T,  W_T,  W_T,  W_T,  W_T,  W_T,  RAND,
-  RAND, W_T,  W_T,  W_T,  W_T,  W_T,  W_T,  W_T,  W_T,  RAND,
-  RAND, W_T,  W_T,  W_T,  W_T,  W_T,  W_T,  W_T,  W_T,  RAND,
-  RAND, W_T,  W_T,  W_T,  W_T,  W_T,  W_T,  W_T,  W_T,  RAND,
-  RAND, W_T,  W_T,  W_T,  W_T,  W_T,  W_T,  W_T,  W_T,  RAND,
-  RAND, W_T,  W_T,  W_T,  W_T,  W_T,  W_T,  W_T,  W_T,  RAND,
-  RAND, W_T,  W_T,  W_T,  W_T,  W_T,  W_T,  W_T,  W_T,  RAND,
-  RAND, W_T,  W_T,  W_T,  W_T,  W_T,  W_T,  W_T,  W_T,  RAND,
-  RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
-  RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND };
-int __STARTFELDx7[120] = // Schwarzer Turm
-{ RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
-  RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
-  RAND, S_T,  S_T,  S_T,  S_T,  S_T,  S_T,  S_T,  S_T,  RAND,
-  RAND, S_T,  S_T,  S_T,  S_T,  S_T,  S_T,  S_T,  S_T,  RAND,
-  RAND, S_T,  S_T,  S_T,  S_T,  S_T,  S_T,  S_T,  S_T,  RAND,
-  RAND, S_T,  S_T,  S_T,  S_T,  S_T,  S_T,  S_T,  S_T,  RAND,
-  RAND, S_T,  S_T,  S_T,  S_T,  S_T,  S_T,  S_T,  S_T,  RAND,
-  RAND, S_T,  S_T,  S_T,  S_T,  S_T,  S_T,  S_T,  S_T,  RAND,
-  RAND, S_T,  S_T,  S_T,  S_T,  S_T,  S_T,  S_T,  S_T,  RAND,
-  RAND, S_T,  S_T,  S_T,  S_T,  S_T,  S_T,  S_T,  S_T,  RAND,
-  RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
-  RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND };
-int __STARTFELDx8[120] = // Weivüe Dame
-{ RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
-  RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
-  RAND, W_D,  W_D,  W_D,  W_D,  W_D,  W_D,  W_D,  W_D,  RAND,
-  RAND, W_D,  W_D,  W_D,  W_D,  W_D,  W_D,  W_D,  W_D,  RAND,
-  RAND, W_D,  W_D,  W_D,  W_D,  W_D,  W_D,  W_D,  W_D,  RAND,
-  RAND, W_D,  W_D,  W_D,  W_D,  W_D,  W_D,  W_D,  W_D,  RAND,
-  RAND, W_D,  W_D,  W_D,  W_D,  W_D,  W_D,  W_D,  W_D,  RAND,
-  RAND, W_D,  W_D,  W_D,  W_D,  W_D,  W_D,  W_D,  W_D,  RAND,
-  RAND, W_D,  W_D,  W_D,  W_D,  W_D,  W_D,  W_D,  W_D,  RAND,
-  RAND, W_D,  W_D,  W_D,  W_D,  W_D,  W_D,  W_D,  W_D,  RAND,
-  RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
-  RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND };
-int __STARTFELDx9[120] = // Schwarze Dame
-{ RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
-  RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
-  RAND, S_D,  S_D,  S_D,  S_D,  S_D,  S_D,  S_D,  S_D,  RAND,
-  RAND, S_D,  S_D,  S_D,  S_D,  S_D,  S_D,  S_D,  S_D,  RAND,
-  RAND, S_D,  S_D,  S_D,  S_D,  S_D,  S_D,  S_D,  S_D,  RAND,
-  RAND, S_D,  S_D,  S_D,  S_D,  S_D,  S_D,  S_D,  S_D,  RAND,
-  RAND, S_D,  S_D,  S_D,  S_D,  S_D,  S_D,  S_D,  S_D,  RAND,
-  RAND, S_D,  S_D,  S_D,  S_D,  S_D,  S_D,  S_D,  S_D,  RAND,
-  RAND, S_D,  S_D,  S_D,  S_D,  S_D,  S_D,  S_D,  S_D,  RAND,
-  RAND, S_D,  S_D,  S_D,  S_D,  S_D,  S_D,  S_D,  S_D,  RAND,
-  RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
-  RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND };
-int __STARTFELDx10[120] = { // Weivüer Kv?nig
-    RAND, RAND, RAND, RAND, RAND, RAND,  RAND,  RAND,  RAND,  RAND,
-    RAND, RAND, RAND, RAND, RAND, RAND,  RAND,  RAND,  RAND,  RAND,
-    RAND, W_K,  W_K,  W_K,  W_K,  W_Kr,  W_K,   W_K,   W_K,   RAND,
-    RAND, W_K,  W_K,  W_K,  W_K,  W_K,   W_K,   W_K,   W_K,   RAND,
-    RAND, W_K,  W_K,  W_K,  W_K,  W_K,   W_K,   W_K,   W_K,   RAND,
-    RAND, W_K,  W_K,  W_K,  W_K,  W_K,   W_K,   W_K,   W_K,   RAND,
-    RAND, W_K,  W_K,  W_K,  W_K,  W_K,   W_K,   W_K,   W_K,   RAND,
-    RAND, W_K,  W_K,  W_K,  W_K,  W_K,   W_K,   W_K,   W_K,   RAND,
-    RAND, W_K,  W_K,  W_K,  W_K,  W_K,   W_K,   W_K,   W_K,   RAND,
-    RAND, W_K,  W_K,  W_K,  W_K,  W_K,   W_K,   W_K,   W_K,   RAND,
-    RAND, RAND, RAND, RAND, RAND, RAND,  RAND,  RAND,  RAND,  RAND,
-    RAND, RAND, RAND, RAND, RAND, RAND,  RAND,  RAND,  RAND,  RAND
-};
-int __STARTFELDx11[120] = { // Schwarzer Kv?nig
-    RAND, RAND, RAND, RAND, RAND, RAND,  RAND,  RAND,  RAND,  RAND,
-    RAND, RAND, RAND, RAND, RAND, RAND,  RAND,  RAND,  RAND,  RAND,
-    RAND, S_K,  S_K,  S_K,  S_K,  S_K,   S_K,   S_K,   S_K,   RAND,
-    RAND, S_K,  S_K,  S_K,  S_K,  S_K,   S_K,   S_K,   S_K,   RAND,
-    RAND, S_K,  S_K,  S_K,  S_K,  S_K,   S_K,   S_K,   S_K,   RAND,
-    RAND, S_K,  S_K,  S_K,  S_K,  S_K,   S_K,   S_K,   S_K,   RAND,
-    RAND, S_K,  S_K,  S_K,  S_K,  S_K,   S_K,   S_K,   S_K,   RAND,
-    RAND, S_K,  S_K,  S_K,  S_K,  S_K,   S_K,   S_K,   S_K,   RAND,
-    RAND, S_K,  S_K,  S_K,  S_K,  S_K,   S_K,   S_K,   S_K,   RAND,
-    RAND, S_K,  S_K,  S_K,  S_K,  S_Kr,  S_K,   S_K,   S_K,   RAND,
-    RAND, RAND, RAND, RAND, RAND, RAND,  RAND,  RAND,  RAND,  RAND,
-    RAND, RAND, RAND, RAND, RAND, RAND,  RAND,  RAND,  RAND,  RAND
-};//*/
-
-
-/*int __STARTPUNKTEx[120] = { // Weivüe bauern Cuckoo
-    RAND, RAND,  RAND,  RAND,   RAND,  RAND,  RAND,  RAND, RAND,  RAND,
-    RAND, RAND,  RAND,  RAND,   RAND,  RAND,  RAND,  RAND, RAND,  RAND,
-    RAND, 0,     0,     0,      0,     0,  	0,     0,    0,     RAND,
-    RAND, 200,   200,   200,    200,   200,	200,   200,  200,   RAND,
-    RAND, 100,   100,   100,    100,   100,	100,   100,  100,   RAND,
-    RAND, -5,    4,     10,     20,    20,    10,    4,    -5,    RAND,
-    RAND, -6,    4,     5,      16,    16,    5,     4,    -6,    RAND,
-    RAND, -6,    4,     2,      5,     5,     2,     4,    -6,    RAND,
-    RAND, -6,    4,     4,      -15,  -15,    4,     4,    -6,    RAND,
-    RAND, 0,     0,     0,      0,     0,     0,     0,    0,     RAND,
-    RAND, RAND,  RAND,  RAND,   RAND,  RAND,  RAND,  RAND, RAND,  RAND,
-    RAND, RAND,  RAND,  RAND,   RAND,  RAND,  RAND,  RAND, RAND,  RAND
-};*/
-double __STARTPUNKTE[120] = {
+double __STARTPUNKTE[120] = { // Weiße Bauern Cuckoo
     RAND, RAND, RAND,  RAND,   RAND,  RAND, RAND, RAND,  RAND,   RAND,
     RAND, RAND, RAND,  RAND,   RAND,  RAND, RAND, RAND,  RAND,   RAND,
     RAND, 0,    0,     0,      0,     0,    0,    0,     0,      RAND,
@@ -442,20 +201,6 @@ double __STARTPUNKTEx2[120] = { // Weiße Springer Pawel
     RAND,  RAND,  RAND,  RAND,  RAND,   RAND,   RAND,   RAND,   RAND,  RAND,
     RAND,  RAND,  RAND,  RAND,  RAND,   RAND,   RAND,   RAND,   RAND,  RAND
 };
-/*double __STARTPUNKTEx3[120] = {
-    RAND,  RAND,  RAND,  RAND,  RAND,   RAND,   RAND,   RAND,   RAND,  RAND,
-    RAND,  RAND,  RAND,  RAND,  RAND,   RAND,   RAND,   RAND,   RAND,  RAND,
-    RAND,  -135,  -25,   -15,   -10,    -10,    -15,    -25,    -135,  RAND,
-    RAND,  -20,   -10,   0,     5,      5,      0,      -10,    -20,   RAND,
-    RAND,  -5,    5,     15,    20,     20,     15,     5,      -5,    RAND,
-    RAND,  -5,    5,     15,    20,     20,     15,     5,      -5,    RAND,
-    RAND,  -10,   0,     10,    15,     15,     10,     0,      -10,   RAND,
-    RAND,  -20,   -10,   0,     5,      5,      0,      -10,    -20,   RAND,
-    RAND,  -35,   -25,   -15,   -10,    -10,    -15,    -25,    -35,   RAND,
-    RAND,  -50,   -40,   -30,   -25,    -25,    -30,    -40,    -50,   RAND,
-    RAND,  RAND,  RAND,  RAND,  RAND,   RAND,   RAND,   RAND,   RAND,  RAND,
-    RAND,  RAND,  RAND,  RAND,  RAND,   RAND,   RAND,   RAND,   RAND,  RAND
-};*/
 /*double __STARTPUNKTEx4[120] = //Weivüe Lv§ufer
 {RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
 RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
@@ -467,19 +212,6 @@ RAND,0,  2,  4,  4,  4,  4,  2,  0,RAND,
 RAND,0,  2,  4,  4,  4,  4,  2,  0,RAND,
 RAND,0,  4,  2,  2,  2,  2,  4,  0,RAND,
 RAND,	0,  0,  0,  0,  0,  0,  0,  0,RAND,
-RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND};
-double __STARTPUNKTEx5[120] =
-{RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-RAND,	0,  0,  0,  0,  0,  0,  0,  0,RAND,
-RAND,0,  4,  2,  2,  2,  2,  4,  0,RAND,
-RAND,0,  2,  4,  4,  4,  4,  2,  0,RAND,
-RAND,0,  2,  4,  4,  4,  4,  2,  0,RAND,
-RAND,0,  2,  4,  4,  4,  4,  2,  0,RAND,
-RAND,0,  3,  4,  4,  4,  4,  3,  0,RAND,
-RAND,0,  4,  2,  2,  2,  2,  4,  0,RAND,
-RAND,-5, -5, -7, -5, -5, -7, -5, -5,	RAND,
 RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
 RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND};
 /*double __STARTPUNKTEx6[120] = //Tvºrme
@@ -495,19 +227,6 @@ RAND,	22, 27, 27, 27, 27, 27, 27, 22,RAND,
 RAND,	8, 11, 13, 13, 13, 13, 11,  8,RAND,
 RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
 RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND};
-double __STARTPUNKTEx7[120] =
-{RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-RAND,	8, 11, 13, 13, 13, 13, 11,  8,RAND,
-RAND,	22, 27, 27, 27, 27, 27, 27, 22,RAND,
-RAND,	0,  0,  0,  0,  0,  0,  0,  0,RAND,
-RAND,	0,  0,  0,  0,  0,  0,  0,  0,RAND,
-RAND,	-2,  0,  0,  0,  0,  0,  0, -2,RAND,
-RAND,	-2,  0,  0,  2,  2,  0,  0, -2,RAND,
-RAND,	-3,  2,  5,  5,  5,  5,  2, -3,RAND,
-RAND,	0,  3,  5,  5,  5,  5,  3,  0,		RAND,
-RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND};
 double __STARTPUNKTEx8[120] = //Dame
 {RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
 RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
@@ -520,20 +239,8 @@ RAND, 0,  5,  5,  6,  6,  5,  5,  0,RAND,
 RAND,-5,  0,  5,  5,  5,  5,  0, -5,RAND,
 RAND,10, -5,  0,  0,  0,  0, -5,-10,RAND,
 RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND};
-double __STARTPUNKTEx9[120] =
-{RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-RAND,10, -5,  0,  0,  0,  0, -5,-10,RAND,
-RAND,-5,  0,  5,  5,  5,  5,  0, -5,RAND,
-RAND, 0,  5,  5,  6,  6,  5,  5,  0,RAND,
-RAND,0,  5,  6,  6,  6,  6,  5,  0,RAND,
-RAND,0,  5,  6,  6,  6,  6,  5,  0,RAND,
-RAND,0,  5,  5,  6,  6,  5,  5,  0,RAND,
-RAND,-5,  0,  5,  5,  5,  5,  0, -5,RAND,
-RAND,-10, -5,  0,  0,  0,  0, -5,-10,	RAND,
-RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
 RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND};*/
+
 double __STARTPUNKTEx10[120] = { //Kv?nig
     RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
     RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
@@ -548,59 +255,6 @@ double __STARTPUNKTEx10[120] = { //Kv?nig
     RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
     RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND
 };
-/*double __STARTPUNKTEx11[120] = {
-    RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-    RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-    RAND,	-22,-35,-40,-40,-40,-40,-35,-22,RAND,
-    RAND,	-22,-35,-40,-40,-40,-40,-35,-22,RAND,
-    RAND,	 -25,-35,-40,-45,-45,-40,-35,-25,RAND,
-    RAND,	-15,-30,-35,-40,-40,-35,-30,-15,RAND,
-    RAND,	-10,-15,-20,-25,-25,-20,-15,-10,RAND,
-    RAND,	4, -2, -5,-15,-15, -5, -2,  4,RAND,
-    RAND,	16, 14,  7, -3, -3,  7, 14, 16,RAND,
-    RAND,	24, 24,  9,  0,  0,  9, 24, 24,		RAND,
-    RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-    RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND
-};//*/
-/*double __STARTPUNKTEx10[120] = //Kv?nig
-{RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-RAND,	32, 26,  15,  6,  6,  15, 26, 32,		RAND,
-RAND,	17, 10,  3, -7, -7,  3, 10, 17,RAND,
-RAND,	8, -1, -6,-16,-16, -6, -1,  8,RAND,
-RAND,	-4,-13,-18,-26,-26,-18,-13,-4,RAND,
-RAND,	-7,-20,-26,-33,-33,-26,-20,-7,RAND,
-RAND,	 -7,-18,-23,-31,-31,-23,-18,-7,RAND,
-RAND,	-2,-15,-20,-25,-25,-20,-15,-2,RAND,
-RAND,	9,-4,-9,-14,-14,-9,-4,9,RAND,
-RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND};
-double __STARTPUNKTEx11[120] =
-{RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-RAND,	9,-4,-9,-14,-14,-9,-4,9,RAND,
-RAND,	-2,-15,-20,-25,-25,-20,-15,-2,RAND,
-RAND,	 -7,-18,-23,-31,-31,-23,-18,-7,RAND,
-RAND,	-7,-20,-26,-33,-33,-26,-20,-7,RAND,
-RAND,	-4,-13,-18,-26,-26,-18,-13,-4,RAND,
-RAND,	8, -1, -6,-16,-16, -6, -1,  8,RAND,
-RAND,	17, 10,  3, -7, -7,  3, 10, 17,RAND,
-RAND,	32, 26,  15,  6,  6,  15, 26, 32,		RAND,
-RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND};//*/
-/*double Zentrum[120] =
-{RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-RAND,	1,1,1,1,1,1,1,1,RAND,
-RAND,	1,2,2,2,2,2,2,1,RAND,
-RAND,	1,2,3,3,3,3,2,1,RAND,
-RAND,	1,2,3,4,4,3,2,1,RAND,
-RAND,	1,2,3,4,4,3,2,1,RAND,
-RAND,	1,2,3,3,3,3,2,1,RAND,
-RAND,	1,2,2,2,2,2,2,1,RAND,
-RAND,	1,1,1,1,1,1,1,1,RAND,
-RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND};*/
 
 double materialwert[15] = { // Materialwert 1.15
     0,                      // NIL! 0
@@ -2777,7 +2431,7 @@ int sort(denkpaar _zugstapel[200], int _n, int _stufe, int _i) {
 
         // Wenn der aktuelle Zug (nach Aktualisierung seines 'order'-Werts)
         // besser ist als der bisher beste gefundene Zug, merke dir seinen Index.
-        if (_zugstapel[j].order > _zugstapel[best_index].order) {
+        if (j == _i || _zugstapel[j].order > _zugstapel[best_index].order) {
             best_index = j; // Nur den Index merken, noch nicht tauschen!
         }
     }

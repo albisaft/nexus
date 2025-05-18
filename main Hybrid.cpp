@@ -111,7 +111,6 @@ int main(int argc, char **argv) {
     timeline = 0;
     time_t t1, t2, t0;
 
-    srand (time(NULL));
 
     // Kommandozeilenargumente
 
@@ -212,7 +211,7 @@ beginning:
             // wichtige Initkommandos - wo man antworten muss
 
             if (command == "uci") {
-                cout << "id name NEXUS 250511 SRP\n";
+                cout << "id name NEXUS 250514 SP\n";
                 cout << "id author Albrecht Fiebiger & Stefan Werner\n";
                 cout << "uciok\n"; }
 
