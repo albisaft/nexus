@@ -212,8 +212,8 @@ RAND,0,  2,  4,  4,  4,  4,  2,  0,RAND,
 RAND,0,  4,  2,  2,  2,  2,  4,  0,RAND,
 RAND,	0,  0,  0,  0,  0,  0,  0,  0,RAND,
 RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND};
-/*double __STARTPUNKTEx6[120] = //Tvºrme
+RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND};*/
+/*double __STARTPUNKTEx6[120] = //Tvºrme Cuckoo
 {RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
 RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
 RAND,	0,  3,  5,  5,  5,  5,  3,  0,		RAND,
@@ -226,7 +226,7 @@ RAND,	22, 27, 27, 27, 27, 27, 27, 22,RAND,
 RAND,	8, 11, 13, 13, 13, 13, 11,  8,RAND,
 RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
 RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND};
-double __STARTPUNKTEx8[120] = //Dame
+/*double __STARTPUNKTEx8[120] = //Dame
 {RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
 RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
 RAND,-10, -5,  0,  0,  0,  0, -5,-10,	RAND,
@@ -1508,7 +1508,7 @@ inline double entwicklung(int feld[120], int farbe)    {
     for (int i = 21; i <= 98; i++)  {
         //dieses_feld = feld[i];
 
-        if (feld[i] == RAND || (abs(feld[i]) > 6 && abs(feld[i])<10))
+        if (feld[i] == RAND || feld[i] == LEER || (abs(feld[i]) > 6 && abs(feld[i]) < 10))
             continue;
 
         if (feld[i] == W_Bx || feld[i] == W_B)  {
@@ -1547,9 +1547,9 @@ inline double entwicklung(int feld[120], int farbe)    {
         //REST PSQ
         /*    if (feld[i] == __STARTFELDx4[i]) wertung += 0.55* __STARTPUNKTEx4[i];  // +kingzone_ich[i]*10;	//1.17
             if (feld[i] == __STARTFELDx5[i]) wertung -=  0.55* __STARTPUNKTEx5[i];//*/
-        /* if (feld[i] == __STARTFELDx6[i]) wertung +=  __STARTPUNKTEx6[i];  // +kingzone_ich[i]*10;	//1.17
-          if (feld[i] == __STARTFELDx7[i]) wertung -=  __STARTPUNKTEx7[i];
-          if (feld[i] == __STARTFELDx8[i]) wertung +=  __STARTPUNKTEx8[i];  // +kingzone_ich[i]*10;	//1.17
+  /*       if (feld[i] == W_T || feld[i] == W_Tr) wertung +=  __STARTPUNKTEx6[i];  // +kingzone_ich[i]*10;	//1.17
+          if (feld[i] == S_T || feld[i] == S_Tr) wertung -=  __STARTPUNKTEx6[119 - i];
+        /*  if (feld[i] == __STARTFELDx8[i]) wertung +=  __STARTPUNKTEx8[i];  // +kingzone_ich[i]*10;	//1.17
           if (feld[i] == __STARTFELDx9[i]) wertung -=  __STARTPUNKTEx9[i];*/
         if (feld[i] == W_K || feld[i] == W_Kr)
             wertung +=  (figurenwert-4100)*0.0005*__STARTPUNKTEx10[i];  // +kingzone_ich[i]*10;	//1.17
@@ -2220,15 +2220,7 @@ inline int zuganzahl(int feld[120], int _eigene_farbe)  { // Zaehlt Zuege von
                     int zielfeld = feld[pos2];
                     if (zielfeld == RAND) // Aus!
                         break;
-                    /*    for (int richtung = 0; richtung <= bewegung[W_K][0]; richtung++)
-                        {
-                       for (int weite = 0; weite <= bewegung[W_K][1]; weite++)  {
-                       pos2 = i + farbvorzeichen * bewegung[W_K][2+richtung] * (weite+1);
-                       int zielfeldk = feld[pos2];
-                       if (zielfeld == zielfeldk) n -= 400*farbvorzeichen;return n;}}_*/
-                    //    if (kingzone[pos2] == -farbvorzeichen && farbvorzeichen == _eigene_farbe) {if (farbvorzeichen == 1) {Angreifer_Wert_w += KSafety*K_Angriff_Bauer; if (C_flag == 0) Anzahl_Angreifer_w += 1;} else {Angreifer_Wert_s += KSafety*K_Angriff_Bauer; if (C_flag == 0) Anzahl_Angreifer_s += 1;}; C_flag = 1;}
-                    //   if (kingzone[pos2] == -farbvorzeichen && farbvorzeichen != _eigene_farbe) {if (farbvorzeichen == 1) {Angreifer_Wert_w += KSafety*K_Angriff_Bauer*0.2; if (C_flag == 0) Anzahl_Angreifer_w += 1;} else {Angreifer_Wert_s += KSafety*K_Angriff_Bauer; if (C_flag == 0) Anzahl_Angreifer_s += 1;}; C_flag = 1;}
-//       if (kingzone[i] == 1) Attack_Bauer += KSafety;
+
                     if (farbvorzeichen == _eigene_farbe)
                         zugzone_ich[pos2] += 10000;
                     else
@@ -2273,13 +2265,6 @@ inline int zuganzahl(int feld[120], int _eigene_farbe)  { // Zaehlt Zuege von
                         break;
                     }
 
-                    //   if (farbvorzeichen != _eigene_farbe)  {
-                    //         Attack_Bauer += kingzone_ich[pos2]/* * Koenigsangriff_Er*/;
-
-                    //   }
-                    //   else  {
-                    //  Attack_Bauer += kingzone_gegner[pos2] * Koenigsangriff_Ich;
-                    //   }//*/
                 }
             }
             Attack_Bauer *= farbvorzeichen;
@@ -2296,34 +2281,19 @@ inline int zuganzahl(int feld[120], int _eigene_farbe)  { // Zaehlt Zuege von
                 for (int weite = 0; weite <= bewegung[figur][1]; weite++)  {
                     pos2 = i + farbvorzeichen * bewegung[figur][2 + richtung] * (weite + 1);
                     int zielfeld = feld[pos2];
-                    //   if (feld[i + 9 * farbvorzeichen] != W_Bx*farbvorzeichen) KSafety -= KSafe*(figurenwert - 3000)*farbvorzeichen;
-                    //   if (feld[i + 9 * farbvorzeichen] != W_Bx*farbvorzeichen) KSafety -= KSafe*(figurenwert - 3000)*farbvorzeichen;
-                    //   if (feld[i + 9 * farbvorzeichen] != W_Bx*farbvorzeichen) KSafety -= KSafe*(figurenwert - 3000)*farbvorzeichen;
-                    //   KSafety -= (i - 48) * (figurenwert - 4000) * farbvorzeichen;
-                    /*    for (int richtung = 0; richtung <= bewegung[W_K][0]; richtung++)
-                        {
-                       for (int weite = 0; weite <= bewegung[W_K][1]; weite++)  {
-                       pos2 = i + farbvorzeichen * bewegung[W_K][2+richtung] * (weite+1);
-                       int zielfeldk = feld[pos2];
-                       if (zielfeld == zielfeldk) n -= 400*farbvorzeichen;return n;}}*/
+
                     if (zielfeld == RAND) // Aus!
                         break;
                     if (farbvorzeichen == _eigene_farbe)
                         zugzone_ich[pos2] += 1;
                     else
                         zugzone_du[pos2] += 1;
+
                     if (zielfeld != LEER)  {
                         int zielfigur = abs(zielfeld);
 
-
-
-                        /*   if (abs(zielfeld) == W_K)
-                                   break;*/
                         if (farbvorzeichen != _eigene_farbe)  {
 
-                            /*if (OpenLines[i%10-2] == 1) KSafety -= 550;
-                                        if (OpenLines[i%10] == 1) KSafety -= 550;
-                                        if (OpenLines[i%10-1] == 1) KSafety -= 550;//*/
                             if (zielfeld / _eigene_farbe > 0) { // Gegner greift meine Figur an
                                 if (schlagzone_gegner[pos2] != 1)
                                     schlagzone_gegner[pos2] = 1;
@@ -2354,18 +2324,7 @@ inline int zuganzahl(int feld[120], int _eigene_farbe)  { // Zaehlt Zuege von
                         break;
                     }
 
-                    /*    if (farbvorzeichen ==1)
-                               {
-                                    if (OpenLines_weiss[i%10-2] == 1) Attack_Koenig -= figurenwert/2;
-                                     if (OpenLines_weiss[i%10] == 1) Attack_Koenig -= figurenwert/2;
-                                     if (OpenLines_weiss[i%10-1] == 1) Attack_Koenig -= figurenwert/2;}//*/
 
-                    /*   else  {
-                    //     Attack_Koenig += kingzone_gegner[pos2] * Koenigsangriff_Ich;
-                       if (OpenLines_schwarz[i%10-2] == 1) Attack_Koenig -= figurenwert/2;
-                                    if (OpenLines_schwarz[i%10] == 1) Attack_Koenig -= figurenwert/2;
-                                    if (OpenLines_schwarz[i%10-1] == 1) Attack_Koenig -= figurenwert/2;//*/
-                    //   }//
                 }
             }
             if (((feld[i+31*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER)&&(feld[i+21*farbvorzeichen]==LEER)||(feld[i+29*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+19*farbvorzeichen]==LEER)&&(feld[i+29*farbvorzeichen]==LEER)||(feld[i+21*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+21*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER))||((feld[i+19*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+19*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+9*farbvorzeichen]==LEER)))
