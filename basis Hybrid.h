@@ -1499,11 +1499,16 @@ void Spielfeld::write()  {
 inline double entwicklung(int feld[120], int farbe)    {
     double wertung = 0;
     int    dieses_feld;
+
+    const double ROCHADE_BONUS = 40;
+    double Phasen_Faktor = 1.0;
+
+    if (figurenwert < 6000) {
+        Phasen_Faktor = figurenwert / 6000;
+    }
+
     //double faktor_eigene_farbe = 1;
     //if (farbe != eigene_farbe) faktor_eigene_farbe = 2;
-
-
-
 
     for (int i = 21; i <= 98; i++)  {
         //dieses_feld = feld[i];
@@ -1537,28 +1542,132 @@ inline double entwicklung(int feld[120], int farbe)    {
             // ************************************************************
             if (i < 60 && feld[i-10] != W_B && feld[i-10] != W_Bx && feld[i-20] != W_B && feld[i-20] != W_Bx && feld[i-30] != W_Bx && feld[i-9] != W_B && feld[i-9] != W_Bx && feld[i-19] != W_B && feld[i-19] != W_Bx && feld[i-29] != W_Bx && feld[i-11] != W_B && feld[i-11] != W_Bx && feld[i-21] != W_B && feld[i-21] != W_Bx && feld[i-31] != W_Bx)
                 wertung -= FreibauerScore;
-        } //	else wertung -= 1 * __STARTPUNKTEx[i];}//-kingzone_gegner[i]*10;*/
+        }
         if (feld[i] == W_P) {
             wertung += __STARTPUNKTEx2[i];   // +kingzone_ich[i]*10;	//1.17
-        }// if (i>61 && (__STARTPUNKTEx2[i]>10) && (feld[i-9] == W_B || feld[i-11]==W_B)) wertung += 75;}
+        }
         if (feld[i] == S_P) {
             wertung -= __STARTPUNKTEx2[119 - i];   // -kingzone_gegner[i]*10;
-        }//if (i<58 && (__STARTPUNKTEx3[i]>10) && (feld[i+9] == S_B || feld[i+11]==S_B)) wertung -= 75;}
-        //REST PSQ
+        }
         /*    if (feld[i] == __STARTFELDx4[i]) wertung += 0.55* __STARTPUNKTEx4[i];  // +kingzone_ich[i]*10;	//1.17
             if (feld[i] == __STARTFELDx5[i]) wertung -=  0.55* __STARTPUNKTEx5[i];//*/
-  /*       if (feld[i] == W_T || feld[i] == W_Tr) wertung +=  __STARTPUNKTEx6[i];  // +kingzone_ich[i]*10;	//1.17
-          if (feld[i] == S_T || feld[i] == S_Tr) wertung -=  __STARTPUNKTEx6[119 - i];
-        /*  if (feld[i] == __STARTFELDx8[i]) wertung +=  __STARTPUNKTEx8[i];  // +kingzone_ich[i]*10;	//1.17
-          if (feld[i] == __STARTFELDx9[i]) wertung -=  __STARTPUNKTEx9[i];*/
-        if (feld[i] == W_K || feld[i] == W_Kr)
-            wertung +=  (figurenwert-4100)*0.0005*__STARTPUNKTEx10[i];  // +kingzone_ich[i]*10;	//1.17
-        if (feld[i] == S_K || feld[i] == S_Kr)
-            wertung -=  (figurenwert-4100)*0.0005*__STARTPUNKTEx10[119 - i];//*/
+        /*       if (feld[i] == W_T || feld[i] == W_Tr) wertung +=  __STARTPUNKTEx6[i];  // +kingzone_ich[i]*10;	//1.17
+                if (feld[i] == S_T || feld[i] == S_Tr) wertung -=  __STARTPUNKTEx6[119 - i];
+              /*  if (feld[i] == __STARTFELDx8[i]) wertung +=  __STARTPUNKTEx8[i];  // +kingzone_ich[i]*10;	//1.17
+                if (feld[i] == __STARTFELDx9[i]) wertung -=  __STARTPUNKTEx9[i];*/
+        if (feld[i] == W_K || feld[i] == W_Kr) {
+                double pawn_shield_score_w = 0;
+            wertung +=  (figurenwert-4100)*0.0005*__STARTPUNKTEx10[i];
+            if (feld[i] == W_Kr) {
+                if (feld[21] == W_Tr || feld[28] == W_Tr) {
+                    wertung += ROCHADE_BONUS * Phasen_Faktor;
+                    if (feld[21] == W_Tr) { //lange Rochade möglich
+                        if (feld[31] != W_Bx)
+                            wertung -= 15 * Phasen_Faktor;
+                        if (feld[32] != W_Bx)
+                            wertung -= 20 * Phasen_Faktor;
+                        if (feld[33] != W_Bx)
+                            wertung -= 30 * Phasen_Faktor;
+                    }
+                    if (feld[28] == W_Tr) { //kurze Rochade möglich
+                        if (feld[38] != W_Bx)
+                            wertung -= 15 * Phasen_Faktor;
+                        if (feld[37] != W_Bx)
+                            wertung -= 20 * Phasen_Faktor;
+                        if (feld[36] != W_Bx)
+                            wertung -= 30 * Phasen_Faktor;
+                    }
+                }
+            }
 
+            if (i == 27) {
+                if (feld[36] == W_Bx)
+                    pawn_shield_score_w += 12;
+                else
+                    pawn_shield_score_w -= 10;
+                if (feld[37] == W_Bx)
+                    pawn_shield_score_w += 20;
+                else
+                    pawn_shield_score_w -= 25;
+                if (feld[38] == W_Bx)
+                    pawn_shield_score_w += 10;
+                else
+                    pawn_shield_score_w -= 7;
+            }
+            if (i == 22 || i == 23) {
+                if (feld[31] == W_Bx)
+                    pawn_shield_score_w += 10;
+                else
+                    pawn_shield_score_w -= 7;
+                if (feld[32] == W_Bx)
+                    pawn_shield_score_w += 20;
+                else
+                    pawn_shield_score_w -= 25;
+                if (feld[33] == W_Bx)
+                    pawn_shield_score_w += 12;
+                else
+                    pawn_shield_score_w -= 10;
+            }
+            wertung += pawn_shield_score_w * Phasen_Faktor;
+        }
+        if (feld[i] == S_K || feld[i] == S_Kr) {
+                double pawn_shield_score_b = 0;
+            wertung -=  (figurenwert-4100)*0.0005*__STARTPUNKTEx10[119 - i];
+
+            if (feld[i] == S_Kr) {
+                if (feld[91] == S_Tr || feld[98] == S_Tr) {
+                    wertung -= ROCHADE_BONUS * Phasen_Faktor;
+                    if (feld[91] == S_Tr) { //lange Rochade möglich
+                        if (feld[81] != S_Bx)
+                            wertung += 8 * Phasen_Faktor;
+                        if (feld[82] != S_Bx)
+                            wertung += 10 * Phasen_Faktor;
+                        if (feld[83] != S_Bx)
+                            wertung += 15 * Phasen_Faktor;
+                    }
+                    if (feld[98] == S_Tr) { //kurze Rochade möglich
+                        if (feld[88] != S_Bx)
+                            wertung += 8 * Phasen_Faktor;
+                        if (feld[87] != S_Bx)
+                            wertung += 10 * Phasen_Faktor;
+                        if (feld[86] != S_Bx)
+                            wertung += 15 * Phasen_Faktor;
+                    }
+                }
+            }
+            if (i == 97) {
+                if (feld[86] == S_Bx)
+                    pawn_shield_score_b += 12;
+                else
+                    pawn_shield_score_b -= 10;
+                if (feld[87] == S_Bx)
+                    pawn_shield_score_b += 20;
+                else
+                    pawn_shield_score_b -= 25;
+                if (feld[88] == S_Bx)
+                    pawn_shield_score_b += 10;
+                else
+                    pawn_shield_score_b -= 7;
+            }
+            if (i == 92 || i == 93) {
+                if (feld[81] == S_Bx)
+                    pawn_shield_score_b += 10;
+                else
+                    pawn_shield_score_b -= 7;
+                if (feld[82] == S_Bx)
+                    pawn_shield_score_b += 20;
+                else
+                    pawn_shield_score_b -= 25;
+                if (feld[83] == S_Bx)
+                    pawn_shield_score_b += 12;
+                else
+                    pawn_shield_score_b -= 10;
+            }
+            wertung -= pawn_shield_score_b * Phasen_Faktor;
+        }
     }
-    return wertung;
-}
+        return wertung;
+    }
 
 inline double material(int feld[120], int farbe)  {
     double wert = 0;
@@ -1638,770 +1747,991 @@ inline double material(int feld[120], int farbe)  {
 }
 
 
-inline int zuganzahl(int feld[120], int _eigene_farbe)  { // Zaehlt Zuege von
-    // Offizieren und
-    // Bauern inclusive
-    // Deckung und
-    // Schlagen,
-    // bei Bauern jedoch kein Schlagen
-    // , was auch unterschiedlich gewichtet werden kann
-    int pos2;
-    int figur;
-    int farbvorzeichen;
-    int Attack = 0;
-    double schlagzone_ich[120] = {0};
-    double schlagzone_gegner[120] = {0};
-    for(int j=21; j<99; ++j) {
-        zugzone_ich[j] = 0;
-        zugzone_du[j] = 0;
-    }
-
-
-    double n = 0;
-    int Anzahl_Angreifer_w = 0;
-    int Anzahl_Angreifer_s = 0;
-    double Angreifer_Wert_w = 0;
-    double Angreifer_Wert_s = 0;
-    double K_Safety_Wert = 0;//*/
-    // disp(feld);
-    for (int i = 21; i <= 98; i++)    {
-        int C_flag = 0;
-        figur = abs(feld[i]);
-
-        if (feld[i] > 0) {
-            farbvorzeichen = +1;
-        } else {
-            farbvorzeichen = -1;
+    inline int zuganzahl(int feld[120], int _eigene_farbe)  { // Zaehlt Zuege von
+        // Offizieren und
+        // Bauern inclusive
+        // Deckung und
+        // Schlagen,
+        // bei Bauern jedoch kein Schlagen
+        // , was auch unterschiedlich gewichtet werden kann
+        int pos2;
+        int figur;
+        int farbvorzeichen;
+        int Attack = 0;
+        double schlagzone_ich[120] = {0};
+        double schlagzone_gegner[120] = {0};
+        for(int j=21; j<99; ++j) {
+            zugzone_ich[j] = 0;
+            zugzone_du[j] = 0;
         }
 
-        if ((figur == LEER) || (figur == RAND))
-            continue;
 
-        if ((figur == W_D)) {
-            int Attack_Dame = 0;
-            int FS_Dame = 0;
+        double n = 0;
+        int Anzahl_Angreifer_w = 0;
+        int Anzahl_Angreifer_s = 0;
+        double Angreifer_Wert_w = 0;
+        double Angreifer_Wert_s = 0;
 
-            for (int richtung = 0; richtung <= bewegung[figur][0]; richtung++)  {
-                for (int weite = 0; weite <= bewegung[figur][1]; weite++)  {
-                    pos2 = i + farbvorzeichen * bewegung[figur][2 + richtung] * (weite + 1);
-                    int zielfeld = feld[pos2];
+        double K_Safety_Wert = 0;//*/
+        // disp(feld);
+        for (int i = 21; i <= 98; i++)    {
+            int C_flag = 0;
+            figur = abs(feld[i]);
 
-                    /*    for (int richtung = 0; richtung <= bewegung[W_K][0]; richtung++)
-                        {
-                       for (int weite = 0; weite <= bewegung[W_K][1]; weite++)  {
-                       pos2 = i + farbvorzeichen * bewegung[W_K][2+richtung] * (weite+1);
-                       int zielfeldk = feld[pos2];
-                       if (zielfeld == zielfeldk) n -= 400*farbvorzeichen;return n;}}*/
-                    if (zielfeld == RAND) // Aus!
-                        break;
-
-                    if (farbvorzeichen == _eigene_farbe)
-                        zugzone_ich[pos2] += 10;
-                    else
-                        zugzone_du[pos2] += 10;
-                    if (kingzone[pos2] == -farbvorzeichen) {
-                        if (farbvorzeichen == _eigene_farbe) {
-                            if (farbvorzeichen == 1) {
-                                Angreifer_Wert_w += KSafety;
-                                if (C_flag == 0)
-                                    Anzahl_Angreifer_w += 1;
-                            } else {
-                                Angreifer_Wert_s += KSafety;
-                                if (C_flag == 0)
-                                    Anzahl_Angreifer_s += 1;
-                            };
-                            C_flag = 1;
-                        } else {
-                            if (farbvorzeichen == 1) {
-                                Angreifer_Wert_w += KSafety*0.5;
-                                if (C_flag == 0)
-                                    Anzahl_Angreifer_w += 1;
-                            } else {
-                                Angreifer_Wert_s += KSafety*0.5;
-                                if (C_flag == 0)
-                                    Anzahl_Angreifer_s += 1;
-                            };
-                            C_flag = 1;
-                        }
-                    }
-
-
-                    if (zielfeld != LEER)  {
-                        int zielfigur = abs(zielfeld);
-
-
-                        /*   if (abs(zielfeld) == W_K)
-                                break;*/
-
-                        if (farbvorzeichen != _eigene_farbe)  {
-                            if (zielfeld / _eigene_farbe > 0) {                // Gegner greift meine Figur an
-                                if (schlagzone_gegner[pos2] != 1)
-                                    schlagzone_gegner[pos2] = 1;
-                                else
-                                    Attack_Dame += KooIch;
-                                //    Attack_Dame += kingzone_ich[pos2] * Koenigsangriff_Er;
-
-                                Attack_Dame += (abs(zielfeld) * materialwert[abs(zielfeld)] - 40) * AttackIch;
-
-
-
-                            } else {
-                                Attack_Dame += DefIch1;
-
-                                if (abs(zielfeld) < 6)
-                                    Attack_Dame -= DefIch2;
-                            } // Gegner deckt seine Figuren
-
-                        } else  {
-                            if (zielfeld / _eigene_farbe < 0) {                     // Ich greife Gegner an
-                                if (schlagzone_ich[pos2] != 1)
-                                    schlagzone_ich[pos2] = 1;
-                                else
-                                    Attack_Dame += KooEr;
-                                //  Attack_Dame += kingzone_gegner[pos2] * Koenigsangriff_Ich;
-
-                                if (zielfigur == W_K || zielfigur == W_Kr)
-                                    break;
-                                Attack_Dame += (abs(zielfeld) * materialwert[abs(zielfeld)]) / AttackEr;
-                            } else {
-                                Attack_Dame += DefEr1;
-
-                                if (abs(zielfeld) < 6)
-                                    Attack_Dame -= DefEr2;
-                            }
-                        } // Ich decke meine Figuren
-                        break;
-                    }
-
-                }
+            if (feld[i] > 0) {
+                farbvorzeichen = +1;
+            } else {
+                farbvorzeichen = -1;
             }
-            //Wie sicher steht meine Dame?
-             if ((feld[i+31*farbvorzeichen] == -W_Bx*farbvorzeichen && feld[i+11*farbvorzeichen]==LEER && feld[i+21*farbvorzeichen]==LEER) || (feld[i+29*farbvorzeichen] == -W_Bx*farbvorzeichen && feld[i+19*farbvorzeichen]==LEER && feld[i+29*farbvorzeichen]==LEER) || ((feld[i+21*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+21*farbvorzeichen] == -W_Bx*farbvorzeichen)&&feld[i+11*farbvorzeichen]==LEER) || ((feld[i+19*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+19*farbvorzeichen] == -W_Bx*farbvorzeichen) && feld[i+9*farbvorzeichen]==LEER) || feld[i+18*farbvorzeichen] == -W_L*farbvorzeichen || feld[i+22*farbvorzeichen] == -W_L*farbvorzeichen)
-                FS_Dame -= Figurensicherheit;
 
+            if ((figur == LEER) || (figur == RAND))
+                continue;
 
-            Attack_Dame *= farbvorzeichen;
-            FS_Dame *= farbvorzeichen;
-            //  cout << MobDame * n_Dame + AttDame * Attack_Dame << "\n";
-            n           += AttDame * Attack_Dame + FS_Dame;
-        }
+            if ((figur == W_D)) {
+                int Attack_Dame = 0;
+                int FS_Dame = 0;
 
-        if ((figur == W_T) || (figur == W_Tr)) {
-            int n_Turm      = -10;
-            int Attack_Turm = 0;
-            int FS_Turm = 0;
+                for (int richtung = 0; richtung <= bewegung[figur][0]; richtung++)  {
+                    for (int weite = 0; weite <= bewegung[figur][1]; weite++)  {
+                        pos2 = i + farbvorzeichen * bewegung[figur][2 + richtung] * (weite + 1);
+                        int zielfeld = feld[pos2];
 
-            for (int richtung = 0; richtung <= bewegung[figur][0]; richtung++)  {
-                for (int weite = 0; weite <= bewegung[figur][1]; weite++)  {
-                    pos2 = i + farbvorzeichen * bewegung[figur][2 + richtung] * (weite + 1);
-                    int zielfeld = feld[pos2];
-                    if (zielfeld == RAND) // Aus!
-                        break;
-                    /*    for (int richtung = 0; richtung <= bewegung[W_K][0]; richtung++)
-                        {
-                       for (int weite = 0; weite <= bewegung[W_K][1]; weite++)  {
-                       pos2 = i + farbvorzeichen * bewegung[W_K][2+richtung] * (weite+1);
-                       int zielfeldk = feld[pos2];
-                       if (zielfeld == zielfeldk) n -= 400*farbvorzeichen;return n;}}*/
-                    if (farbvorzeichen == _eigene_farbe)
-                        zugzone_ich[pos2] += 100;
-                    else
-                        zugzone_du[pos2] += 100;
-                    if (kingzone[pos2] == -farbvorzeichen) {
-                        if (farbvorzeichen == _eigene_farbe) {
-                            if (farbvorzeichen == 1) {
-                                Angreifer_Wert_w += KSafety*K_Angriff_Turm;
-                                if (C_flag == 0)
-                                    Anzahl_Angreifer_w += 1;
+                        /*    for (int richtung = 0; richtung <= bewegung[W_K][0]; richtung++)
+                            {
+                           for (int weite = 0; weite <= bewegung[W_K][1]; weite++)  {
+                           pos2 = i + farbvorzeichen * bewegung[W_K][2+richtung] * (weite+1);
+                           int zielfeldk = feld[pos2];
+                           if (zielfeld == zielfeldk) n -= 400*farbvorzeichen;return n;}}*/
+                        if (zielfeld == RAND) // Aus!
+                            break;
+
+                        if (farbvorzeichen == _eigene_farbe)
+                            zugzone_ich[pos2] += 10;
+                        else
+                            zugzone_du[pos2] += 10;
+                        if (kingzone[pos2] == -farbvorzeichen) {
+                                double angriffs_multiplikator = 1.0;
+                            if (farbvorzeichen == _eigene_farbe) {
+                                if (farbvorzeichen == 1) {
+                                    if ((feld[pos2+10*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+10*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 2.0;
+                                    }
+                                     else if ((feld[pos2+11*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+11*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 1.8;
+                                    }
+                                    else if ((feld[pos2+9*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+9*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 1.8;
+                                    }
+                                    else angriffs_multiplikator = 1.0;
+                                    Angreifer_Wert_w += KSafety * angriffs_multiplikator;
+                                    if (C_flag == 0)
+                                        Anzahl_Angreifer_w += 1;
+                                } else {
+                                    if ((feld[pos2+10*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+10*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 2.0;
+                                    }
+                                     else if ((feld[pos2+11*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+11*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 1.8;
+                                    }
+                                    else if ((feld[pos2+9*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+9*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 1.8;
+                                    }
+                                    else angriffs_multiplikator = 1.0;
+                                    Angreifer_Wert_s += KSafety * angriffs_multiplikator;
+                                    if (C_flag == 0)
+                                        Anzahl_Angreifer_s += 1;
+                                };
+                                C_flag = 1;
                             } else {
-                                Angreifer_Wert_s += KSafety*K_Angriff_Turm;
-                                if (C_flag == 0)
-                                    Anzahl_Angreifer_s += 1;
-                            };
-                            C_flag = 1;
-                        } else {
-                            if (farbvorzeichen == 1) {
-                                Angreifer_Wert_w += KSafety*K_Angriff_Turm*0.5;
-                                if (C_flag == 0)
-                                    Anzahl_Angreifer_w += 1;
-                            } else {
-                                Angreifer_Wert_s += KSafety*K_Angriff_Turm*0.5;
-                                if (C_flag == 0)
-                                    Anzahl_Angreifer_s += 1;
-                            };
-                            C_flag = 1;
+                                if (farbvorzeichen == 1) {
+                                     if ((feld[pos2+10*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+10*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 2.0;
+                                    }
+                                     else if ((feld[pos2+11*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+11*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 1.8;
+                                    }
+                                    else if ((feld[pos2+9*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+9*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 1.8;
+                                    }
+                                    else angriffs_multiplikator = 1.0;
+                                    Angreifer_Wert_w += KSafety * angriffs_multiplikator * 0.5;
+
+                                    if (C_flag == 0)
+                                        Anzahl_Angreifer_w += 1;
+                                } else {
+                                    if ((feld[pos2+10*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+10*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 2.0;
+                                    }
+                                     else if ((feld[pos2+11*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+11*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 1.8;
+                                    }
+                                    else if ((feld[pos2+9*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+9*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 1.8;
+                                    }
+                                    else angriffs_multiplikator = 1.0;
+                                    Angreifer_Wert_s += KSafety * angriffs_multiplikator * 0.5;
+                                    if (C_flag == 0)
+                                        Anzahl_Angreifer_s += 1;
+                                };
+                                C_flag = 1;
+                            }
                         }
+
+
+                        if (zielfeld != LEER)  {
+                            int zielfigur = abs(zielfeld);
+
+
+                            /*   if (abs(zielfeld) == W_K)
+                                    break;*/
+
+                            if (farbvorzeichen != _eigene_farbe)  {
+                                if (zielfeld / _eigene_farbe > 0) {                // Gegner greift meine Figur an
+                                    if (schlagzone_gegner[pos2] != 1)
+                                        schlagzone_gegner[pos2] = 1;
+                                    else
+                                        Attack_Dame += KooIch;
+                                    //    Attack_Dame += kingzone_ich[pos2] * Koenigsangriff_Er;
+
+                                    Attack_Dame += (abs(zielfeld) * materialwert[abs(zielfeld)] - 40) * AttackIch;
+
+
+
+                                } else {
+                                    Attack_Dame += DefIch1;
+
+                                    if (abs(zielfeld) < 6)
+                                        Attack_Dame -= DefIch2;
+                                } // Gegner deckt seine Figuren
+
+                            } else  {
+                                if (zielfeld / _eigene_farbe < 0) {                     // Ich greife Gegner an
+                                    if (schlagzone_ich[pos2] != 1)
+                                        schlagzone_ich[pos2] = 1;
+                                    else
+                                        Attack_Dame += KooEr;
+                                    //  Attack_Dame += kingzone_gegner[pos2] * Koenigsangriff_Ich;
+
+                                    if (zielfigur == W_K || zielfigur == W_Kr)
+                                        break;
+                                    Attack_Dame += (abs(zielfeld) * materialwert[abs(zielfeld)]) / AttackEr;
+                                } else {
+                                    Attack_Dame += DefEr1;
+
+                                    if (abs(zielfeld) < 6)
+                                        Attack_Dame -= DefEr2;
+                                }
+                            } // Ich decke meine Figuren
+                            break;
+                        }
+
                     }
+                }
+                //Wie sicher steht meine Dame?
+                if ((feld[i+31*farbvorzeichen] == -W_Bx*farbvorzeichen && feld[i+11*farbvorzeichen]==LEER && feld[i+21*farbvorzeichen]==LEER) || (feld[i+29*farbvorzeichen] == -W_Bx*farbvorzeichen && feld[i+19*farbvorzeichen]==LEER && feld[i+29*farbvorzeichen]==LEER) || ((feld[i+21*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+21*farbvorzeichen] == -W_Bx*farbvorzeichen)&&feld[i+11*farbvorzeichen]==LEER) || ((feld[i+19*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+19*farbvorzeichen] == -W_Bx*farbvorzeichen) && feld[i+9*farbvorzeichen]==LEER) || feld[i+18*farbvorzeichen] == -W_L*farbvorzeichen || feld[i+22*farbvorzeichen] == -W_L*farbvorzeichen)
+                    FS_Dame -= Figurensicherheit;
 
 
-                    //     if (kingzone[i] == 1) Attack_Turm += KSafety;
-                    if (zielfeld != LEER)  {
-                        int zielfigur = abs(zielfeld);
+                Attack_Dame *= farbvorzeichen;
+                FS_Dame *= farbvorzeichen;
+                //  cout << MobDame * n_Dame + AttDame * Attack_Dame << "\n";
+                n           += AttDame * Attack_Dame + FS_Dame;
+            }
 
+            if ((figur == W_T) || (figur == W_Tr)) {
+                int n_Turm      = -10;
+                int Attack_Turm = 0;
+                int FS_Turm = 0;
 
+                for (int richtung = 0; richtung <= bewegung[figur][0]; richtung++)  {
+                    for (int weite = 0; weite <= bewegung[figur][1]; weite++)  {
+                        pos2 = i + farbvorzeichen * bewegung[figur][2 + richtung] * (weite + 1);
+                        int zielfeld = feld[pos2];
+                        if (zielfeld == RAND) // Aus!
+                            break;
+                        /*    for (int richtung = 0; richtung <= bewegung[W_K][0]; richtung++)
+                            {
+                           for (int weite = 0; weite <= bewegung[W_K][1]; weite++)  {
+                           pos2 = i + farbvorzeichen * bewegung[W_K][2+richtung] * (weite+1);
+                           int zielfeldk = feld[pos2];
+                           if (zielfeld == zielfeldk) n -= 400*farbvorzeichen;return n;}}*/
+                        if (farbvorzeichen == _eigene_farbe)
+                            zugzone_ich[pos2] += 100;
+                        else
+                            zugzone_du[pos2] += 100;
+                        if (kingzone[pos2] == -farbvorzeichen) {
+                                double angriffs_multiplikator = 1.0;
+                            if (farbvorzeichen == _eigene_farbe) {
+                                    if (farbvorzeichen == 1) {
 
-                        /*   if (abs(zielfeld) == W_K)
-                                break;*/
-
-                        if (farbvorzeichen != _eigene_farbe)  {
-                            if (zielfeld / _eigene_farbe > 0) { // Gegner greift meine Figur
-                                // an
-                                if (schlagzone_gegner[pos2] != 1)
-                                    schlagzone_gegner[pos2] = 1;
-                                else
-                                    Attack_Turm += KooIch;
-
-                                //         Attack_Turm += kingzone_ich[pos2]/* * Koenigsangriff_Er*/;
-                                n_Turm += 3;
-
-                                if ((n_Turm > 6) && (n_Turm < 11))
-                                    n_Turm += 2;
-
-                                if ((n_Turm > 10) && (n_Turm < 14))
-                                    n_Turm += 1;
-
-                                Attack_Turm +=
-                                    (abs(zielfeld) * materialwert[abs(zielfeld)] - 40) * AttackIch;
+                                 if ((feld[pos2+10*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+10*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 2.0;
+                                    }
+                                     else if ((feld[pos2+11*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+11*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 1.8;
+                                    }
+                                    else if ((feld[pos2+9*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+9*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 1.8;
+                                    }
+                                    else angriffs_multiplikator = 1.0;
+                                    Angreifer_Wert_w += KSafety * K_Angriff_Turm * angriffs_multiplikator;
+                                    if (C_flag == 0)
+                                        Anzahl_Angreifer_w += 1;
+                                } else {
+                                    if ((feld[pos2+10*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+10*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 2.0;
+                                    }
+                                     else if ((feld[pos2+11*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+11*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 1.8;
+                                    }
+                                    else if ((feld[pos2+9*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+9*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 1.8;
+                                    }
+                                    else angriffs_multiplikator = 1.0;
+                                    Angreifer_Wert_s += KSafety * K_Angriff_Turm * angriffs_multiplikator;
+                                    if (C_flag == 0)
+                                        Anzahl_Angreifer_s += 1;
+                                };
+                                C_flag = 1;
                             } else {
-                                Attack_Turm += DefIch1;
+                                if (farbvorzeichen == 1) {
 
-                                if (abs(zielfeld) < 6)
-                                    Attack_Turm -= DefIch2;
-                            } // Gegner deckt seine Figuren
+                                 if ((feld[pos2+10*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+10*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 2.0;
+                                    }
+                                     else if ((feld[pos2+11*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+11*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 1.8;
+                                    }
+                                    else if ((feld[pos2+9*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+9*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 1.8;
+                                    }
+                                    else angriffs_multiplikator = 1.0;
+                                    Angreifer_Wert_w += KSafety * K_Angriff_Turm * angriffs_multiplikator * 0.5;
+                                    if (C_flag == 0)
+                                        Anzahl_Angreifer_w += 1;
+                                } else {
+                                    if ((feld[pos2+10*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+10*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 2.0;
+                                    }
+                                     else if ((feld[pos2+11*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+11*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 1.8;
+                                    }
+                                    else if ((feld[pos2+9*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+9*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 1.8;
+                                    }
+                                    else angriffs_multiplikator = 1.0;
+                                    Angreifer_Wert_s += KSafety * K_Angriff_Turm * angriffs_multiplikator * 0.5;
+                                    if (C_flag == 0)
+                                        Anzahl_Angreifer_s += 1;
+                                };
+                                C_flag = 1;
+                            }
+                        }
 
-                        } else  {
-                            if (zielfeld / _eigene_farbe < 0) {                     // Ich greife Gegner an
-                                if (schlagzone_ich[pos2] != 1)
-                                    schlagzone_ich[pos2] = 1;
-                                else
-                                    Attack_Turm += KooEr;
-                                //   Attack_Turm += kingzone_gegner[pos2] * Koenigsangriff_Ich;
-                                if (n_Turm < 7)
+
+                        //     if (kingzone[i] == 1) Attack_Turm += KSafety;
+                        if (zielfeld != LEER)  {
+                            int zielfigur = abs(zielfeld);
+
+
+
+                            /*   if (abs(zielfeld) == W_K)
+                                    break;*/
+
+                            if (farbvorzeichen != _eigene_farbe)  {
+                                if (zielfeld / _eigene_farbe > 0) { // Gegner greift meine Figur
+                                    // an
+                                    if (schlagzone_gegner[pos2] != 1)
+                                        schlagzone_gegner[pos2] = 1;
+                                    else
+                                        Attack_Turm += KooIch;
+
+                                    //         Attack_Turm += kingzone_ich[pos2]/* * Koenigsangriff_Er*/;
                                     n_Turm += 3;
 
-                                if ((n_Turm > 6) && (n_Turm < 11))
-                                    n_Turm += 2;
+                                    if ((n_Turm > 6) && (n_Turm < 11))
+                                        n_Turm += 2;
 
-                                if ((n_Turm > 10) && (n_Turm < 14))
-                                    n_Turm += 1;
+                                    if ((n_Turm > 10) && (n_Turm < 14))
+                                        n_Turm += 1;
 
-                                if (zielfigur == W_K || zielfigur == W_Kr)
-                                    break;
-                                Attack_Turm += (abs(zielfeld) * materialwert[abs(zielfeld)]) /  AttackEr;
+                                    Attack_Turm +=
+                                        (abs(zielfeld) * materialwert[abs(zielfeld)] - 40) * AttackIch;
+                                } else {
+                                    Attack_Turm += DefIch1;
+
+                                    if (abs(zielfeld) < 6)
+                                        Attack_Turm -= DefIch2;
+                                } // Gegner deckt seine Figuren
+
                             } else  {
-                                Attack_Turm += DefEr1;
+                                if (zielfeld / _eigene_farbe < 0) {                     // Ich greife Gegner an
+                                    if (schlagzone_ich[pos2] != 1)
+                                        schlagzone_ich[pos2] = 1;
+                                    else
+                                        Attack_Turm += KooEr;
+                                    //   Attack_Turm += kingzone_gegner[pos2] * Koenigsangriff_Ich;
+                                    if (n_Turm < 7)
+                                        n_Turm += 3;
 
-                                if (abs(zielfeld) < 6)
-                                    Attack_Turm -= DefEr2;
-                            }
-                        } // Ich decke meine Figuren
-                        break;
-                    }
+                                    if ((n_Turm > 6) && (n_Turm < 11))
+                                        n_Turm += 2;
 
-                    if (farbvorzeichen != _eigene_farbe)  {
-                        //        Attack_Turm += kingzone_ich[pos2]/* * Koenigsangriff_Er*/;
+                                    if ((n_Turm > 10) && (n_Turm < 14))
+                                        n_Turm += 1;
 
-                        if (n_Turm < 7)
-                            n_Turm += 3;
+                                    if (zielfigur == W_K || zielfigur == W_Kr)
+                                        break;
+                                    Attack_Turm += (abs(zielfeld) * materialwert[abs(zielfeld)]) /  AttackEr;
+                                } else  {
+                                    Attack_Turm += DefEr1;
 
-                        if ((n_Turm > 6) && (n_Turm < 11))
-                            n_Turm += 2;
-
-                        if ((n_Turm > 10) && (n_Turm < 14))
-                            n_Turm += 1;
-                    } else  {
-                        //  Attack_Turm += kingzone_gegner[pos2] * Koenigsangriff_Ich;
-                        if (n_Turm < 7)
-                            n_Turm += 3;
-
-                        if ((n_Turm > 6) && (n_Turm < 11))
-                            n_Turm += 2;
-
-                        if ((n_Turm > 10) && (n_Turm < 14))
-                            n_Turm += 1;
-                    }
-                }
-            }
-            //Wie sicher steht mein Turm?
-            if ((((feld[i+31*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER)&&(feld[i+21*farbvorzeichen]==LEER)||(feld[i+29*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+19*farbvorzeichen]==LEER)&&(feld[i+29*farbvorzeichen]==LEER)||feld[i+21*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+21*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER))||((feld[i+19*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+19*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+9*farbvorzeichen]==LEER)))
-                FS_Turm -= Figurensicherheit;
-
-
-            n_Turm *= farbvorzeichen;
-            Attack_Turm *= farbvorzeichen;
-            FS_Turm *= farbvorzeichen;
-            n        += MobTurm * n_Turm + AttTurm * Attack_Turm + FS_Turm;
-        }
-
-        if ((figur == W_L)) {
-            int n_Laeufer      = -15;
-            int Attack_Laeufer = 0;
-            int FS_Laeufer = 0;
-
-            for (int richtung = 0; richtung <= bewegung[figur][0]; richtung++)  {
-                for (int weite = 0; weite <= bewegung[figur][1]; weite++)  {
-                    pos2 = i + farbvorzeichen * bewegung[figur][2 + richtung] * (weite + 1);
-                    int zielfeld = feld[pos2];
-                    if (zielfeld == RAND) // Aus!
-                        break;
-                    /*    for (int richtung = 0; richtung <= bewegung[W_K][0]; richtung++)
-                        {
-                       for (int weite = 0; weite <= bewegung[W_K][1]; weite++)  {
-                       pos2 = i + farbvorzeichen * bewegung[W_K][2+richtung] * (weite+1);
-                       int zielfeldk = feld[pos2];
-                       if (zielfeld == zielfeldk) n -= 400*farbvorzeichen;return n;}}*/
-                    if (farbvorzeichen == _eigene_farbe)
-                        zugzone_ich[pos2] += 1000;
-                    else
-                        zugzone_du[pos2] += 1000;
-                    if (kingzone[pos2] == -farbvorzeichen) {
-                        if (farbvorzeichen == _eigene_farbe) {
-                            if (farbvorzeichen == 1) {
-                                Angreifer_Wert_w += KSafety*K_Angriff_Laeufer;
-                                if (C_flag == 0)
-                                    Anzahl_Angreifer_w += 1;
-                            } else {
-                                Angreifer_Wert_s += KSafety*K_Angriff_Laeufer;
-                                if (C_flag == 0)
-                                    Anzahl_Angreifer_s += 1;
-                            };
-                            C_flag = 1;
-                        } else {
-                            if (farbvorzeichen == 1) {
-                                Angreifer_Wert_w += KSafety*K_Angriff_Laeufer*0.5;
-                                if (C_flag == 0)
-                                    Anzahl_Angreifer_w += 1;
-                            } else {
-                                Angreifer_Wert_s += KSafety*K_Angriff_Laeufer*0.5;
-                                if (C_flag == 0)
-                                    Anzahl_Angreifer_s += 1;
-                            };
-                            C_flag = 1;
+                                    if (abs(zielfeld) < 6)
+                                        Attack_Turm -= DefEr2;
+                                }
+                            } // Ich decke meine Figuren
+                            break;
                         }
-                    }
-
-                    //     if (kingzone[i] == 1) Attack_Laeufer += KSafety;
-                    if (zielfeld != LEER)  {
-                        int zielfigur = abs(zielfeld);
-
-                        /*   if (abs(zielfeld) == W_K)
-                            break;*/
 
                         if (farbvorzeichen != _eigene_farbe)  {
-                            if (zielfeld / _eigene_farbe > 0) { // Gegner greift meine Figur
-                                // an
-                                if (schlagzone_gegner[pos2] != 1)
-                                    schlagzone_gegner[pos2] = 1;
-                                else
-                                    Attack_Laeufer += KooIch;
-                                //           Attack_Laeufer += kingzone_ich[pos2]/* * Koenigsangriff_Er*/;
-                                if (n_Laeufer == -15)
-                                    n_Laeufer += 5;  // 12
+                            //        Attack_Turm += kingzone_ich[pos2]/* * Koenigsangriff_Er*/;
 
-                                if ((n_Laeufer > -11) && (n_Laeufer < 10))
-                                    n_Laeufer += 4;
+                            if (n_Turm < 7)
+                                n_Turm += 3;
 
-                                if ((n_Laeufer > 9) && (n_Laeufer < 16))
-                                    n_Laeufer += 3;
+                            if ((n_Turm > 6) && (n_Turm < 11))
+                                n_Turm += 2;
 
-                                if ((n_Laeufer > 15) && (n_Laeufer < 22))
-                                    n_Laeufer += 2;
-
-                                if (n_Laeufer > 21)
-                                    n_Laeufer += 1;
-
-                                Attack_Laeufer += (abs(zielfeld) * materialwert[abs(zielfeld)] - 40) * AttackIch;
-                            } else {
-                                Attack_Laeufer += DefIch1;
-
-                                if (abs(zielfeld) < 6) Attack_Laeufer -= DefIch2;
-                            } // Gegner deckt seine Figuren
+                            if ((n_Turm > 10) && (n_Turm < 14))
+                                n_Turm += 1;
                         } else  {
-                            if (zielfeld / _eigene_farbe < 0) {  // Ich greife Gegner an
-                                if (schlagzone_ich[pos2] != 1)
-                                    schlagzone_ich[pos2] = 1;
-                                else
-                                    Attack_Laeufer += KooEr;
-                                //      Attack_Laeufer += kingzone_gegner[pos2] * Koenigsangriff_Ich;
-                                if (n_Laeufer == -15)
-                                    n_Laeufer += 5;  // 12
+                            //  Attack_Turm += kingzone_gegner[pos2] * Koenigsangriff_Ich;
+                            if (n_Turm < 7)
+                                n_Turm += 3;
 
-                                if ((n_Laeufer > -11) && (n_Laeufer < 10))
-                                    n_Laeufer += 4;
+                            if ((n_Turm > 6) && (n_Turm < 11))
+                                n_Turm += 2;
 
-                                if ((n_Laeufer > 9) && (n_Laeufer < 16))
-                                    n_Laeufer += 3;
-
-                                if ((n_Laeufer > 15) && (n_Laeufer < 22))
-                                    n_Laeufer += 2;
-
-                                if (n_Laeufer > 21)
-                                    n_Laeufer += 1;
-
-                                if (zielfigur == W_K || zielfigur == W_Kr)
-                                    break;
-                                Attack_Laeufer += (abs(zielfeld) * materialwert[abs(zielfeld)]) /  AttackEr;
-                            } else  { // Ich decke meine Figuren
-                                Attack_Laeufer += DefEr1;
-
-                                if (abs(zielfeld) < 6)
-                                    Attack_Laeufer -= DefEr2;
-                            }
-                        }
-                        break;
-                    }
-
-                    if (farbvorzeichen != _eigene_farbe)  {
-                        //               Attack_Laeufer += kingzone_ich[pos2]/* * Koenigsangriff_Er*/;
-
-                        if (n_Laeufer == -15)
-                            n_Laeufer += 5;  // 12
-
-                        if ((n_Laeufer > -11) && (n_Laeufer < 10))
-                            n_Laeufer += 4;
-
-                        if ((n_Laeufer > 9) && (n_Laeufer < 16))
-                            n_Laeufer += 3;
-
-                        if ((n_Laeufer > 15) && (n_Laeufer < 22))
-                            n_Laeufer += 2;
-
-                        if (n_Laeufer > 21)
-                            n_Laeufer += 1;
-                    } else  {
-                        //   Attack_Laeufer += kingzone_gegner[pos2] * Koenigsangriff_Ich;
-                        if (n_Laeufer == -15)
-                            n_Laeufer += 5;  // 12
-
-                        if ((n_Laeufer > -11) && (n_Laeufer < 10))
-                            n_Laeufer += 4;
-
-                        if ((n_Laeufer > 9) && (n_Laeufer < 16))
-                            n_Laeufer += 3;
-
-                        if ((n_Laeufer > 15) && (n_Laeufer < 22))
-                            n_Laeufer += 2;
-
-                        if (n_Laeufer > 21)
-                            n_Laeufer += 1;
-                    }
-                }
-            }
-            if ((((feld[i+31*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER)&&(feld[i+21*farbvorzeichen]==LEER)||(feld[i+29*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+19*farbvorzeichen]==LEER)&&(feld[i+29*farbvorzeichen]==LEER)||feld[i+21*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+21*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER))||((feld[i+19*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+19*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+9*farbvorzeichen]==LEER)))
-                FS_Laeufer -= Figurensicherheit;
-
-            n_Laeufer *= farbvorzeichen;
-            Attack_Laeufer *= farbvorzeichen;
-            FS_Laeufer *= farbvorzeichen;
-
-            n += MobLau * n_Laeufer + AttLau * Attack_Laeufer + FS_Laeufer;
-        }
-
-        if ((figur == W_P)) {
-            int Attack_Pferd = 0;
-            int FS_Pferd = 0;
-
-            for (int richtung = 0; richtung <= bewegung[figur][0]; richtung++)  {
-                for (int weite = 0; weite <= bewegung[figur][1]; weite++)  {
-                    pos2 = i + farbvorzeichen * bewegung[figur][2 + richtung] * (weite + 1);
-                    int zielfeld = feld[pos2];
-                    if (zielfeld == RAND) // Aus!
-                        break;
-                    /*    for (int richtung = 0; richtung <= bewegung[W_K][0]; richtung++)
-                        {
-                       for (int weite = 0; weite <= bewegung[W_K][1]; weite++)  {
-                       pos2 = i + farbvorzeichen * bewegung[W_K][2+richtung] * (weite+1);
-                       int zielfeldk = feld[pos2];
-                       if (zielfeld == zielfeldk) n -= 400*farbvorzeichen;return n;}}*/
-                    if (farbvorzeichen == _eigene_farbe)
-                        zugzone_ich[pos2] += 1000;
-                    else
-                        zugzone_du[pos2] += 1000;
-                    if (kingzone[pos2] == -farbvorzeichen) {
-                        if (farbvorzeichen == _eigene_farbe) {
-                            if (farbvorzeichen == 1) {
-                                Angreifer_Wert_w += KSafety*K_Angriff_Springer;
-                                if (C_flag == 0)
-                                    Anzahl_Angreifer_w += 1;
-                            } else {
-                                Angreifer_Wert_s += KSafety*K_Angriff_Springer;
-                                if (C_flag == 0)
-                                    Anzahl_Angreifer_s += 1;
-                            };
-                            C_flag = 1;
-                        } else {
-                            if (farbvorzeichen == 1) {
-                                Angreifer_Wert_w += KSafety*K_Angriff_Springer*0.5;
-                                if (C_flag == 0)
-                                    Anzahl_Angreifer_w += 1;
-                            } else {
-                                Angreifer_Wert_s += KSafety*K_Angriff_Springer*0.5;
-                                if (C_flag == 0)
-                                    Anzahl_Angreifer_s += 1;
-                            };
-                            C_flag = 1;
+                            if ((n_Turm > 10) && (n_Turm < 14))
+                                n_Turm += 1;
                         }
                     }
-
-
-
-                    //     if (kingzone[i] == 1) Attack_Pferd += KSafety;
-                    if (zielfeld != LEER)  {
-                        int zielfigur = abs(zielfeld);
-
-
-
-                        /*   if (abs(zielfeld) == W_K)
-                            break;*/
-
-                        if (farbvorzeichen != _eigene_farbe)  {
-                            if (zielfeld / _eigene_farbe > 0) { // Gegner greift meine Figur an
-                                if (schlagzone_gegner[pos2] != 1)
-                                    schlagzone_gegner[pos2] = 1;
-                                else
-                                    Attack_Pferd += KooIch;
-                                //      Attack_Pferd += kingzone_ich[pos2]/* * Koenigsangriff_Er*/;
-                                Attack_Pferd += (abs(zielfeld) * materialwert[abs(zielfeld)] - 40) * AttackIch;
-                            } else {
-                                Attack_Pferd += DefIch1;
-
-                                if (abs(zielfeld) < 6)
-                                    Attack_Pferd -= DefIch2;
-                            } // Gegner deckt seine Figuren 1
-                        } else  {
-                            if (zielfeld / _eigene_farbe < 0) {                      // Ich greife Gegner an
-                                if (schlagzone_ich[pos2] != 1)
-                                    schlagzone_ich[pos2] = 1;
-                                else
-                                    Attack_Pferd += KooEr;
-
-                                if (zielfigur == W_K || zielfigur == W_Kr)
-                                    break;
-                                //      Attack_Pferd += kingzone_gegner[pos2] * Koenigsangriff_Ich;
-                                Attack_Pferd += (abs(zielfeld) * materialwert[abs(zielfeld)]) / AttackEr;
-                            } else  {
-                                Attack_Pferd += DefEr1;
-
-                                if (abs(zielfeld) < 6)
-                                    Attack_Pferd -= DefEr2;
-                            }
-                        } // Ich decke meine Figuren
-                        break;
-                    }
-
-                    /*    if (farbvorzeichen != _eigene_farbe)  {
-                        //        Attack_Pferd += kingzone_ich[pos2]/* * Koenigsangriff_Er*/;
-
-                    //  }
-                    //  else  {
-                    //   Attack_Pferd += kingzone_gegner[pos2] * Koenigsangriff_Ich;
-                    //   }//*/
                 }
+                //Wie sicher steht mein Turm?
+                if ((((feld[i+31*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER)&&(feld[i+21*farbvorzeichen]==LEER)||(feld[i+29*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+19*farbvorzeichen]==LEER)&&(feld[i+29*farbvorzeichen]==LEER)||feld[i+21*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+21*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER))||((feld[i+19*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+19*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+9*farbvorzeichen]==LEER)))
+                    FS_Turm -= Figurensicherheit;
+
+
+                n_Turm *= farbvorzeichen;
+                Attack_Turm *= farbvorzeichen;
+                FS_Turm *= farbvorzeichen;
+                n        += MobTurm * n_Turm + AttTurm * Attack_Turm + FS_Turm;
             }
-            if (((feld[i+31*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER)&&(feld[i+21*farbvorzeichen]==LEER)||(feld[i+29*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+19*farbvorzeichen]==LEER)&&(feld[i+29*farbvorzeichen]==LEER)||(feld[i+21*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+21*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER))||((feld[i+19*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+19*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+9*farbvorzeichen]==LEER)))
-                FS_Pferd -= Figurensicherheit;
 
-            Attack_Pferd *= farbvorzeichen;
-            FS_Pferd *= farbvorzeichen;
+            if ((figur == W_L)) {
+                int n_Laeufer      = -15;
+                int Attack_Laeufer = 0;
+                int FS_Laeufer = 0;
 
-            n += AttSpr * Attack_Pferd + FS_Pferd;
-        }
+                for (int richtung = 0; richtung <= bewegung[figur][0]; richtung++)  {
+                    for (int weite = 0; weite <= bewegung[figur][1]; weite++)  {
+                        pos2 = i + farbvorzeichen * bewegung[figur][2 + richtung] * (weite + 1);
+                        int zielfeld = feld[pos2];
+                        if (zielfeld == RAND) // Aus!
+                            break;
+                        /*    for (int richtung = 0; richtung <= bewegung[W_K][0]; richtung++)
+                            {
+                           for (int weite = 0; weite <= bewegung[W_K][1]; weite++)  {
+                           pos2 = i + farbvorzeichen * bewegung[W_K][2+richtung] * (weite+1);
+                           int zielfeldk = feld[pos2];
+                           if (zielfeld == zielfeldk) n -= 400*farbvorzeichen;return n;}}*/
+                        if (farbvorzeichen == _eigene_farbe)
+                            zugzone_ich[pos2] += 1000;
+                        else
+                            zugzone_du[pos2] += 1000;
+                        if (kingzone[pos2] == -farbvorzeichen) {
+                                double angriffs_multiplikator = 1.0;
+                            if (farbvorzeichen == _eigene_farbe) {
+                                    if (farbvorzeichen == 1) {
 
-        if (((figur == W_B) || (figur == W_Bx))) {
-            int Attack_Bauer = 0;
+                                 if ((feld[pos2+10*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+10*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 2.0;
+                                    }
+                                     else if ((feld[pos2+11*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+11*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 1.8;
+                                    }
+                                    else if ((feld[pos2+9*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+9*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 1.8;
+                                    }
+                                    else angriffs_multiplikator = 1.0;
+                                    Angreifer_Wert_w += KSafety * K_Angriff_Laeufer * angriffs_multiplikator;
+                                    if (C_flag == 0)
+                                        Anzahl_Angreifer_w += 1;
+                                } else {
+                                    if ((feld[pos2+10*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+10*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 2.0;
+                                    }
+                                     else if ((feld[pos2+11*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+11*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 1.8;
+                                    }
+                                    else if ((feld[pos2+9*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+9*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 1.8;
+                                    }
+                                    else angriffs_multiplikator = 1.0;
+                                    Angreifer_Wert_s += KSafety * K_Angriff_Laeufer * angriffs_multiplikator;
+                                    if (C_flag == 0)
+                                        Anzahl_Angreifer_s += 1;
+                                };
+                                C_flag = 1;
+                            } else {
+                                if (farbvorzeichen == 1) {
 
-            /*   if (farbvorzeichen == 1)
-                        {if (OpenLines_weiss[i%10-2] == 1 && OpenLines_weiss[i%10] == 1) Attack_Bauer -= 200;}
-                else {if (OpenLines_schwarz[i%10-2] == 1 && OpenLines_schwarz[i%10] == 1) Attack_Bauer -= 200;}*/
-            // if (feld[i+1] == feld[i]) n += 200;
-            for (int richtung = 0; richtung <= bewegung[13][0]; richtung++)  {
-                for (int weite = 0; weite <= bewegung[13][1]; weite++)  {
-                    pos2 = i + farbvorzeichen * bewegung[13][2 + richtung] * (weite + 1);
-                    int zielfeld = feld[pos2];
-                    if (zielfeld == RAND) // Aus!
-                        break;
+                                if ((feld[pos2+10*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+10*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 2.0;
+                                    }
+                                     else if ((feld[pos2+11*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+11*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 1.8;
+                                    }
+                                    else if ((feld[pos2+9*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+9*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 1.8;
+                                    }
+                                    else angriffs_multiplikator = 1.0;
+                                    Angreifer_Wert_w += KSafety * K_Angriff_Laeufer * angriffs_multiplikator * 0.5;
+                                    if (C_flag == 0)
+                                        Anzahl_Angreifer_w += 1;
+                                } else {
+                                    if ((feld[pos2+10*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+10*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 2.0;
+                                    }
+                                     else if ((feld[pos2+11*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+11*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 1.8;
+                                    }
+                                    else if ((feld[pos2+9*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+9*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 1.8;
+                                    }
+                                    else angriffs_multiplikator = 1.0;
+                                    Angreifer_Wert_s += KSafety * K_Angriff_Laeufer * angriffs_multiplikator * 0.5;
+                                    if (C_flag == 0)
+                                        Anzahl_Angreifer_s += 1;
+                                };
+                                C_flag = 1;
+                            }
+                        }
 
-                    if (farbvorzeichen == _eigene_farbe)
-                        zugzone_ich[pos2] += 10000;
-                    else
-                        zugzone_du[pos2] += 10000;
-                    if (zielfeld != LEER)  {
-                        int zielfigur = abs(zielfeld);
+                        //     if (kingzone[i] == 1) Attack_Laeufer += KSafety;
+                        if (zielfeld != LEER)  {
+                            int zielfigur = abs(zielfeld);
 
-
-
-                        /*   if (abs(zielfeld) == W_K)
+                            /*   if (abs(zielfeld) == W_K)
                                 break;*/
-                        if (farbvorzeichen != _eigene_farbe)  {
-                            if (zielfeld / _eigene_farbe > 0) { // Gegner greift meine Figur
-                                // an
-                                if (schlagzone_gegner[pos2] != 1)
-                                    schlagzone_gegner[pos2] = 1;
-                                else
-                                    Attack_Bauer += KooIch;
-                                //         Attack_Bauer += kingzone_ich[pos2]/* * Koenigsangriff_Er*/;
-                                Attack_Bauer += (abs(zielfeld) * materialwert[abs(zielfeld)] - 40) * AttackIch;
-                            } else {
-                                Attack_Bauer += DefIch1 / 2;
-                                //         if (abs(zielfeld) < 6) Attack_Bauer -= DefIch2;
-                            }                                   // Gegner deckt seine Figuren
-                            //    1
-                        } else  {
-                            if (zielfeld / _eigene_farbe < 0) { // Ich greife Gegner an
-                                if (schlagzone_ich[pos2] != 1)
-                                    schlagzone_ich[pos2] = 1;
-                                else
-                                    Attack_Bauer += KooEr;
 
-                                if (zielfigur == W_K || zielfigur == W_Kr)
-                                    break;
-                                //        Attack_Bauer += kingzone_gegner[pos2] * Koenigsangriff_Ich;
-                                Attack_Bauer += (abs(zielfeld) * materialwert[abs(zielfeld)]) / AttackEr;
-                            } else {
-                                Attack_Bauer += DefEr1 / 2;
-                                //         if (abs(zielfeld) < 6) Attack_Bauer -= DefIch2;
-                            }
-                        } // Ich decke meine Figuren
-                        break;
-                    }
+                            if (farbvorzeichen != _eigene_farbe)  {
+                                if (zielfeld / _eigene_farbe > 0) { // Gegner greift meine Figur
+                                    // an
+                                    if (schlagzone_gegner[pos2] != 1)
+                                        schlagzone_gegner[pos2] = 1;
+                                    else
+                                        Attack_Laeufer += KooIch;
+                                    //           Attack_Laeufer += kingzone_ich[pos2]/* * Koenigsangriff_Er*/;
+                                    if (n_Laeufer == -15)
+                                        n_Laeufer += 5;  // 12
 
-                }
-            }
-            Attack_Bauer *= farbvorzeichen;
+                                    if ((n_Laeufer > -11) && (n_Laeufer < 10))
+                                        n_Laeufer += 4;
 
-            n += AttBau * Attack_Bauer;
-        }
+                                    if ((n_Laeufer > 9) && (n_Laeufer < 16))
+                                        n_Laeufer += 3;
 
-        if (((figur == W_K) || (figur == W_Kr))) {
-            int Attack_Koenig = 0;
-            int FS_Koenig = 0;
-            //  int KSafety = 0;
+                                    if ((n_Laeufer > 15) && (n_Laeufer < 22))
+                                        n_Laeufer += 2;
 
-            for (int richtung = 0; richtung <= bewegung[figur][0]; richtung++)  {
-                for (int weite = 0; weite <= bewegung[figur][1]; weite++)  {
-                    pos2 = i + farbvorzeichen * bewegung[figur][2 + richtung] * (weite + 1);
-                    int zielfeld = feld[pos2];
+                                    if (n_Laeufer > 21)
+                                        n_Laeufer += 1;
 
-                    if (zielfeld == RAND) // Aus!
-                        break;
-                    if (farbvorzeichen == _eigene_farbe)
-                        zugzone_ich[pos2] += 1;
-                    else
-                        zugzone_du[pos2] += 1;
+                                    Attack_Laeufer += (abs(zielfeld) * materialwert[abs(zielfeld)] - 40) * AttackIch;
+                                } else {
+                                    Attack_Laeufer += DefIch1;
 
-                    if (zielfeld != LEER)  {
-                        int zielfigur = abs(zielfeld);
-
-                        if (farbvorzeichen != _eigene_farbe)  {
-
-                            if (zielfeld / _eigene_farbe > 0) { // Gegner greift meine Figur an
-                                if (schlagzone_gegner[pos2] != 1)
-                                    schlagzone_gegner[pos2] = 1;
-                                else
-                                    Attack_Koenig += KooIch;
-                                //    Attack_Koenig += kingzone_ich[pos2]/* * Koenigsangriff_Er*/;
-                                Attack_Koenig += (abs(zielfeld) * materialwert[abs(zielfeld)] - 40) * AttackIch;
-                            } else {
-                                Attack_Koenig += DefIch1;//if (abs(zielfeld)<6) Attack_Koenig -= DefIch2;
-                            }
-                            // Gegner deckt seine Figuren    1
-                        } else  {
-                            if (zielfeld / _eigene_farbe < 0) { // Ich greife Gegner an
-                                if (schlagzone_ich[pos2] != 1)
-                                    schlagzone_ich[pos2] = 1;
-                                else
-                                    Attack_Koenig += KooEr;
-
-                                if (zielfigur == W_K)
-                                    break;
-                                //      Attack_Koenig += kingzone_gegner[pos2] * Koenigsangriff_Ich;
-                                Attack_Koenig += (abs(zielfeld) * materialwert[abs(zielfeld)]) / AttackEr;
+                                    if (abs(zielfeld) < 6)
+                                        Attack_Laeufer -= DefIch2;
+                                } // Gegner deckt seine Figuren
                             } else  {
-                                Attack_Koenig += DefEr1;//if (abs(zielfeld)<6) Attack_Koenig -= DefEr2;
+                                if (zielfeld / _eigene_farbe < 0) {  // Ich greife Gegner an
+                                    if (schlagzone_ich[pos2] != 1)
+                                        schlagzone_ich[pos2] = 1;
+                                    else
+                                        Attack_Laeufer += KooEr;
+                                    //      Attack_Laeufer += kingzone_gegner[pos2] * Koenigsangriff_Ich;
+                                    if (n_Laeufer == -15)
+                                        n_Laeufer += 5;  // 12
+
+                                    if ((n_Laeufer > -11) && (n_Laeufer < 10))
+                                        n_Laeufer += 4;
+
+                                    if ((n_Laeufer > 9) && (n_Laeufer < 16))
+                                        n_Laeufer += 3;
+
+                                    if ((n_Laeufer > 15) && (n_Laeufer < 22))
+                                        n_Laeufer += 2;
+
+                                    if (n_Laeufer > 21)
+                                        n_Laeufer += 1;
+
+                                    if (zielfigur == W_K || zielfigur == W_Kr)
+                                        break;
+                                    Attack_Laeufer += (abs(zielfeld) * materialwert[abs(zielfeld)]) /  AttackEr;
+                                } else  { // Ich decke meine Figuren
+                                    Attack_Laeufer += DefEr1;
+
+                                    if (abs(zielfeld) < 6)
+                                        Attack_Laeufer -= DefEr2;
+                                }
                             }
+                            break;
+                        }
 
-                        } // Ich decke meine Figuren
-                        break;
+                        if (farbvorzeichen != _eigene_farbe)  {
+                            //               Attack_Laeufer += kingzone_ich[pos2]/* * Koenigsangriff_Er*/;
+
+                            if (n_Laeufer == -15)
+                                n_Laeufer += 5;  // 12
+
+                            if ((n_Laeufer > -11) && (n_Laeufer < 10))
+                                n_Laeufer += 4;
+
+                            if ((n_Laeufer > 9) && (n_Laeufer < 16))
+                                n_Laeufer += 3;
+
+                            if ((n_Laeufer > 15) && (n_Laeufer < 22))
+                                n_Laeufer += 2;
+
+                            if (n_Laeufer > 21)
+                                n_Laeufer += 1;
+                        } else  {
+                            //   Attack_Laeufer += kingzone_gegner[pos2] * Koenigsangriff_Ich;
+                            if (n_Laeufer == -15)
+                                n_Laeufer += 5;  // 12
+
+                            if ((n_Laeufer > -11) && (n_Laeufer < 10))
+                                n_Laeufer += 4;
+
+                            if ((n_Laeufer > 9) && (n_Laeufer < 16))
+                                n_Laeufer += 3;
+
+                            if ((n_Laeufer > 15) && (n_Laeufer < 22))
+                                n_Laeufer += 2;
+
+                            if (n_Laeufer > 21)
+                                n_Laeufer += 1;
+                        }
                     }
-
-
                 }
+                if ((((feld[i+31*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER)&&(feld[i+21*farbvorzeichen]==LEER)||(feld[i+29*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+19*farbvorzeichen]==LEER)&&(feld[i+29*farbvorzeichen]==LEER)||feld[i+21*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+21*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER))||((feld[i+19*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+19*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+9*farbvorzeichen]==LEER)))
+                    FS_Laeufer -= Figurensicherheit;
+
+                n_Laeufer *= farbvorzeichen;
+                Attack_Laeufer *= farbvorzeichen;
+                FS_Laeufer *= farbvorzeichen;
+
+                n += MobLau * n_Laeufer + AttLau * Attack_Laeufer + FS_Laeufer;
             }
-            if (((feld[i+31*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER)&&(feld[i+21*farbvorzeichen]==LEER)||(feld[i+29*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+19*farbvorzeichen]==LEER)&&(feld[i+29*farbvorzeichen]==LEER)||(feld[i+21*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+21*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER))||((feld[i+19*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+19*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+9*farbvorzeichen]==LEER)))
-                FS_Koenig -= Figurensicherheit;
-            Attack_Koenig *= farbvorzeichen;
-            FS_Koenig *= farbvorzeichen;
+
+            if ((figur == W_P)) {
+                int Attack_Pferd = 0;
+                int FS_Pferd = 0;
+
+                for (int richtung = 0; richtung <= bewegung[figur][0]; richtung++)  {
+                    for (int weite = 0; weite <= bewegung[figur][1]; weite++)  {
+                        pos2 = i + farbvorzeichen * bewegung[figur][2 + richtung] * (weite + 1);
+                        int zielfeld = feld[pos2];
+                        if (zielfeld == RAND) // Aus!
+                            break;
+                        /*    for (int richtung = 0; richtung <= bewegung[W_K][0]; richtung++)
+                            {
+                           for (int weite = 0; weite <= bewegung[W_K][1]; weite++)  {
+                           pos2 = i + farbvorzeichen * bewegung[W_K][2+richtung] * (weite+1);
+                           int zielfeldk = feld[pos2];
+                           if (zielfeld == zielfeldk) n -= 400*farbvorzeichen;return n;}}*/
+                        if (farbvorzeichen == _eigene_farbe)
+                            zugzone_ich[pos2] += 1000;
+                        else
+                            zugzone_du[pos2] += 1000;
+                        if (kingzone[pos2] == -farbvorzeichen) {
+                                double angriffs_multiplikator = 1.0;
+                            if (farbvorzeichen == _eigene_farbe) {
+                                    if (farbvorzeichen == 1) {
+
+                                if ((feld[pos2+10*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+10*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 2.0;
+                                    }
+                                     else if ((feld[pos2+11*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+11*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 1.8;
+                                    }
+                                    else if ((feld[pos2+9*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+9*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 1.8;
+                                    }
+                                    else angriffs_multiplikator = 1.0;
+                                    Angreifer_Wert_w += KSafety * K_Angriff_Springer * angriffs_multiplikator;
+                                    if (C_flag == 0)
+                                        Anzahl_Angreifer_w += 1;
+                                } else {
+                                    if ((feld[pos2+10*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+10*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 2.0;
+                                    }
+                                     else if ((feld[pos2+11*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+11*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 1.8;
+                                    }
+                                    else if ((feld[pos2+9*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+9*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 1.8;
+                                    }
+                                    else angriffs_multiplikator = 1.0;
+                                    Angreifer_Wert_s += KSafety * K_Angriff_Springer * angriffs_multiplikator;
+                                    if (C_flag == 0)
+                                        Anzahl_Angreifer_s += 1;
+                                };
+                                C_flag = 1;
+                            } else {
+                                if (farbvorzeichen == 1) {
+
+                                 if ((feld[pos2+10*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+10*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 2.0;
+                                    }
+                                     else if ((feld[pos2+11*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+11*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 1.8;
+                                    }
+                                    else if ((feld[pos2+9*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+9*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 1.8;
+                                    }
+                                    else angriffs_multiplikator = 1.0;
+                                    Angreifer_Wert_w += KSafety * K_Angriff_Springer * angriffs_multiplikator * 0.5;
+                                    if (C_flag == 0)
+                                        Anzahl_Angreifer_w += 1;
+                                } else {
+                                    if ((feld[pos2+10*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+10*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 2.0;
+                                    }
+                                     else if ((feld[pos2+11*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+11*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 1.8;
+                                    }
+                                    else if ((feld[pos2+9*farbvorzeichen] == W_K * -farbvorzeichen || feld[pos2+9*farbvorzeichen] == W_Kr * -farbvorzeichen) &&
+                                        feld[pos2] != W_Bx * -farbvorzeichen && feld[pos2] != W_B * -farbvorzeichen) {
+                                        angriffs_multiplikator = 1.8;
+                                    }
+                                    else angriffs_multiplikator = 1.0;
+                                    Angreifer_Wert_s += KSafety * K_Angriff_Springer * angriffs_multiplikator * 0.5;
+                                    if (C_flag == 0)
+                                        Anzahl_Angreifer_s += 1;
+                                };
+                                C_flag = 1;
+                            }
+                        }
 
 
-            n += AttKoe * Attack_Koenig + FS_Koenig/* + KSafety*/; // + KSafety;
+
+                        //     if (kingzone[i] == 1) Attack_Pferd += KSafety;
+                        if (zielfeld != LEER)  {
+                            int zielfigur = abs(zielfeld);
+
+
+
+                            /*   if (abs(zielfeld) == W_K)
+                                break;*/
+
+                            if (farbvorzeichen != _eigene_farbe)  {
+                                if (zielfeld / _eigene_farbe > 0) { // Gegner greift meine Figur an
+                                    if (schlagzone_gegner[pos2] != 1)
+                                        schlagzone_gegner[pos2] = 1;
+                                    else
+                                        Attack_Pferd += KooIch;
+                                    //      Attack_Pferd += kingzone_ich[pos2]/* * Koenigsangriff_Er*/;
+                                    Attack_Pferd += (abs(zielfeld) * materialwert[abs(zielfeld)] - 40) * AttackIch;
+                                } else {
+                                    Attack_Pferd += DefIch1;
+
+                                    if (abs(zielfeld) < 6)
+                                        Attack_Pferd -= DefIch2;
+                                } // Gegner deckt seine Figuren 1
+                            } else  {
+                                if (zielfeld / _eigene_farbe < 0) {                      // Ich greife Gegner an
+                                    if (schlagzone_ich[pos2] != 1)
+                                        schlagzone_ich[pos2] = 1;
+                                    else
+                                        Attack_Pferd += KooEr;
+
+                                    if (zielfigur == W_K || zielfigur == W_Kr)
+                                        break;
+                                    //      Attack_Pferd += kingzone_gegner[pos2] * Koenigsangriff_Ich;
+                                    Attack_Pferd += (abs(zielfeld) * materialwert[abs(zielfeld)]) / AttackEr;
+                                } else  {
+                                    Attack_Pferd += DefEr1;
+
+                                    if (abs(zielfeld) < 6)
+                                        Attack_Pferd -= DefEr2;
+                                }
+                            } // Ich decke meine Figuren
+                            break;
+                        }
+
+                        /*    if (farbvorzeichen != _eigene_farbe)  {
+                            //        Attack_Pferd += kingzone_ich[pos2]/* * Koenigsangriff_Er*/;
+
+                        //  }
+                        //  else  {
+                        //   Attack_Pferd += kingzone_gegner[pos2] * Koenigsangriff_Ich;
+                        //   }//*/
+                    }
+                }
+                if (((feld[i+31*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER)&&(feld[i+21*farbvorzeichen]==LEER)||(feld[i+29*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+19*farbvorzeichen]==LEER)&&(feld[i+29*farbvorzeichen]==LEER)||(feld[i+21*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+21*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER))||((feld[i+19*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+19*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+9*farbvorzeichen]==LEER)))
+                    FS_Pferd -= Figurensicherheit;
+
+                Attack_Pferd *= farbvorzeichen;
+                FS_Pferd *= farbvorzeichen;
+
+                n += AttSpr * Attack_Pferd + FS_Pferd;
+            }
+
+            if (((figur == W_B) || (figur == W_Bx))) {
+                int Attack_Bauer = 0;
+
+                /*   if (farbvorzeichen == 1)
+                            {if (OpenLines_weiss[i%10-2] == 1 && OpenLines_weiss[i%10] == 1) Attack_Bauer -= 200;}
+                    else {if (OpenLines_schwarz[i%10-2] == 1 && OpenLines_schwarz[i%10] == 1) Attack_Bauer -= 200;}*/
+                // if (feld[i+1] == feld[i]) n += 200;
+                for (int richtung = 0; richtung <= bewegung[13][0]; richtung++)  {
+                    for (int weite = 0; weite <= bewegung[13][1]; weite++)  {
+                        pos2 = i + farbvorzeichen * bewegung[13][2 + richtung] * (weite + 1);
+                        int zielfeld = feld[pos2];
+                        if (zielfeld == RAND) // Aus!
+                            break;
+
+                        if (farbvorzeichen == _eigene_farbe)
+                            zugzone_ich[pos2] += 10000;
+                        else
+                            zugzone_du[pos2] += 10000;
+                        if (zielfeld != LEER)  {
+                            int zielfigur = abs(zielfeld);
+
+
+
+                            /*   if (abs(zielfeld) == W_K)
+                                    break;*/
+                            if (farbvorzeichen != _eigene_farbe)  {
+                                if (zielfeld / _eigene_farbe > 0) { // Gegner greift meine Figur
+                                    // an
+                                    if (schlagzone_gegner[pos2] != 1)
+                                        schlagzone_gegner[pos2] = 1;
+                                    else
+                                        Attack_Bauer += KooIch;
+                                    //         Attack_Bauer += kingzone_ich[pos2]/* * Koenigsangriff_Er*/;
+                                    Attack_Bauer += (abs(zielfeld) * materialwert[abs(zielfeld)] - 40) * AttackIch;
+                                } else {
+                                    Attack_Bauer += DefIch1 / 2;
+                                    //         if (abs(zielfeld) < 6) Attack_Bauer -= DefIch2;
+                                }                                   // Gegner deckt seine Figuren
+                                //    1
+                            } else  {
+                                if (zielfeld / _eigene_farbe < 0) { // Ich greife Gegner an
+                                    if (schlagzone_ich[pos2] != 1)
+                                        schlagzone_ich[pos2] = 1;
+                                    else
+                                        Attack_Bauer += KooEr;
+
+                                    if (zielfigur == W_K || zielfigur == W_Kr)
+                                        break;
+                                    //        Attack_Bauer += kingzone_gegner[pos2] * Koenigsangriff_Ich;
+                                    Attack_Bauer += (abs(zielfeld) * materialwert[abs(zielfeld)]) / AttackEr;
+                                } else {
+                                    Attack_Bauer += DefEr1 / 2;
+                                    //         if (abs(zielfeld) < 6) Attack_Bauer -= DefIch2;
+                                }
+                            } // Ich decke meine Figuren
+                            break;
+                        }
+
+                    }
+                }
+                Attack_Bauer *= farbvorzeichen;
+
+                n += AttBau * Attack_Bauer;
+            }
+
+            if (((figur == W_K) || (figur == W_Kr))) {
+                int Attack_Koenig = 0;
+                int FS_Koenig = 0;
+                //  int KSafety = 0;
+
+                for (int richtung = 0; richtung <= bewegung[figur][0]; richtung++)  {
+                    for (int weite = 0; weite <= bewegung[figur][1]; weite++)  {
+                        pos2 = i + farbvorzeichen * bewegung[figur][2 + richtung] * (weite + 1);
+                        int zielfeld = feld[pos2];
+
+                        if (zielfeld == RAND) // Aus!
+                            break;
+                        if (farbvorzeichen == _eigene_farbe)
+                            zugzone_ich[pos2] += 1;
+                        else
+                            zugzone_du[pos2] += 1;
+
+                        if (zielfeld != LEER)  {
+                            int zielfigur = abs(zielfeld);
+
+                            if (farbvorzeichen != _eigene_farbe)  {
+
+                                if (zielfeld / _eigene_farbe > 0) { // Gegner greift meine Figur an
+                                    if (schlagzone_gegner[pos2] != 1)
+                                        schlagzone_gegner[pos2] = 1;
+                                    else
+                                        Attack_Koenig += KooIch;
+                                    //    Attack_Koenig += kingzone_ich[pos2]/* * Koenigsangriff_Er*/;
+                                    Attack_Koenig += (abs(zielfeld) * materialwert[abs(zielfeld)] - 40) * AttackIch;
+                                } else {
+                                    Attack_Koenig += DefIch1;//if (abs(zielfeld)<6) Attack_Koenig -= DefIch2;
+                                }
+                                // Gegner deckt seine Figuren    1
+                            } else  {
+                                if (zielfeld / _eigene_farbe < 0) { // Ich greife Gegner an
+                                    if (schlagzone_ich[pos2] != 1)
+                                        schlagzone_ich[pos2] = 1;
+                                    else
+                                        Attack_Koenig += KooEr;
+
+                                    if (zielfigur == W_K)
+                                        break;
+                                    //      Attack_Koenig += kingzone_gegner[pos2] * Koenigsangriff_Ich;
+                                    Attack_Koenig += (abs(zielfeld) * materialwert[abs(zielfeld)]) / AttackEr;
+                                } else  {
+                                    Attack_Koenig += DefEr1;//if (abs(zielfeld)<6) Attack_Koenig -= DefEr2;
+                                }
+
+                            } // Ich decke meine Figuren
+                            break;
+                        }
+
+
+                    }
+                }
+                if (((feld[i+31*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER)&&(feld[i+21*farbvorzeichen]==LEER)||(feld[i+29*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+19*farbvorzeichen]==LEER)&&(feld[i+29*farbvorzeichen]==LEER)||(feld[i+21*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+21*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+11*farbvorzeichen]==LEER))||((feld[i+19*farbvorzeichen] == -W_B*farbvorzeichen || feld[i+19*farbvorzeichen] == -W_Bx*farbvorzeichen)&&(feld[i+9*farbvorzeichen]==LEER)))
+                    FS_Koenig -= Figurensicherheit;
+                Attack_Koenig *= farbvorzeichen;
+                FS_Koenig *= farbvorzeichen;
+
+
+                n += AttKoe * Attack_Koenig + FS_Koenig/* + KSafety*/; // + KSafety;
+            }
+
         }
-
-    }
-    K_Safety_Wert = Angreifer_Wert_w * (100-100/(pow(2,(Anzahl_Angreifer_w-1))))/100 - Angreifer_Wert_s * (100-100/(pow(2,(Anzahl_Angreifer_s-1))))/100;
+        K_Safety_Wert = Angreifer_Wert_w * (100-100/(pow(2,(Anzahl_Angreifer_w-1))))/100 - Angreifer_Wert_s * (100-100/(pow(2,(Anzahl_Angreifer_s-1))))/100;
 
 
-    n += K_Safety_Wert;
-    int Koordination_ich = 0;
-    int Koordination_du = 0;
-    int Kontrolle_ich = 0;
-    int Kontrolle_du = 0;
+        n += K_Safety_Wert;
+        int Koordination_ich = 0;
+        int Koordination_du = 0;
+        int Kontrolle_ich = 0;
+        int Kontrolle_du = 0;
 
-    for (int i=21; i < 99; i++) {
+        for (int i=21; i < 99; i++) {
 
-        if (zugzone_ich[i] > zugzone_du[i] && (i-60)/_eigene_farbe > 0) {
-            Kontrolle_ich += 1;
-            if (feld[i] != 0 && feld[i]/abs(feld[i]) != _eigene_farbe)
+            if (zugzone_ich[i] > zugzone_du[i] && (i-60)/_eigene_farbe > 0) {
                 Kontrolle_ich += 1;
-            if ((zugzone_ich[i+1] > zugzone_du[i+1]) || (zugzone_ich[i-1] > zugzone_du[i-1] ) || (zugzone_ich[i+10] > zugzone_du[i+10] ) || (zugzone_ich[i-10] > zugzone_du[i-10] ))
-                Koordination_ich += 1;
-            if ((zugzone_ich[i+1] == zugzone_du[i+1]) || (zugzone_ich[i-1] == zugzone_du[i-1] ) || (zugzone_ich[i+10] == zugzone_du[i+10] ) || (zugzone_ich[i-10] == zugzone_du[i-10] ))
-                Koordination_ich += 0.5;
-        }
-        if (zugzone_du[i] > zugzone_ich[i] && (i-60)/_eigene_farbe < 0) {
-            Kontrolle_du += 1;
-            if (feld[i] != 0 && feld[i]/abs(feld[i]) == _eigene_farbe)
+                if (feld[i] != 0 && feld[i]/abs(feld[i]) != _eigene_farbe)
+                    Kontrolle_ich += 1;
+                if ((zugzone_ich[i+1] > zugzone_du[i+1]) || (zugzone_ich[i-1] > zugzone_du[i-1] ) || (zugzone_ich[i+10] > zugzone_du[i+10] ) || (zugzone_ich[i-10] > zugzone_du[i-10] ))
+                    Koordination_ich += 1;
+                if ((zugzone_ich[i+1] == zugzone_du[i+1]) || (zugzone_ich[i-1] == zugzone_du[i-1] ) || (zugzone_ich[i+10] == zugzone_du[i+10] ) || (zugzone_ich[i-10] == zugzone_du[i-10] ))
+                    Koordination_ich += 0.5;
+            }
+            if (zugzone_du[i] > zugzone_ich[i] && (i-60)/_eigene_farbe < 0) {
                 Kontrolle_du += 1;
-            if ((zugzone_du[i+1] > zugzone_ich[i+1]) || (zugzone_du[i-1] > zugzone_ich[i-1] ) || (zugzone_du[i+10] >  zugzone_ich[i+10] ) || (zugzone_du[i-10] > zugzone_ich[i-10] ))
-                Koordination_du += 1;
-            if ((zugzone_du[i+1] == zugzone_ich[i+1]) || (zugzone_du[i-1] == zugzone_ich[i-1] ) || (zugzone_du[i+10] == zugzone_ich[i+10] ) || (zugzone_du[i-10] == zugzone_ich[i-10] ))
-                Koordination_du += 0.5;
+                if (feld[i] != 0 && feld[i]/abs(feld[i]) == _eigene_farbe)
+                    Kontrolle_du += 1;
+                if ((zugzone_du[i+1] > zugzone_ich[i+1]) || (zugzone_du[i-1] > zugzone_ich[i-1] ) || (zugzone_du[i+10] >  zugzone_ich[i+10] ) || (zugzone_du[i-10] > zugzone_ich[i-10] ))
+                    Koordination_du += 1;
+                if ((zugzone_du[i+1] == zugzone_ich[i+1]) || (zugzone_du[i-1] == zugzone_ich[i-1] ) || (zugzone_du[i+10] == zugzone_ich[i+10] ) || (zugzone_du[i-10] == zugzone_ich[i-10] ))
+                    Koordination_du += 0.5;
+            }
+
         }
 
+
+        n += (Koordination_ich - Koordination_du) * _eigene_farbe * 58 + (Kontrolle_ich - Kontrolle_du) * _eigene_farbe * Kontrolle;
+        return n;
     }
 
+    int sort(denkpaar _zugstapel[200], int _n, int _stufe, int _i) {
+        // Annahme: Der beste Zug ist zunächst der an der aktuellen Position _i.
+        int best_index = _i;
 
-    n += (Koordination_ich - Koordination_du) * _eigene_farbe * 58 + (Kontrolle_ich - Kontrolle_du) * _eigene_farbe * Kontrolle;
-    return n;
-}
+        // Durchlaufe alle Züge ab Position _i.
+        for (int j = _i; j < _n; ++j) {
+            // Aktualisiere den 'order'-Wert des aktuellen Zugs _zugstapel[j]
+            // basierend auf History-Heuristik und PV-Move-Bonus.
+            _zugstapel[j].order += historyMoves[_zugstapel[j].z.pos.pos1][_zugstapel[j].z.pos.pos2] * 0.005;
+            if (_zugstapel[j].z.id == best_one[_stufe].z.id) {
+                _zugstapel[j].order += 225; // Starker Bonus für den erwarteten besten Zug (PV-Move)
+            }
 
-int sort(denkpaar _zugstapel[200], int _n, int _stufe, int _i) {
-    // Annahme: Der beste Zug ist zunächst der an der aktuellen Position _i.
-    int best_index = _i;
-
-    // Durchlaufe alle Züge ab Position _i.
-    for (int j = _i; j < _n; ++j) {
-        // Aktualisiere den 'order'-Wert des aktuellen Zugs _zugstapel[j]
-        // basierend auf History-Heuristik und PV-Move-Bonus.
-        _zugstapel[j].order += historyMoves[_zugstapel[j].z.pos.pos1][_zugstapel[j].z.pos.pos2] * 0.005;
-        if (_zugstapel[j].z.id == best_one[_stufe].z.id) {
-            _zugstapel[j].order += 225; // Starker Bonus für den erwarteten besten Zug (PV-Move)
+            // Wenn der aktuelle Zug (nach Aktualisierung seines 'order'-Werts)
+            // besser ist als der bisher beste gefundene Zug, merke dir seinen Index.
+            if (j == _i || _zugstapel[j].order > _zugstapel[best_index].order) {
+                best_index = j; // Nur den Index merken, noch nicht tauschen!
+            }
         }
 
-        // Wenn der aktuelle Zug (nach Aktualisierung seines 'order'-Werts)
-        // besser ist als der bisher beste gefundene Zug, merke dir seinen Index.
-        if (j == _i || _zugstapel[j].order > _zugstapel[best_index].order) {
-            best_index = j; // Nur den Index merken, noch nicht tauschen!
+        // Nachdem alle Züge geprüft wurden, tausche den besten gefundenen Zug
+        // (an _zugstapel[best_index]) an die Position _zugstapel[_i],
+        // falls er nicht schon dort ist.
+        if (best_index != _i) {
+            denkpaar temp = _zugstapel[_i];
+            _zugstapel[_i] = _zugstapel[best_index];
+            _zugstapel[best_index] = temp;
         }
-    }
 
-    // Nachdem alle Züge geprüft wurden, tausche den besten gefundenen Zug
-    // (an _zugstapel[best_index]) an die Position _zugstapel[_i],
-    // falls er nicht schon dort ist.
-    if (best_index != _i) {
-        denkpaar temp = _zugstapel[_i];
-        _zugstapel[_i] = _zugstapel[best_index];
-        _zugstapel[best_index] = temp;
+        return 0; // Erfolgsindikator
     }
-
-    return 0; // Erfolgsindikator
-}

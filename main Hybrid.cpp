@@ -211,7 +211,7 @@ beginning:
             // wichtige Initkommandos - wo man antworten muss
 
             if (command == "uci") {
-                cout << "id name NEXUS 250530 PSQ LEER\n";
+                cout << "id name NEXUS 250711 Phase 6000\n";
                 cout << "id author Albrecht Fiebiger & Stefan Werner\n";
                 cout << "uciok\n"; }
 
@@ -269,7 +269,7 @@ beginning:
                             //for (auto e : zuege) cout << e << " ";
                             if (falsch == true)
                                 goto beginning;  // eine Goto-Anweisung; Wehe dem
-                            // Spag ettiprogramm!
+                            // Spaghettiprogramm!
                             zug_nummer += 1; } } } }
 
             if (command == "go") {
