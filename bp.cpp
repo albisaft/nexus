@@ -3,6 +3,7 @@ feldtyp * testbrett[ende+1];
 Spielfeld * testspiel[ende+1];
 
 
+
 howitends __end = nothing;
 
 
@@ -11,8 +12,8 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
 
 
     if (NullFlag == 3) {
-        spiel.Farbe = -farbe; }
-    else
+        spiel.Farbe = -farbe;
+    } else
         spiel.Farbe = farbe;//*/
 
     double wertung;
@@ -25,7 +26,8 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
     spiel.makeZugstapel();
 
     if (spiel.spezial == SCHACH) {
-        return alpha; }
+        return alpha;
+    }
 
 
     int n = spiel.n;  // Anzahl der Zuege
@@ -41,7 +43,8 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
 
         __end = spiel.last_moves();
         if ( __end  == nothing) {
-            nn += 1; }
+            nn += 1;
+        }
 
         aktueller_zug[stufe] = zugstapel[spiel.getStufe()][i];
 
@@ -64,11 +67,13 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
 
                 wertung = - bp(*testspiel[stufe], farbe*-1, -beta, -alpha, stufe + 1, _stopp, 1);
 
-            }
-            else {
+            } else {
                 wertung = wertung * (farbe);
                 if (farbe == 1 ) {
-                    wertung -= 10; } } }
+                    wertung -= 10;
+                }
+            }
+        }
 
 
 
@@ -85,7 +90,8 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
 
 
                 if (wertungn >= beta && abs(beta)!=MAX_WERT ) {
-                    return beta; }
+                    return beta;
+                }
 
 
             }
@@ -98,33 +104,33 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
 
                         wertung = - bp(*testspiel[stufe], farbe*-1, -alpha-1, -alpha, stufe + 1, _stopp-2, 4);
 
-                    }
-                    else
+                    } else
                         wertung = alpha + 1;
 
 
                     if(wertung > alpha) {
 
-                        wertung = - bp(*testspiel[stufe], -farbe, -beta, -alpha, stufe + 1, _stopp, 4); } }
-                else {
+                        wertung = - bp(*testspiel[stufe], -farbe, -beta, -alpha, stufe + 1, _stopp, 4);
+                    }
+                } else {
                     if (i > 4 && (_stopp-stufe > 2) &! aktueller_zug[stufe].kill) {
 
                         wertung = - bp(*testspiel[stufe], farbe*-1, -alpha-1, -alpha, stufe + 1, _stopp-2, 1);
 
-                    }
-                    else
+                    } else
                         wertung = alpha + 1;
 
 
                     if(wertung > alpha) {
-                        wertung = - bp(*testspiel[stufe], farbe*-1, -beta, -alpha, stufe + 1, _stopp, 1); } } }
-            else  {
+                        wertung = - bp(*testspiel[stufe], farbe*-1, -beta, -alpha, stufe + 1, _stopp, 1);
+                    }
+                }
+            } else  {
                 if (i > 4 && (_stopp-stufe > 2) &! aktueller_zug[stufe].kill) {
 
                     wertung = - bp(*testspiel[stufe], farbe*-1, -alpha-1, -alpha, stufe + 1, _stopp-2, 2);
 
-                }
-                else
+                } else
                     wertung = alpha + 1;
 
 
@@ -132,15 +138,18 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
                     wertung = - bp(*testspiel[stufe], farbe*-1, -beta, -alpha, stufe + 1, _stopp, 2);
 
 
-                    zugstapel[spiel.getStufe()][i].bewertung = wertung; } //}
+                    zugstapel[spiel.getStufe()][i].bewertung = wertung;
+                } //}
 
 
-            } }
+            }
+        }
 
         if (testspiel[stufe]->spezial == SCHACH) {
 
             testspiel[stufe]->spezial = NICHTS;
-            continue; }
+            continue;
+        }
 
         zugstapel[spiel.getStufe()][i].bewertung = wertung;
 
@@ -153,7 +162,8 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
                  << setw(5) << wertung
                  <<", Zug-ID "
                  << setw(6) << aktueller_zug[0].z.id << "\n";
-            cout.flush(); }
+            cout.flush();
+        }
         //else { if (stufe == 0) cout << "*" << flush;}
 
         if (wertung > alpha) {
@@ -164,15 +174,27 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
 
             if (wertung >= beta) {
 
-                if(!aktueller_zug[stufe].kill)
+                if(!aktueller_zug[stufe].kill) {
                     historyMoves[aktueller_zug[stufe].z.pos.pos1][aktueller_zug[stufe].z.pos.pos2] += (_stopp -stufe) * (_stopp - stufe);
+
+                    // KILLER MOVES
+                    // Konkrete Züge, die auf einer konkreten Stufe für Cutoffs gesorgt haben, merken wir uns für die Sortierung
+                    if (zugstapel[spiel.getStufe()][i].z.id != killerMoves[stufe][0].z.id) {
+                        killerMoves[stufe][1] = killerMoves[stufe][0];
+                        killerMoves[stufe][0] = zugstapel[spiel.getStufe()][i];
+                    }
+                }
 
 
                 spiel.nn = nn;
 
-                return beta; }
+                return beta;
+            }
 
-            alpha = wertung; } }
+            alpha = wertung;
+        }
+    }
     spiel.nn = nn;
 
-    return alpha; }
+    return alpha;
+}
