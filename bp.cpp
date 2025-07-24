@@ -35,8 +35,13 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
 
     for (int i=0; i < n; i++) {
 
+        // LATE MOVE PRUNING
+        if (stufe > 3 && i > 20 && !zugstapel[spiel.getStufe()][i].kill) {
+            if ((_stopp - stufe) < 2) { // In geringer Tiefe
+                continue; // Überspringe späte, ruhige Züge
+            }
+        }
 
-//cout << zeit[stufe] << "\n";
         sort(zugstapel[spiel.getStufe()], spiel.n, stufe, i);
         testspiel[stufe]->copy(spiel);
         testspiel[stufe]->zug(zugstapel[spiel.getStufe()][i]);
@@ -143,6 +148,8 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
 
 
             }
+
+
         }
 
         if (testspiel[stufe]->spezial == SCHACH) {

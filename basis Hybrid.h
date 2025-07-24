@@ -2670,7 +2670,6 @@ int sort(denkpaar _zugstapel[200], int _n, int _stufe, int _i) {
             }
 
             // Priorität 4: Alle anderen ruhigen Züge (werden nach History sortiert)
-            // Der Faktor 0.005 ist hier unwichtig, da History nicht mehr mit MVV/LVA konkurriert.
             // Wir nehmen den vollen History-Wert.
             zug.order = historyMoves[zug.z.pos.pos1][zug.z.pos.pos2];
         }
