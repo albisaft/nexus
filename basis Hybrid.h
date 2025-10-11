@@ -92,6 +92,8 @@ const int figurenanzahl = 12; // bei disp()
 bool killFlag           = true;
 const int MAX_WERT      = 99999999;
 
+extern vector<string> stellungsHistorie;
+
 
 enum howitends      { matt       = -MAX_WERT, patt = -1, remis = 0, schaach = 1,
                       schachmatt = +MAX_WERT, nothing
@@ -658,27 +660,17 @@ howitends Spielfeld::last_moves()  {
     // testet, ob, nachdem der Zug gesetzt wurde, noch Schach ist; wenn der
     // Gegner nach seinem Zug noch im Schach steht,
     // hat er einen falschen gemacht
-    gegner = this->Farbe;
-
     find_kings();
 
-    if (Farbe  < 0)  {
-        if (this->test_drohung(Feld[this->getStufe()], 1, this->wking))  {
-            //cout << "weiss hat schach";
+    int mover = -this->Farbe;   // +1 = Weiß hat gezogen, -1 = Schwarz hat gezogen
+    int moverKing = (mover > 0) ? this->wking : this->bking;
 
-            /* test =1;*/
-            return schaach; // verloren
-        }
-    }
-
-    if (Farbe > 0)  {
-        if (this->test_drohung(Feld[this->getStufe()], -1, this->bking))  {
-            //cout << "schwarz hat schach";
-            /*test = 1;*/
-            return schaach;
-        }
+// test_drohung erwartet als 'farbe' die "angegriffene" Seite (also den Mover)
+    if (this->test_drohung(Feld[this->getStufe()], mover, moverKing)) {
+        return schaach; // illegaler Zug: eigener König bleibt im Schach
     }
     return nothing;
+
 }
 
 Spielfeld::Spielfeld()  {
@@ -709,18 +701,19 @@ string int_array_to_string(int int_array[], int size_of_array) {
     return oss.str();
 }
 
-string Spielfeld::hash()  {
-    Feld[1][0] = Farbe;
-    string str = int_array_to_string(Feld[1], 120);
-    Feld[1][0] = RAND;
-    string str2 = int_array_to_string(Feld[1], 120);
+string Spielfeld::hash() {
+    // Schritt 1: Erzeuge den langen, eindeutigen String, der den Zustand beschreibt.
+    // Dies ist der teuerste Schritt, daher rufen wir ihn nur EINMAL auf.
+    string kompletterZustand = int_array_to_string(Feld[this->Stufe], 120);
+    kompletterZustand += (this->Farbe > 0) ? "w" : "b";
 
-    std::size_t str_hash = std::hash<std::string> {} (str) +
-                           std::hash<std::string> {} (str2);
+    // Schritt 2: Konvertiere diesen langen String in eine kurze, schnelle 64-bit Zahl.
+    // std::hash ist dafür optimiert und sehr schnell.
+    std::size_t numerischerHash = std::hash<std::string> {}(kompletterZustand);
 
-    // std::cout << "hash(" << std::quoted(str) << ") = " << str_hash << '\n';
-
-    return to_string(str_hash);
+    // Schritt 3: Gib diese Zahl als kurzen String zurück.
+    // Vergleiche und Kopien dieses kurzen Strings sind extrem schnell.
+    return to_string(numerischerHash);
 }
 
 inline void Spielfeld::zug_reset()  {
@@ -776,9 +769,9 @@ inline int * Spielfeld::to_feld()  {
     return _feld;
 }
 
-inline void Spielfeld::copy(Spielfeld& _spiel)  {
-    Farbe = _spiel.Farbe;
-    Stufe = _spiel.Stufe;
+inline void Spielfeld::copy(Spielfeld& src) {
+    this->Farbe = src.Farbe;
+    this->Stufe = src.Stufe;  // WICHTIG: Stufe mitkopieren!
 }
 
 inline void Spielfeld::setPos(int _feld[], int _farbe, int _stufe, vector<string> & _zuege) {
@@ -944,8 +937,15 @@ inline bool Spielfeld::test_drohung(int feld[], int farbe, int pos)  {
            (feld[pos + 12 * farbe] == W_P * farbe * -1) ||
            (feld[pos + 19 * farbe] == W_P * farbe * -1) ||
            (feld[pos + 8  * farbe] == W_P * farbe * -1) ||
+           (feld[pos + -21 * farbe] == W_P * farbe * -1) ||
+           (feld[pos + -12 * farbe] == W_P * farbe * -1) ||
+           (feld[pos + -19 * farbe] == W_P * farbe * -1) ||
+           (feld[pos + -8  * farbe] == W_P * farbe * -1) ||
+
            (feld[pos + 9  * farbe] == W_B * farbe * -1) ||
            (feld[pos + 11 * farbe] == W_B * farbe * -1) ||
+           (feld[pos + 9  * farbe] == W_Bx * farbe * -1) ||
+           (feld[pos + 11 * farbe] == W_Bx * farbe * -1) ||
 
            (feld[pos + 11 * farbe] == W_K * farbe * -1 ||
             feld[pos + -11 * farbe] == W_K * farbe * -1 ||
@@ -955,6 +955,15 @@ inline bool Spielfeld::test_drohung(int feld[], int farbe, int pos)  {
             feld[pos + -10 * farbe] == W_K * farbe * -1 ||
             feld[pos + 9 * farbe] == W_K * farbe * -1 ||
             feld[pos + -9 * farbe] == W_K * farbe * -1 );
+
+            (feld[pos + 11 * farbe] == W_Kr * farbe * -1 ||
+            feld[pos + -11 * farbe] == W_Kr * farbe * -1 ||
+            feld[pos + 1 * farbe] == W_Kr * farbe * -1 ||
+            feld[pos + -1 * farbe] == W_Kr * farbe * -1 ||
+            feld[pos + 10 * farbe] == W_Kr * farbe * -1 ||
+            feld[pos + -10 * farbe] == W_K * farbe * -1 ||
+            feld[pos + 9 * farbe] == W_Kr * farbe * -1 ||
+            feld[pos + -9 * farbe] == W_Kr * farbe * -1 );
 }
 
 inline void Spielfeld::find_kings()  {
@@ -1045,8 +1054,7 @@ int Spielfeld::zuggenerator()  {
                     if (zielfeld != LEER)   {
                         // schraeg schlagen
                         if (zielfeld == -1 * W_K * farbvorzeichen || zielfeld == -1 * W_Kr * farbvorzeichen)      {
-                            spezial = SCHACH; /*test = 1;*/
-                            return 0;
+                            break;
                         }
 
 
@@ -1095,8 +1103,7 @@ int Spielfeld::zuggenerator()  {
                     if (((zielfeld = Feld[Stufe][ziel]) != RAND))   {
                         if (zielfeld != LEER)   { // schraeg schlagen
                             if (zielfeld == -1 * W_K * farbvorzeichen)      {
-                                spezial = SCHACH; /*test = 1;*/
-                                return 0;
+                                break;
                             }
 
                             if (zielfeld / abs(zielfeld) != farbvorzeichen)   {
@@ -1156,9 +1163,7 @@ int Spielfeld::zuggenerator()  {
 
                         if ((zielfeld == -1 * W_K * farbvorzeichen) ||
                                 (zielfeld == -1 * W_Kr * farbvorzeichen))        {
-                            spezial = SCHACH; /*test = 1;*/
-
-                            return 0;
+                            break;
                         }
 
 
@@ -1333,6 +1338,7 @@ int Spielfeld::zuggenerator()  {
             }
         }
     }
+
     return n;
 }
 
@@ -2104,7 +2110,7 @@ inline int zuganzahl(int feld[120], int _eigene_farbe)  { // Zaehlt Zuege von
         }
 
         if ((figur == W_L)) {
-            int n_Laeufer      = -15;
+            int n_Laeufer  = -15;
             int Attack_Laeufer = 0;
             int FS_Laeufer = 0;
 
@@ -2696,3 +2702,4 @@ int sort(denkpaar _zugstapel[200], int _n, int _stufe, int _i) {
 
     return 0;
 }
+

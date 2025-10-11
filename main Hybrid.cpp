@@ -229,7 +229,7 @@ beginning:
             // wichtige Initkommandos - wo man antworten muss
 
             if (command == "uci") {
-                cout << "id name NEXUS 250723 LMP\n";
+                cout << "id name NEXUS 251010 Patt Pingpong Fix\n";
                 cout << "id author Albrecht Fiebiger & Stefan Werner\n";
                 cout << "uciok\n";
             }
@@ -249,6 +249,13 @@ beginning:
                 if (command == "startpos") {
                     spiel.setPos(grundfeld, +1, 0, zuege);
                     zug_nummer = 1;
+                    letzter_zug_weiss.pos1 = 0;
+                    letzter_zug_weiss.pos2 = 0;
+                    letzter_zug_weiss_prev = {0,0};
+                    letzter_zug_schwarz.pos1 = 0;
+                    letzter_zug_schwarz.pos2 = 0;
+                    letzter_zug_schwarz_prev = {0,0};
+
 
                     cin >> command;
                     spoken << command << flush << "\n";
@@ -288,11 +295,25 @@ beginning:
                             bool falsch = true;
                             for (i = 0; i < spiel.n; i++) {
                                 if ((zugstapel[spiel.Stufe][i].z.id == _zug.z.id)) {
-                                    spiel.realer_zug(zugstapel[spiel.Stufe][i], zuege);
+                                    denkpaar played = zugstapel[spiel.Stufe][i]; // Zug sichern, BEVOR realer_zug die Stufe ändert
+                                    int mover = spiel.Farbe; // Wer zieht jetzt (vor realer_zug)
+
+                                    spiel.realer_zug(played, zuege);
+
+                                    // letzten Zug korrekt setzen (aus 'played', nicht mehr aus zugstapel[…]!)
+                                    if (mover == 1) {
+                                        letzter_zug_weiss_prev = letzter_zug_weiss;
+                                        letzter_zug_weiss.pos1 = played.z.pos.pos1;
+                                        letzter_zug_weiss.pos2 = played.z.pos.pos2;
+                                    } else {
+                                        letzter_zug_schwarz_prev = letzter_zug_schwarz;
+                                        letzter_zug_schwarz.pos1 = played.z.pos.pos1;
+                                        letzter_zug_schwarz.pos2 = played.z.pos.pos2;
+                                    }
+
+
 
                                     spiel.zug_reset();
-                                    _zug = zugstapel[spiel.Stufe][i];
-                                    //	Analysedatei.note (_zug, eigene_farbe * -1, false);
                                     falsch = false;
                                     break;
                                 }
@@ -351,27 +372,9 @@ beginning:
                     int alpha = -MAX_WERT;
                     int beta = MAX_WERT;
 
-                   /* // Aspiration Windows erst ab Tiefe 2 für stabile Startwerte
-                    if (_stopp > 3 && letzterWert != 0) {
-                        int window = 60;
-                        alpha = letzterWert - window;
-                        beta = letzterWert + window;
-                    }*/
-
                     // Rufe die Suche mit dem verengten Fenster auf
                     wert = bp(spiel, spiel.Farbe, alpha, beta, 0, _stopp, 1);
 
-                    // --- FAIL-HIGH/FAIL-LOW LOGIK START ---
-                    // Prüfe, ob der wahre Score außerhalb unseres Fensters lag
-
-                  /*  if (wert <= alpha || wert >= beta) {
-                        // Die Suche ist "gescheitert", unser Fenster war falsch.
-                        // Wir müssen mit einem vollen Fenster neu suchen, um den exakten Wert zu finden.
-                        // Öffne das Fenster wieder vollständig
-                        wert = bp(spiel, spiel.Farbe, -MAX_WERT, MAX_WERT, 0, _stopp, 1);
-                    }
-
-                    letzterWert = wert;*/
 
                     int Zeitfaktor = 1;
                     if (zug_nummer <= 120)
@@ -385,9 +388,7 @@ beginning:
                         break;
                     }
 
-
                 }
-
 
                 t2 = clock();
                 timeline = (double)(timeline * (zug_nummer - 1) / zug_nummer +
@@ -432,6 +433,15 @@ beginning:
                 cout << "bestmove " << grundfeld_bezeichnungen[bester_zug[0].z.pos.pos1]
                      << grundfeld_bezeichnungen[bester_zug[0].z.pos.pos2] << "\n";
 
+                if (spiel.Farbe == 1) {
+                    letzter_zug_weiss_prev = letzter_zug_weiss;
+                    letzter_zug_weiss.pos1 = bester_zug[0].z.pos.pos1;
+                    letzter_zug_weiss.pos2 = bester_zug[0].z.pos.pos2;
+                } else {
+                    letzter_zug_schwarz_prev = letzter_zug_schwarz;
+                    letzter_zug_schwarz.pos1 = bester_zug[0].z.pos.pos1;
+                    letzter_zug_schwarz.pos2 = bester_zug[0].z.pos.pos2;
+                }
 
                 zug_nummer += 1;
             }
@@ -474,7 +484,21 @@ beginning:
                     if ((zugstapel[i].z.pos.pos1 == pos1) &&
                             (zugstapel[i].z.pos.pos2 == pos2)) {
                         ok = true;
-                        spiel.realer_zug(zugstapel[i], zuege);
+                        denkpaar played = zugstapel[i];
+                        int mover = spiel.Farbe; // Farbe VOR dem Zug merken
+                        spiel.realer_zug(played, zuege);
+
+
+                        if (mover == 1) {
+                            letzter_zug_weiss_prev = letzter_zug_weiss;
+                            letzter_zug_weiss.pos1 = played.z.pos.pos1;
+                            letzter_zug_weiss.pos2 = played.z.pos.pos2;
+                        } else {
+                            letzter_zug_schwarz_prev = letzter_zug_schwarz;
+                            letzter_zug_schwarz.pos1 = played.z.pos.pos1;
+                            letzter_zug_schwarz.pos2 = played.z.pos.pos2;
+                        }
+
                         //zuege_append(zuege, spiel.hash());
                         //if (zuege_wied(zuege)) exit = true;
                         spiel.zug_reset();
@@ -495,10 +519,13 @@ beginning:
         //  int devwert = 0;
         for (int _stopp = 1; ; _stopp++) {
 
+
+
             cout << "Suchtiefe " << _stopp << "\n";
             //   if (_stopp == 0)
-
-            wert = bp(spiel, spiel.Farbe, -MAX_WERT, MAX_WERT, 0, _stopp, /*devwert, */1);
+            /*vector<string> historie = zuege;  // Bisherige Züge als Historie
+            historie.push_back(spiel.hash()); // aktuelle Root-Stellung hinzufügen*/
+            wert = bp(spiel, spiel.Farbe, -MAX_WERT, MAX_WERT, 0, _stopp, 1);
             //  if (_stopp == stopp-4) devwert = wert;
             /*     else {
                      int alpha = wert - 30;
@@ -532,6 +559,7 @@ beginning:
              << " => " << grundfeld_bezeichnungen[bester_zug[0].z.pos.pos2] << "\n";
 
         spiel.realer_zug(bester_zug[0], zuege);
+
 
         exit = true;
         switch (spiel.check_end(zuege)) {
