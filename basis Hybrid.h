@@ -919,8 +919,7 @@ inline bool Spielfeld::look_richtung_ld(const int feld[], const int &farbe, cons
 }
 
 inline bool Spielfeld::test_drohung(int feld[], int farbe, int pos)  {
-    if ((pos < 0) || (pos > 99)) {
-        cout << pos << " ";
+    if ((pos < 21) || (pos > 98)) {
         return false;
     }
 
@@ -946,6 +945,10 @@ inline bool Spielfeld::test_drohung(int feld[], int farbe, int pos)  {
            (feld[pos + 11 * farbe] == W_B * farbe * -1) ||
            (feld[pos + 9  * farbe] == W_Bx * farbe * -1) ||
            (feld[pos + 11 * farbe] == W_Bx * farbe * -1) ||
+           (feld[pos + 9  * farbe] == W_Bp_l * farbe * -1) ||
+           (feld[pos + 11 * farbe] == W_Bp_l * farbe * -1) ||
+           (feld[pos + 9  * farbe] == W_Bp_r * farbe * -1) ||
+           (feld[pos + 11 * farbe] == W_Bp_r * farbe * -1) ||
 
            (feld[pos + 11 * farbe] == W_K * farbe * -1 ||
             feld[pos + -11 * farbe] == W_K * farbe * -1 ||
@@ -954,14 +957,14 @@ inline bool Spielfeld::test_drohung(int feld[], int farbe, int pos)  {
             feld[pos + 10 * farbe] == W_K * farbe * -1 ||
             feld[pos + -10 * farbe] == W_K * farbe * -1 ||
             feld[pos + 9 * farbe] == W_K * farbe * -1 ||
-            feld[pos + -9 * farbe] == W_K * farbe * -1 );
+            feld[pos + -9 * farbe] == W_K * farbe * -1 ||
 
-            (feld[pos + 11 * farbe] == W_Kr * farbe * -1 ||
+            feld[pos + 11 * farbe] == W_Kr * farbe * -1 ||
             feld[pos + -11 * farbe] == W_Kr * farbe * -1 ||
             feld[pos + 1 * farbe] == W_Kr * farbe * -1 ||
             feld[pos + -1 * farbe] == W_Kr * farbe * -1 ||
             feld[pos + 10 * farbe] == W_Kr * farbe * -1 ||
-            feld[pos + -10 * farbe] == W_K * farbe * -1 ||
+            feld[pos + -10 * farbe] == W_Kr * farbe * -1 ||
             feld[pos + 9 * farbe] == W_Kr * farbe * -1 ||
             feld[pos + -9 * farbe] == W_Kr * farbe * -1 );
 }
@@ -1057,12 +1060,10 @@ int Spielfeld::zuggenerator()  {
                             break;
                         }
 
-
-
                         if (zielfeld / abs(zielfeld) != farbvorzeichen)   {
                             spezial = UNRUH;
 
-                            if (figur == W_Bx) {
+                            if (figur == W_Bx || figur == W_Bp_l || figur == W_Bp_r) {
                                 add_verwandelung(farbvorzeichen, pos2, W_B, n);
                             } else if (figur == W_B)  { // Bauernumwandelung per schlag
                                 if (Farbe > 0)  {
@@ -1109,7 +1110,7 @@ int Spielfeld::zuggenerator()  {
                             if (zielfeld / abs(zielfeld) != farbvorzeichen)   {
                                 spezial = UNRUH;
 
-                                if (figur == W_Bx)
+                                if (figur == W_Bx || figur == W_Bp_l || figur == W_Bp_r)
                                     add_verwandelung(farbvorzeichen, pos2, W_B, n);
                                 else if (figur == W_B)  { // Bauernumwandelung per schlag
                                     if (Farbe > 0)  {

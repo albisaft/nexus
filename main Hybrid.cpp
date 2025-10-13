@@ -229,7 +229,7 @@ beginning:
             // wichtige Initkommandos - wo man antworten muss
 
             if (command == "uci") {
-                cout << "id name NEXUS 251010 Patt Pingpong Fix\n";
+                cout << "id name NEXUS 251011 Check Extension\n";
                 cout << "id author Albrecht Fiebiger & Stefan Werner\n";
                 cout << "uciok\n";
             }

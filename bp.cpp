@@ -23,14 +23,18 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
         spiel.Farbe = farbe;//*/
 
     double wertung = 0;
-    srand (time(NULL));
+    static bool seeded = false;
+    if (!seeded) {
+        srand((unsigned)time(NULL));
+        seeded = true;
+    }
 
     spiel.makeZugstapel();
 
     spiel.find_kings();
     int king = (farbe > 0) ? spiel.wking : spiel.bking;
     const bool inCheckNow = spiel.test_drohung(Feld[spiel.getStufe()], farbe, king);
-
+    const int ext = (inCheckNow && (_stopp < ende - 1)) ? 1 : 0;    // Check Extension
 
     int n = spiel.n;  // Anzahl der Zuege
     int nn = 0;       // Anzahl der vom Schach her machbaren Zuege
@@ -88,7 +92,7 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
         aktueller_zug[stufe] = zugstapel[spiel.getStufe()][i];
 
 
-        if (((stufe +1>= _stopp)||(stufe+1 >= ende))) {
+        if (((stufe +1>= _stopp + ext)||(stufe+1 >= ende))) {
             // Stellungsbewertung im Blatt (gewünschte Tiefe erreicht)
             wertung = rand() % 3 - 1;
             //wertung = 0;
@@ -101,7 +105,7 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
             }
 
 
-            if ((wertung*farbe > alpha-50 && wertung*farbe < beta + 500) && aktueller_zug[stufe].kill && stufe < _stopp + 2) {
+            if ((wertung*farbe > alpha-50 && wertung*farbe < beta + 500) && aktueller_zug[stufe].kill && stufe < _stopp + 2 && (stufe + 1 < ende)) {
 
                 wertung = - bp(*testspiel[stufe], farbe*-1, -beta, -alpha, stufe + 1, _stopp, 1);
 
@@ -124,7 +128,7 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
                 wertungn = - bp(*testspiel[stufe], farbe, -beta, -beta+1, stufe + 1, _stopp-2, 3);
 
 
-                if (wertungn >= beta && abs(beta)!=MAX_WERT ) {
+                if (wertungn >= beta && std::abs(beta)!= MAX_WERT ) {
                     return beta;
                 }
 
@@ -143,7 +147,7 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
 
                     if(wertung > alpha) {
 
-                        wertung = - bp(*testspiel[stufe], -farbe, -beta, -alpha, stufe + 1, _stopp, 4);
+                        wertung = - bp(*testspiel[stufe], -farbe, -beta, -alpha, stufe + 1, _stopp + ext, 4);
                     }
                 } else {
                     if (!inCheckNow && i > 4 && (_stopp-stufe > 2) && !aktueller_zug[stufe].kill) {
@@ -155,7 +159,7 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
 
 
                     if(wertung > alpha) {
-                        wertung = - bp(*testspiel[stufe], farbe*-1, -beta, -alpha, stufe + 1, _stopp, 1);
+                        wertung = - bp(*testspiel[stufe], farbe*-1, -beta, -alpha, stufe + 1, _stopp + ext, 1);
                     }
                 }
             } else  {
@@ -168,7 +172,7 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
 
 
                 if(wertung > alpha) {
-                    wertung = - bp(*testspiel[stufe], farbe*-1, -beta, -alpha, stufe + 1, _stopp, 2);
+                    wertung = - bp(*testspiel[stufe], farbe*-1, -beta, -alpha, stufe + 1, _stopp + ext, 2);
 
 
                     zugstapel[spiel.getStufe()][i].bewertung = wertung;
@@ -236,8 +240,11 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
             if (wertung >= beta) {
 
                 if(!aktueller_zug[stufe].kill) {
-                    historyMoves[aktueller_zug[stufe].z.pos.pos1][aktueller_zug[stufe].z.pos.pos2] += (_stopp -stufe) * (_stopp - stufe);
-
+                    int from = aktueller_zug[stufe].z.pos.pos1;
+                    int to = aktueller_zug[stufe].z.pos.pos2;
+                    if ((unsigned)from < 120u && (unsigned)to < 120u) {
+                        historyMoves[from][to] += (_stopp - stufe) * (_stopp - stufe);
+                    }
                     // KILLER MOVES
                     // Konkrete Züge, die auf einer konkreten Stufe für Cutoffs gesorgt haben, merken wir uns für die Sortierung
                     if (zugstapel[spiel.getStufe()][i].z.id != killerMoves[stufe][0].z.id) {
