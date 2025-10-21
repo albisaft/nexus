@@ -203,47 +203,50 @@ double __STARTPUNKTEx2[120] = { // Weiße Springer Pawel
     RAND,  RAND,  RAND,  RAND,  RAND,   RAND,   RAND,   RAND,   RAND,  RAND,
     RAND,  RAND,  RAND,  RAND,  RAND,   RAND,   RAND,   RAND,   RAND,  RAND
 };
-/*double __STARTPUNKTEx4[120] = //Weivüe Lv§ufer
-{RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-RAND,-5, -5, -7, -5, -5, -7, -5, -5,	RAND,
-RAND,0,  4,  2,  2,  2,  2,  4,  0,RAND,
-RAND,0,  3,  4,  4,  4,  4,  3,  0,RAND,
-RAND,0,  2,  4,  4,  4,  4,  2,  0,RAND,
-RAND,0,  2,  4,  4,  4,  4,  2,  0,RAND,
-RAND,0,  2,  4,  4,  4,  4,  2,  0,RAND,
-RAND,0,  4,  2,  2,  2,  2,  4,  0,RAND,
-RAND,	0,  0,  0,  0,  0,  0,  0,  0,RAND,
-RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND};*/
-/*double __STARTPUNKTEx6[120] = //Tvºrme Cuckoo
-{RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-RAND,	0,  3,  5,  5,  5,  5,  3,  0,		RAND,
-RAND,	-3,  2,  5,  5,  5,  5,  2, -3,RAND,
-RAND,	-2,  0,  0,  2,  2,  0,  0, -2,RAND,
-RAND,	-2,  0,  0,  0,  0,  0,  0, -2,RAND,
-RAND,	0,  0,  0,  0,  0,  0,  0,  0,RAND,
-RAND,	0,  0,  0,  0,  0,  0,  0,  0,RAND,
-RAND,	22, 27, 27, 27, 27, 27, 27, 22,RAND,
-RAND,	8, 11, 13, 13, 13, 13, 11,  8,RAND,
-RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND};
-/*double __STARTPUNKTEx8[120] = //Dame
-{RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-RAND,-10, -5,  0,  0,  0,  0, -5,-10,	RAND,
-RAND,-5,  0,  5,  5,  5,  5,  0, -5,RAND,
-RAND,0,  5,  5,  6,  6,  5,  5,  0,RAND,
-RAND,0,  5,  6,  6,  6,  6,  5,  0,RAND,
-RAND,0,  5,  6,  6,  6,  6,  5,  0,RAND,
-RAND, 0,  5,  5,  6,  6,  5,  5,  0,RAND,
-RAND,-5,  0,  5,  5,  5,  5,  0, -5,RAND,
-RAND,10, -5,  0,  0,  0,  0, -5,-10,RAND,
-RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND};*/
+double __STARTPUNKTEx4[120] = { //Weiße Läufer
+    RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
+    RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
+    RAND,-5, -5, -7, -5, -5, -7, -5, -5,	RAND,
+    RAND,0,  4,  2,  2,  2,  2,  4,  0,RAND,
+    RAND,0,  3,  4,  4,  4,  4,  3,  0,RAND,
+    RAND,0,  2,  4,  4,  4,  4,  2,  0,RAND,
+    RAND,0,  2,  4,  4,  4,  4,  2,  0,RAND,
+    RAND,0,  2,  4,  4,  4,  4,  2,  0,RAND,
+    RAND,0,  4,  2,  2,  2,  2,  4,  0,RAND,
+    RAND,	0,  0,  0,  0,  0,  0,  0,  0,RAND,
+    RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
+    RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND
+};
+double __STARTPUNKTEx6[120] = { //Türme Cuckoo
+    RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
+    RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
+    RAND,	0,  3,  5,  5,  5,  5,  3,  0,		RAND,
+    RAND,	-3,  2,  5,  5,  5,  5,  2, -3,RAND,
+    RAND,	-2,  0,  0,  2,  2,  0,  0, -2,RAND,
+    RAND,	-2,  0,  0,  0,  0,  0,  0, -2,RAND,
+    RAND,	0,  0,  0,  0,  0,  0,  0,  0,RAND,
+    RAND,	0,  0,  0,  0,  0,  0,  0,  0,RAND,
+    RAND,	22, 27, 27, 27, 27, 27, 27, 22,RAND,
+    RAND,	8, 11, 13, 13, 13, 13, 11,  8,RAND,
+    RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
+    RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND
+};
+double __STARTPUNKTEx8[120] = { //Dame
+    RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
+    RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
+    RAND,-10, -5,  0,  0,  0,  0, -5,-10,	RAND,
+    RAND,-5,  0,  5,  5,  5,  5,  0, -5,RAND,
+    RAND,0,  5,  5,  6,  6,  5,  5,  0,RAND,
+    RAND,0,  5,  6,  6,  6,  6,  5,  0,RAND,
+    RAND,0,  5,  6,  6,  6,  6,  5,  0,RAND,
+    RAND, 0,  5,  5,  6,  6,  5,  5,  0,RAND,
+    RAND,-5,  0,  5,  5,  5,  5,  0, -5,RAND,
+    RAND,10, -5,  0,  0,  0,  0, -5,-10,RAND,
+    RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
+    RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND
+};
 
-double __STARTPUNKTEx10[120] = { //Kv?nig
+double __STARTPUNKTEx10[120] = { //König
     RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
     RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
     RAND,	24, 24,  9,  0,  0,  9, 24, 24,		RAND,
@@ -1519,7 +1522,7 @@ inline double entwicklung(int feld[120], int farbe)    {
     for (int i = 21; i <= 98; i++)  {
         //dieses_feld = feld[i];
 
-        if (feld[i] == RAND || feld[i] == LEER || (abs(feld[i]) > 6 && abs(feld[i]) < 10))
+        if (feld[i] == RAND || feld[i] == LEER)
             continue;
 
         if (feld[i] == W_Bx || feld[i] == W_B)  {
@@ -1555,12 +1558,24 @@ inline double entwicklung(int feld[120], int farbe)    {
         if (feld[i] == S_P) {
             wertung -= __STARTPUNKTEx2[119 - i];   // -kingzone_gegner[i]*10;
         }
-        /*    if (feld[i] == __STARTFELDx4[i]) wertung += 0.55* __STARTPUNKTEx4[i];  // +kingzone_ich[i]*10;	//1.17
-            if (feld[i] == __STARTFELDx5[i]) wertung -=  0.55* __STARTPUNKTEx5[i];//*/
-        /*       if (feld[i] == W_T || feld[i] == W_Tr) wertung +=  __STARTPUNKTEx6[i];  // +kingzone_ich[i]*10;	//1.17
-                if (feld[i] == S_T || feld[i] == S_Tr) wertung -=  __STARTPUNKTEx6[119 - i];
-              /*  if (feld[i] == __STARTFELDx8[i]) wertung +=  __STARTPUNKTEx8[i];  // +kingzone_ich[i]*10;	//1.17
-                if (feld[i] == __STARTFELDx9[i]) wertung -=  __STARTPUNKTEx9[i];*/
+        if (feld[i] == W_L) {
+            wertung += __STARTPUNKTEx4[i];
+        }
+        if (feld[i] == S_L) {
+            wertung -= __STARTPUNKTEx4[119 - i];
+        }
+        if (feld[i] == W_T || feld[i] == W_Tr) {
+            wertung += __STARTPUNKTEx6[i];
+        }
+        if (feld[i] == S_T || feld[i] == S_Tr) {
+            wertung -= __STARTPUNKTEx6[119 - i];
+        }
+        if (feld[i] == W_D) {
+            wertung += __STARTPUNKTEx8[i];
+        }
+        if (feld[i] == S_D) {
+            wertung -= __STARTPUNKTEx8[119 - i];
+        }
         if (feld[i] == W_K || feld[i] == W_Kr) {
             double pawn_shield_score_w = 0;
             wertung +=  (figurenwert-4100)*0.0005*__STARTPUNKTEx10[i];
@@ -1749,6 +1764,8 @@ inline int zuganzahl(int feld[120], int _eigene_farbe)  { // Zaehlt Zuege von
     double K_Safety_Wert = 0;//*/
     // disp(feld);
     for (int i = 21; i <= 98; i++)    {
+        if ((i % 10) == 0 || (i % 10) == 9)
+            continue; // Randspalten überspringen
         int C_flag = 0;
         figur = abs(feld[i]);
 

@@ -105,8 +105,6 @@ int main(int argc, char **argv) {
     bool geladen = false;
     bool allein = false;
     bool _user = false;
-    feldtyp *xbrettchen = new feldtyp;
-    denkpaar *xzugstapel = new denkpaar[200];
 
     bool exit = false;
     int pos1;
@@ -114,7 +112,8 @@ int main(int argc, char **argv) {
     int wert;
     int zug_nummer = 1;
     timeline = 0;
-    time_t t1, t2, t0;
+    clock_t t1, t2, t0;
+    t0 = clock();
 
 
     // Kommandozeilenargumente
@@ -190,8 +189,6 @@ int main(int argc, char **argv) {
 
     Spielfeld spiel(grundfeld, +1, 0);
 
-    spiel.to_feldtyp(xbrettchen);
-
 
     // UCI Protokoll
     if (!_user)
@@ -229,7 +226,7 @@ beginning:
             // wichtige Initkommandos - wo man antworten muss
 
             if (command == "uci") {
-                cout << "id name NEXUS 251011 Check Extension\n";
+                cout << "id name NEXUS 251019 Timefix+PST\n";
                 cout << "id author Albrecht Fiebiger & Stefan Werner\n";
                 cout << "uciok\n";
             }
@@ -382,8 +379,8 @@ beginning:
                     else
                         Zeitfaktor = 30;
 
-
-                    if ((clock() - t1) * 1.7 >= Restzeit / Zeitfaktor || wert == MAX_WERT) {
+                    double elapsed_ms = 1000.0 * (double)(clock() - t1) / CLOCKS_PER_SEC;
+                    if (elapsed_ms * 1.7 >= (double)Restzeit / (double)Zeitfaktor || wert == MAX_WERT) {
                         stopp_tatsaechlich = _stopp;
                         break;
                     }
@@ -394,8 +391,6 @@ beginning:
                 timeline = (double)(timeline * (zug_nummer - 1) / zug_nummer +
                                     (t2 - t1) / zug_nummer);
                 int spez;
-                denkpaar *zugstapel = new denkpaar[200];
-
 
                 exit = true;
                 switch (spiel.check_end(zuege)) {
@@ -461,7 +456,6 @@ beginning:
                     eigene_farbe *= -1;
                     break;
                 }
-                denkpaar *zugstapel = new denkpaar[200];
                 int spez;
                 int n = spiel.zuggenerator();
 
@@ -481,10 +475,11 @@ beginning:
                 }
 
                 for (int i = 0; i < n; i++) {
-                    if ((zugstapel[i].z.pos.pos1 == pos1) &&
-                            (zugstapel[i].z.pos.pos2 == pos2)) {
+                    denkpaar& mz = zugstapel[spiel.Stufe][i]; // globales Move-Array
+                    if ((mz.z.pos.pos1 == pos1) &&
+                            (mz.z.pos.pos2 == pos2)) {
                         ok = true;
-                        denkpaar played = zugstapel[i];
+                        denkpaar played = mz;
                         int mover = spiel.Farbe; // Farbe VOR dem Zug merken
                         spiel.realer_zug(played, zuege);
 
@@ -507,7 +502,7 @@ beginning:
                 }
                 if (ok == false)
                     cout << "\nUnmoegliche Eingabe, vertippt?\n";
-                delete[] zugstapel;
+
             } while (!ok);
         }
 
@@ -536,7 +531,8 @@ beginning:
                      }*/
 
             //   }
-            if ((clock() - t1 >= 300) && (_stopp >= stopp))
+            double elapsed_ms_user = 1000.0 * (double)(clock() - t1) / CLOCKS_PER_SEC;
+            if (elapsed_ms_user >= 300.0 && _stopp >= stopp)
                 break;
         }
 
@@ -546,7 +542,6 @@ beginning:
         timeline = (double)(timeline * (zug_nummer - 1) / zug_nummer +
                             (t2 - t1) / zug_nummer);
         int spez;
-        denkpaar *zugstapel = new denkpaar[200];
 
         cout << "\nmove " << (double)zug_nummer / 2 << ": "
              << ((spiel.Farbe > 0) ? "white" : "black") << ", "
