@@ -226,7 +226,7 @@ beginning:
             // wichtige Initkommandos - wo man antworten muss
 
             if (command == "uci") {
-                cout << "id name NEXUS 251019 Timefix+PST\n";
+                cout << "id name NEXUS 251026 LPSQ 10 + Bugfixes + LMP agg\n";
                 cout << "id author Albrecht Fiebiger & Stefan Werner\n";
                 cout << "uciok\n";
             }
@@ -360,6 +360,11 @@ beginning:
                     for(int j=21; j<99; j++) {
                         historyMoves[i][j] = 0;
                     }
+                }
+
+                for(int i=0; i<100; i++) {
+                    killerMoves[i][0].z.id = 0;
+                    killerMoves[i][1].z.id = 0;
                 }
 
                 //int letzterWert = 0;  //Variable für den Score aus der letzten Iteration
@@ -517,27 +522,15 @@ beginning:
 
 
             cout << "Suchtiefe " << _stopp << "\n";
-            //   if (_stopp == 0)
-            /*vector<string> historie = zuege;  // Bisherige Züge als Historie
-            historie.push_back(spiel.hash()); // aktuelle Root-Stellung hinzufügen*/
-            wert = bp(spiel, spiel.Farbe, -MAX_WERT, MAX_WERT, 0, _stopp, 1);
-            //  if (_stopp == stopp-4) devwert = wert;
-            /*     else {
-                     int alpha = wert - 30;
-                     int beta = wert + 30;
-                     wert = bp(spiel, spiel.Farbe, alpha, beta, 0, _stopp,1 );
-                     if (wert <= alpha || wert >= beta) {
-                         wert = bp(spiel, spiel.Farbe, -MAX_WERT, MAX_WERT, 0, _stopp, 1);
-                     }*/
 
-            //   }
+            wert = bp(spiel, spiel.Farbe, -MAX_WERT, MAX_WERT, 0, _stopp, 1);
+
             double elapsed_ms_user = 1000.0 * (double)(clock() - t1) / CLOCKS_PER_SEC;
             if (elapsed_ms_user >= 300.0 && _stopp >= stopp)
                 break;
         }
 
-        //    make_schema(zugstapel[spiel.getStufe()], spiel.n, 0);
-        //   move_sort_schema();
+
         t2 = clock();
         timeline = (double)(timeline * (zug_nummer - 1) / zug_nummer +
                             (t2 - t1) / zug_nummer);

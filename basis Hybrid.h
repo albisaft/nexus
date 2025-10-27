@@ -203,19 +203,19 @@ double __STARTPUNKTEx2[120] = { // Weiße Springer Pawel
     RAND,  RAND,  RAND,  RAND,  RAND,   RAND,   RAND,   RAND,   RAND,  RAND,
     RAND,  RAND,  RAND,  RAND,  RAND,   RAND,   RAND,   RAND,   RAND,  RAND
 };
-double __STARTPUNKTEx4[120] = { //Weiße Läufer
-    RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-    RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-    RAND,-5, -5, -7, -5, -5, -7, -5, -5,	RAND,
-    RAND,0,  4,  2,  2,  2,  2,  4,  0,RAND,
-    RAND,0,  3,  4,  4,  4,  4,  3,  0,RAND,
-    RAND,0,  2,  4,  4,  4,  4,  2,  0,RAND,
-    RAND,0,  2,  4,  4,  4,  4,  2,  0,RAND,
-    RAND,0,  2,  4,  4,  4,  4,  2,  0,RAND,
-    RAND,0,  4,  2,  2,  2,  2,  4,  0,RAND,
-    RAND,	0,  0,  0,  0,  0,  0,  0,  0,RAND,
-    RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
-    RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND
+double __STARTPUNKTEx4[120] = { // Läufer
+    RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
+    RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
+    RAND, -3,  -4, -10,  -4,  -4, -10,  -4,  -3,  RAND,
+    RAND, -3,   4,   2,   4,   4,   2,   4,  -3,  RAND,
+    RAND, -3,   3,   6,   8,   8,   6,   3,  -3,  RAND,
+    RAND, -3,   1,   6,  10,  10,   6,   1,  -3,  RAND,
+    RAND, -3,   1,   4,  10,  10,   4,   1,  -3,  RAND,
+    RAND, -3,   1,   4,   4,   4,   4,   1,  -3,  RAND,
+    RAND, -3,   1,   1,   1,   1,   1,   1,  -3,  RAND,
+    RAND, -3,  -3,  -3,  -3,  -3,  -3,  -3,  -3,  RAND,
+    RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND,
+    RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND, RAND
 };
 double __STARTPUNKTEx6[120] = { //Türme Cuckoo
     RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,	RAND,
@@ -1198,7 +1198,7 @@ int Spielfeld::zuggenerator()  {
                     }
 
                     // gehen
-                    if (figur == W_B)  { // Bauernumwandelung
+                    if (figur == W_B)  { // Bauernumwandlung
                         if (Farbe > 0)  {
                             if ((91 <= pos2) && (pos2 <= 98))  {
                                 add_verwandelung(farbvorzeichen, pos2, W_D, n);

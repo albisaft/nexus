@@ -34,6 +34,7 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
     spiel.find_kings();
     int king = (farbe > 0) ? spiel.wking : spiel.bking;
     const bool inCheckNow = spiel.test_drohung(Feld[spiel.getStufe()], farbe, king);
+
     const int ext = (inCheckNow && (_stopp < ende - 1)) ? 1 : 0;    // Check Extension
 
     int n = spiel.n;  // Anzahl der Zuege
@@ -45,15 +46,19 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
 // ==========================================================
     for (int i=0; i < n; i++) {
 
+        sort(zugstapel[spiel.getStufe()], spiel.n, stufe, i);
+
         // LATE MOVE PRUNING
-        if (!inCheckNow && stufe > 3 && i > 20 && !zugstapel[spiel.getStufe()][i].kill) {
-            if ((_stopp - stufe) < 2) { // In geringer Tiefe
+        if (!inCheckNow && stufe > 2 && !zugstapel[spiel.getStufe()][i].kill) {
+            int depth = _stopp - stufe;
+            int lmpSchwelle = 5 + depth * depth * 3;
+
+            if (i >= lmpSchwelle) { // In geringer Tiefe
                 continue; // Überspringe späte, ruhige Züge
             }
         }
 
         // --- Zug ausführen und auf Legalität prüfen ---
-        sort(zugstapel[spiel.getStufe()], spiel.n, stufe, i);
         testspiel[stufe]->copy(spiel);
         testspiel[stufe]->zug(zugstapel[spiel.getStufe()][i]);
 
@@ -101,7 +106,6 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
             if (alpha < wertung*farbe + 180) {
                 wertung += (double) 1.55 *  entwicklung(Feld[testspiel[stufe]->getStufe()], farbe);		//0.375-0.4		-->160		1.6
                 wertung += (double) 0.09 *  zuganzahl  (Feld[testspiel[stufe]->getStufe()], farbe); //0,8;0.076
-
             }
 
 
@@ -120,43 +124,34 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
 
 
         else {
-
+            // NULL MOVE PRUNING
             if (!inCheckNow && (NullFlag==1) && (_stopp-stufe)>2) {
-
                 int wertungn = 0;
 
                 wertungn = - bp(*testspiel[stufe], farbe, -beta, -beta+1, stufe + 1, _stopp-2, 3);
 
-
                 if (wertungn >= beta && std::abs(beta)!= MAX_WERT ) {
                     return beta;
                 }
-
             }
 
-
+            // LATE MOVE REDUCTION mit PVS
             if (NullFlag==1) {
                 if ((_stopp-stufe)>2) {
                     if (!inCheckNow && i > 4 && !aktueller_zug[stufe].kill) {
-
                         wertung = - bp(*testspiel[stufe], farbe*-1, -alpha-1, -alpha, stufe + 1, _stopp-2, 4);
-
                     } else
                         wertung = alpha + 1;
 
-
                     if(wertung > alpha) {
-
                         wertung = - bp(*testspiel[stufe], -farbe, -beta, -alpha, stufe + 1, _stopp + ext, 4);
                     }
                 } else {
                     if (!inCheckNow && i > 4 && (_stopp-stufe > 2) && !aktueller_zug[stufe].kill) {
-
                         wertung = - bp(*testspiel[stufe], farbe*-1, -alpha-1, -alpha, stufe + 1, _stopp-2, 1);
 
                     } else
                         wertung = alpha + 1;
-
 
                     if(wertung > alpha) {
                         wertung = - bp(*testspiel[stufe], farbe*-1, -beta, -alpha, stufe + 1, _stopp + ext, 1);
@@ -164,17 +159,13 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
                 }
             } else  {
                 if (!inCheckNow && i > 4 && (_stopp-stufe > 2) && !aktueller_zug[stufe].kill) {
-
                     wertung = - bp(*testspiel[stufe], farbe*-1, -alpha-1, -alpha, stufe + 1, _stopp-2, 2);
 
                 } else
                     wertung = alpha + 1;
 
-
                 if(wertung > alpha) {
                     wertung = - bp(*testspiel[stufe], farbe*-1, -beta, -alpha, stufe + 1, _stopp + ext, 2);
-
-
                     zugstapel[spiel.getStufe()][i].bewertung = wertung;
                 } //}
             }
@@ -245,6 +236,9 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
                     if ((unsigned)from < 120u && (unsigned)to < 120u) {
                         historyMoves[from][to] += (_stopp - stufe) * (_stopp - stufe);
                     }
+                    if (historyMoves[from][to] > 500000) {
+                        historyMoves[from][to] = 500000;  // Cap unter Killer-Schwelle
+                    }
                     // KILLER MOVES
                     // Konkrete Züge, die auf einer konkreten Stufe für Cutoffs gesorgt haben, merken wir uns für die Sortierung
                     if (zugstapel[spiel.getStufe()][i].z.id != killerMoves[stufe][0].z.id) {
@@ -272,11 +266,9 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
         spiel.find_kings();
         int king = (farbe > 0) ? spiel.wking : spiel.bking;
 
-        // KRITISCH: Welche Semantik hat test_drohung?
-        // Test beide Varianten:
         bool check1 = spiel.test_drohung(Feld[spiel.getStufe()], farbe, king);
 
-        return check1 ? -(MAX_WERT - stufe) : 0;  // Variante 1
+        return check1 ? -(MAX_WERT - stufe) : 0;
     }
 
     spiel.nn = nn;
