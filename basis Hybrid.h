@@ -805,9 +805,7 @@ inline int Spielfeld::getStufe()  {
 inline void Spielfeld::zug(denkpaar& _zug)  {
     setStufe(Stufe + 1);
 
-    for (int i = 0; i < 120; i++)  {
-        Feld[Stufe][i] = Feld[Stufe - 1][i];
-    }
+    memcpy(Feld[Stufe], Feld[Stufe - 1], 120 * sizeof(int));
 
     Feld[Stufe][_zug.z.pos.pos2] = Feld[Stufe][_zug.z.pos.pos1];
     Feld[Stufe][_zug.z.pos.pos1] = LEER;

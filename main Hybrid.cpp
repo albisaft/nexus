@@ -11,6 +11,7 @@
 #include <cstdlib>
 #include <ctype.h>
 #include <unistd.h>
+#include <cstring>
 
 #include <time.h>
 
@@ -226,7 +227,7 @@ beginning:
             // wichtige Initkommandos - wo man antworten muss
 
             if (command == "uci") {
-                cout << "id name NEXUS 251026 LPSQ 10 + Bugfixes + LMP agg\n";
+                cout << "id name NEXUS 260210 memcpy \n";
                 cout << "id author Albrecht Fiebiger & Stefan Werner\n";
                 cout << "uciok\n";
             }

@@ -49,7 +49,7 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
         sort(zugstapel[spiel.getStufe()], spiel.n, stufe, i);
 
         // LATE MOVE PRUNING
-        if (!inCheckNow && stufe > 2 && !zugstapel[spiel.getStufe()][i].kill) {
+        if (!inCheckNow && stufe > 2 && !zugstapel[spiel.getStufe()][i].kill && !zugstapel[spiel.getStufe()-2][i].kill) {
             int depth = _stopp - stufe;
             int lmpSchwelle = 5 + depth * depth * 3;
 
