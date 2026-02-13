@@ -24,8 +24,6 @@ struct denkpaar {
     bool   reckoning;
     bool   kill;
     double   order;
-
-    int finds[120]; // Find
 };
 
 struct figurtyp {
