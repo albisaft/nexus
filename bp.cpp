@@ -31,7 +31,6 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
 
     spiel.makeZugstapel();
 
-    spiel.find_kings();
     int king = (farbe > 0) ? spiel.wking : spiel.bking;
     const bool inCheckNow = spiel.test_drohung(Feld[spiel.getStufe()], farbe, king);
 
