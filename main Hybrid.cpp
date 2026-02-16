@@ -227,7 +227,7 @@ beginning:
             // wichtige Initkommandos - wo man antworten muss
 
             if (command == "uci") {
-                cout << "id name NEXUS 260215 Nullmove Neu R=2\n";
+                cout << "id name NEXUS 260216 Aspiration 100*2\n";
                 cout << "id author Albrecht Fiebiger & Stefan Werner\n";
                 cout << "uciok\n";
             }
@@ -331,13 +331,11 @@ beginning:
                 int Restzeit_S;
                 int Restzeit;
 
-
                 for (cin >> command; command != "wtime" && command != "btime"; ) {
                     cin >> command;
                 }
 
                 if (command == "wtime") {
-
                     cin >> Restzeit_W;
                     spoken << command << flush << "\n";
                     cin >> command;
@@ -368,17 +366,64 @@ beginning:
                     killerMoves[i][1].z.id = 0;
                 }
 
-                //int letzterWert = 0;  //Variable für den Score aus der letzten Iteration
+                int letzterWert = 0;  //Score aus der letzten Iteration
+                bool habeLetzten = false;
+                bool zeitAbgelaufen = false;
 
                 for (int _stopp = 1;; _stopp++) {
 
-                    int alpha = -MAX_WERT;
-                    int beta = MAX_WERT;
+                    int alpha, beta;
+                    int fenster = 100;  // Startbreite Aspiration Windows in Centipawn
 
-                    // Rufe die Suche mit dem verengten Fenster auf
+                    // Ab Tiefe 3: Enges Fenster um den letzten Score
+                    if (habeLetzten && _stopp >= 3) {
+                        alpha = letzterWert - fenster;
+                        beta  = letzterWert + fenster;
+                    } else {
+                        alpha = -MAX_WERT;
+                        beta  = MAX_WERT;
+                    }
+
+                    // Rufe die Suche mit dem aktuellen Fenster auf
                     wert = bp(spiel, spiel.Farbe, alpha, beta, 0, _stopp, 1);
 
+                    // Bei Fail: Fenster schrittweise verdoppeln
+                    while (habeLetzten && _stopp >= 3 && (wert <= alpha || wert >= beta)) {
+                        fenster *= 2;
 
+                        // Sicherheitsnetz: Ab 800 volles Fenster
+                        if (fenster >= 800) {
+                            alpha = -MAX_WERT;
+                            beta  = MAX_WERT;
+                        } else {
+                            alpha = letzterWert - fenster;
+                            beta  = letzterWert + fenster;
+                        }
+
+                        // Zeitkontrolle VOR dem Re-Search
+                        double elapsed_ms = 1000.0 * (double)(clock() - t1) / CLOCKS_PER_SEC;
+                        int Zeitfaktor = (zug_nummer <= 120) ? (60 - zug_nummer / 4) : 30;
+                        if (elapsed_ms * 1.7 >= (double)Restzeit / (double)Zeitfaktor) {
+                            stopp_tatsaechlich = _stopp;
+                            zeitAbgelaufen = true;
+                            break; // aus while, danach auch aus der for-Schleife  // Keine Zeit mehr für Re-Search
+                        }
+
+                        wert = bp(spiel, spiel.Farbe, alpha, beta, 0, _stopp, 1);
+                        if (wert == MAX_WERT) {
+                            // Matt gefunden, Iteration kann beendet werden
+                            break;
+                        }
+                    }
+
+                    if (zeitAbgelaufen) {
+                        break; // äußere for(_stopp)-Schleife beenden
+                    }
+
+                    letzterWert = wert;
+                    habeLetzten = true;
+
+                    // Zeitkontrolle nach der Iteration
                     int Zeitfaktor = 1;
                     if (zug_nummer <= 120)
                         Zeitfaktor = 60 - zug_nummer / 4;
@@ -390,7 +435,6 @@ beginning:
                         stopp_tatsaechlich = _stopp;
                         break;
                     }
-
                 }
 
                 t2 = clock();
@@ -425,6 +469,7 @@ beginning:
                     break;
                 }
                 }
+
                 cout << "info depth " << stopp_tatsaechlich << " score cp " << wert/1.55 << " pv " << grundfeld_bezeichnungen[bester_zug[0].z.pos.pos1]
                      << grundfeld_bezeichnungen[bester_zug[0].z.pos.pos2] << " " << grundfeld_bezeichnungen[bester_zug[1].z.pos.pos1]
                      << grundfeld_bezeichnungen[bester_zug[1].z.pos.pos2] << " " << grundfeld_bezeichnungen[bester_zug[2].z.pos.pos1]
