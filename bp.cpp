@@ -14,34 +14,65 @@ ZugPosition letzter_zug_schwarz = {0, 0};
 ZugPosition letzter_zug_weiss_prev = {0,0};
 ZugPosition letzter_zug_schwarz_prev = {0,0};
 
-int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _stopp, int NullFlag) { // Bewertung, Planung
+int bp (Spielfeld & spiel, int farbe, int alpha, int beta, int stufe, int _stopp, int NullFlag) { // Bewertung, Planung
 
-
-    if (NullFlag == 3) {
-        spiel.Farbe = -farbe;
-    } else
-        spiel.Farbe = farbe;//*/
+    //Farbe setzen
+    spiel.Farbe = farbe;
 
     double wertung = 0;
+
     static bool seeded = false;
     if (!seeded) {
         srand((unsigned)time(NULL));
         seeded = true;
     }
 
-    spiel.makeZugstapel();
-
     int king = (farbe > 0) ? spiel.wking : spiel.bking;
     const bool inCheckNow = spiel.test_drohung(Feld[spiel.getStufe()], farbe, king);
 
     const int ext = (inCheckNow && (_stopp < ende - 1)) ? 1 : 0;    // Check Extension
+
+    // ============================================================
+    // === NULL MOVE PRUNING – einmal pro Knoten, VOR der Schleife
+    // ============================================================
+    // Idee: Wenn die Stellung so gut ist, dass selbst ein "Aussetzen"
+    // (Null Move = Gegner zieht zweimal) noch einen Beta-Cutoff ergibt,
+    // dann ist die Stellung sicher >= beta.
+    if (!inCheckNow                             // Nicht im Schach
+            && (NullFlag == 1 || NullFlag == 4) // Nicht zwei Null Moves hintereinander
+            && (_stopp - stufe) >= 3            // Genug Resttiefe
+            && stufe > 0                        // Nicht auf Root-Ebene
+            && stufe + 1 < ende
+            && beta != MAX_WERT && beta != -MAX_WERT) // kein unendliches Fenster)
+            {
+        int nullTiefe = _stopp - 2;  // Reduktion um 2 Halbzüge
+
+        // Null Move: Kein Zug, nur Seite wechseln
+        spiel.Farbe = -farbe;
+
+        // Suche mit Null-Fenster und reduzierter Tiefe
+        int nullWert = -bp(spiel, -farbe, -beta, -beta + 1, stufe + 1, nullTiefe, 2);
+
+        // Farbe wieder zurücksetzen
+        spiel.Farbe = farbe;
+
+        // Wenn Null Move >= beta: Stellung ist zu gut, sofort abschneiden
+        if (nullWert >= beta) {
+            return beta;
+        }
+    }
+
+    // ============================================================
+    // === Zugstapel generieren
+    // ============================================================
+    spiel.makeZugstapel();
 
     int n = spiel.n;  // Anzahl der Zuege
     int nn = 0;       // Anzahl der vom Schach her machbaren Zuege
 
 
 // ==========================================================
-// =========== START DER ZUG-SCHLEIFE (for-loop) ============
+// =========== START DER ZUG-SCHLEIFE  ======================
 // ==========================================================
     for (int i=0; i < n; i++) {
 
@@ -123,51 +154,30 @@ int bp (Spielfeld & spiel, int farbe, int alpha, double beta, int stufe, int _st
 
 
         else {
-            // NULL MOVE PRUNING
-            if (!inCheckNow && (NullFlag==1) && (_stopp-stufe)>2) {
-                int wertungn = 0;
-
-                wertungn = - bp(*testspiel[stufe], farbe, -beta, -beta+1, stufe + 1, _stopp-2, 3);
-
-                if (wertungn >= beta && std::abs(beta)!= MAX_WERT ) {
-                    return beta;
-                }
-            }
 
             // LATE MOVE REDUCTION mit PVS
-            if (NullFlag==1) {
-                if ((_stopp-stufe)>2) {
-                    if (!inCheckNow && i > 4 && !aktueller_zug[stufe].kill) {
-                        wertung = - bp(*testspiel[stufe], farbe*-1, -alpha-1, -alpha, stufe + 1, _stopp-2, 4);
-                    } else
-                        wertung = alpha + 1;
+            if ((_stopp-stufe)>2) {
+                if (!inCheckNow && i > 4 && !aktueller_zug[stufe].kill) {
+                    // Reduzierte Suche
+                    wertung = - bp(*testspiel[stufe], farbe*-1, -alpha-1, -alpha, stufe + 1, _stopp-2, 4);
+                } else
+                    wertung = alpha + 1;
 
-                    if(wertung > alpha) {
-                        wertung = - bp(*testspiel[stufe], -farbe, -beta, -alpha, stufe + 1, _stopp + ext, 4);
-                    }
-                } else {
-                    if (!inCheckNow && i > 4 && (_stopp-stufe > 2) && !aktueller_zug[stufe].kill) {
-                        wertung = - bp(*testspiel[stufe], farbe*-1, -alpha-1, -alpha, stufe + 1, _stopp-2, 1);
-
-                    } else
-                        wertung = alpha + 1;
-
-                    if(wertung > alpha) {
-                        wertung = - bp(*testspiel[stufe], farbe*-1, -beta, -alpha, stufe + 1, _stopp + ext, 1);
-                    }
+                if (wertung > alpha) {
+                    wertung = - bp(*testspiel[stufe], -farbe, -beta, -alpha, stufe + 1, _stopp + ext, 4);
                 }
-            } else  {
+            } else {
                 if (!inCheckNow && i > 4 && (_stopp-stufe > 2) && !aktueller_zug[stufe].kill) {
-                    wertung = - bp(*testspiel[stufe], farbe*-1, -alpha-1, -alpha, stufe + 1, _stopp-2, 2);
+                    wertung = - bp(*testspiel[stufe], farbe*-1, -alpha-1, -alpha, stufe + 1, _stopp-2, 1);
 
                 } else
                     wertung = alpha + 1;
 
                 if(wertung > alpha) {
-                    wertung = - bp(*testspiel[stufe], farbe*-1, -beta, -alpha, stufe + 1, _stopp + ext, 2);
-                    zugstapel[spiel.getStufe()][i].bewertung = wertung;
-                } //}
+                    wertung = - bp(*testspiel[stufe], farbe*-1, -beta, -alpha, stufe + 1, _stopp + ext, 1);
+                }
             }
+
         }
 
         // ===== HIN-UND-HER-ERKENNUNG (nur auf Root-Ebene) =====
