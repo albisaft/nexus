@@ -75,12 +75,6 @@ int    Figurensicherheit = 180;
 int    IsolaniScore = 11;
 int    FreibauerScore = 25;
 
-//double K_Angriff_Bauer = 0.05;//*/
-//double KSafe = 0.04;
-//int Koenigsangriff_Ich = 50;
-//int Koenigsangriff_Er = 0;  //25 Koenigsangriff_Ich
-
-
 enum state { user, uci, gone, position };
 state status = uci;
 
@@ -168,6 +162,63 @@ int grundfeld[120] = {
     RAND, RAND, RAND, RAND, RAND, RAND,  RAND,  RAND,  RAND,   RAND,
     RAND, RAND, RAND, RAND, RAND, RAND,  RAND,  RAND,  RAND,   RAND
 }; // */
+
+// ============================================================
+// === ZOBRIST-HASHING und TRANSPOSITION TABLE
+// ============================================================
+
+// Zobrist-Tabelle: Zufallszahlen für jede Figur auf jedem Feld
+uint64_t zobrist_figuren[27][120];  // [figurentyp + 13][feld]
+uint64_t zobrist_seite;              // XOR wenn Schwarz am Zug
+
+// Zobrist-Tabelle einmalig mit Zufallszahlen füllen
+void zobrist_initialisieren() {
+    std::mt19937_64 rng(123456789);
+    for (int figurtyp = 0; figurtyp < 27; figurtyp++) {
+        for (int feld = 0; feld < 120; feld++) {
+            zobrist_figuren[figurtyp][feld] = rng();
+        }
+    }
+    zobrist_seite = rng();
+}
+
+// Hash einer Stellung komplett berechnen
+uint64_t zobrist_hash_berechnen(int feld[], int farbe) {
+    uint64_t h = 0;
+    for (int i = 21; i <= 98; i++) {
+        int figur = feld[i];
+        if (figur != LEER && figur != RAND) {
+            h ^= zobrist_figuren[figur + 13][i];
+        }
+    }
+    if (farbe < 0) {
+        h ^= zobrist_seite;
+    }
+    return h;
+}
+
+// --- Transposition Table ---
+enum TTFlag : unsigned char {
+    TT_LEER  = 0,
+    TT_EXAKT = 1,
+    TT_ALPHA = 2,  // Obergrenze (fail-low: kein Zug war gut genug)
+    TT_BETA  = 3   // Untergrenze (fail-high: Beta-Cutoff)
+};
+
+struct TTEintrag {
+    uint64_t schluessel;  // Zobrist-Hash zur Verifikation
+    int      wert;        // Gespeicherter Score
+    int      tiefe;       // Verbleibende Suchtiefe
+    TTFlag   typ;         // Art des Eintrags
+    int      bpiZugId;    // ID des besten Zugs (für Zugsortierung, später)
+};
+
+// Tabellengröße: 2^20 = ca. 1 Million Einträge
+const int TT_GROESSE = 1 << 20;
+const int TT_MASKE   = TT_GROESSE - 1;
+
+TTEintrag tt_tabelle[TT_GROESSE];
+
 
 
 
@@ -2770,4 +2821,3 @@ int sort(denkpaar _zugstapel[200], int _n, int _stufe, int _i) {
 
     return 0;
 }
-

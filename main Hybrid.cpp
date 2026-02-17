@@ -21,6 +21,9 @@
 #include <map>
 #include <algorithm>
 
+#include <random>
+#include <cstdint>
+
 #include "basis Hybrid.h"
 
 using namespace std;
@@ -188,6 +191,9 @@ int main(int argc, char **argv) {
         }
     }
 
+    zobrist_initialisieren();
+    memset(tt_tabelle, 0, sizeof(tt_tabelle));
+
     Spielfeld spiel(grundfeld, +1, 0);
 
 
@@ -227,7 +233,7 @@ beginning:
             // wichtige Initkommandos - wo man antworten muss
 
             if (command == "uci") {
-                cout << "id name NEXUS 260216 Aspiration 100*2\n";
+                cout << "id name NEXUS 260216 Transposition Table I\n";
                 cout << "id author Albrecht Fiebiger & Stefan Werner\n";
                 cout << "uciok\n";
             }

@@ -33,11 +33,37 @@ int bp (Spielfeld & spiel, int farbe, int alpha, int beta, int stufe, int _stopp
     const int ext = (inCheckNow && (_stopp < ende - 1)) ? 1 : 0;    // Check Extension
 
     // ============================================================
+    // === TRANSPOSITION TABLE – Nachschlagen
+    // ============================================================
+    int verbleibendeTiefe = _stopp - stufe;
+    uint64_t hash = zobrist_hash_berechnen(Feld[spiel.getStufe()], farbe);
+    TTEintrag& tt = tt_tabelle[hash & TT_MASKE];
+
+    int alpha_anfang = alpha;  // Merken für späteres Speichern
+
+    // Nur in Nicht-Root-Knoten den TT-Treffer verwenden
+    if (stufe > 0 && tt.schluessel == hash
+            && tt.typ != TT_LEER
+            && tt.tiefe >= verbleibendeTiefe) {
+
+        if (tt.typ == TT_EXAKT) {
+            return tt.wert;
+        }
+        if (tt.typ == TT_BETA && tt.wert >= beta) {
+            return beta;
+        }
+        if (tt.typ == TT_ALPHA && tt.wert <= alpha) {
+            return alpha;
+        }
+    }
+
+    // ============================================================
     // === NULL MOVE PRUNING – einmal pro Knoten, VOR der Schleife
     // ============================================================
     // Idee: Wenn die Stellung so gut ist, dass selbst ein "Aussetzen"
     // (Null Move = Gegner zieht zweimal) noch einen Beta-Cutoff ergibt,
     // dann ist die Stellung sicher >= beta.
+
     if (!inCheckNow                             // Nicht im Schach
             && (NullFlag == 1 || NullFlag == 4) // Nicht zwei Null Moves hintereinander
             && (_stopp - stufe) >= 3            // Genug Resttiefe
@@ -256,15 +282,19 @@ int bp (Spielfeld & spiel, int farbe, int alpha, int beta, int stufe, int _stopp
                     }
                 }
 
+                // TT speichern bei Beta-Cutoff
+                if (tt.typ == TT_LEER || verbleibendeTiefe >= tt.tiefe) {
+                    tt.schluessel = hash;
+                    tt.wert       = beta;
+                    tt.tiefe      = verbleibendeTiefe;
+                    tt.typ        = TT_BETA;
+                }
 
                 spiel.nn = nn;
-
                 return beta;
             }
 
             alpha = wertung;
-
-
         }
     }
 
@@ -280,8 +310,28 @@ int bp (Spielfeld & spiel, int farbe, int alpha, int beta, int stufe, int _stopp
         return check1 ? -(MAX_WERT - stufe) : 0;
     }
 
-    spiel.nn = nn;
+        // ============================================================
+    // === TRANSPOSITION TABLE – Speichern
+    // ============================================================
+    // Nur speichern wenn wir mindestens so tief gesucht haben
+    // wie ein eventuell vorhandener alter Eintrag
+    if (tt.typ == TT_LEER || verbleibendeTiefe >= tt.tiefe) {
+        tt.schluessel = hash;
+        tt.tiefe      = verbleibendeTiefe;
 
+        if (alpha <= alpha_anfang) {
+            tt.typ  = TT_ALPHA;  // Fail-low: kein Zug besser als alpha
+            tt.wert = alpha;
+        } else if (alpha >= beta) {
+            tt.typ  = TT_BETA;   // Fail-high: Beta-Cutoff
+            tt.wert = beta;
+        } else {
+            tt.typ  = TT_EXAKT;  // Exakter Wert
+            tt.wert = alpha;
+        }
+    }
+
+    spiel.nn = nn;
     return alpha;
 
 }
