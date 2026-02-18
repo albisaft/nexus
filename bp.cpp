@@ -36,15 +36,22 @@ int bp (Spielfeld & spiel, int farbe, int alpha, int beta, int stufe, int _stopp
     // === TRANSPOSITION TABLE – Nachschlagen
     // ============================================================
     int verbleibendeTiefe = _stopp - stufe;
+    if (verbleibendeTiefe < 0) verbleibendeTiefe = 0;
+
     uint64_t hash = zobrist_hash_berechnen(Feld[spiel.getStufe()], farbe);
     TTEintrag& tt = tt_tabelle[hash & TT_MASKE];
 
     int alpha_anfang = alpha;  // Merken für späteres Speichern
+    ttMoveId[stufe] = 0;
 
     // Nur in Nicht-Root-Knoten den TT-Treffer verwenden
     if (stufe > 0 && tt.schluessel == hash
             && tt.typ != TT_LEER
             && tt.tiefe >= verbleibendeTiefe) {
+
+        if (tt.bpiZugId != 0) {
+            ttMoveId[stufe] = tt.bpiZugId;
+        }
 
         if (tt.typ == TT_EXAKT) {
             return tt.wert;
@@ -69,8 +76,7 @@ int bp (Spielfeld & spiel, int farbe, int alpha, int beta, int stufe, int _stopp
             && (_stopp - stufe) >= 3            // Genug Resttiefe
             && stufe > 0                        // Nicht auf Root-Ebene
             && stufe + 1 < ende
-            && beta != MAX_WERT && beta != -MAX_WERT) // kein unendliches Fenster)
-            {
+            && beta != MAX_WERT && beta != -MAX_WERT) { // kein unendliches Fenster)
         int nullTiefe = _stopp - 2;  // Reduktion um 2 Halbzüge
 
         // Null Move: Kein Zug, nur Seite wechseln
@@ -288,6 +294,7 @@ int bp (Spielfeld & spiel, int farbe, int alpha, int beta, int stufe, int _stopp
                     tt.wert       = beta;
                     tt.tiefe      = verbleibendeTiefe;
                     tt.typ        = TT_BETA;
+                    tt.bpiZugId   = zugstapel[spiel.getStufe()][i].z.id; //Cutoff-Zug
                 }
 
                 spiel.nn = nn;
@@ -298,7 +305,7 @@ int bp (Spielfeld & spiel, int farbe, int alpha, int beta, int stufe, int _stopp
         }
     }
 
-// ===== PATT/MATT-ERKENNUNG  =====
+    // ===== PATT/MATT-ERKENNUNG  =====
     if (nn == 0) {
         // Prüfe DIREKT ob im Schach:
 
@@ -310,7 +317,7 @@ int bp (Spielfeld & spiel, int farbe, int alpha, int beta, int stufe, int _stopp
         return check1 ? -(MAX_WERT - stufe) : 0;
     }
 
-        // ============================================================
+    // ============================================================
     // === TRANSPOSITION TABLE – Speichern
     // ============================================================
     // Nur speichern wenn wir mindestens so tief gesucht haben
@@ -329,6 +336,8 @@ int bp (Spielfeld & spiel, int farbe, int alpha, int beta, int stufe, int _stopp
             tt.typ  = TT_EXAKT;  // Exakter Wert
             tt.wert = alpha;
         }
+
+        tt.bpiZugId = bester_zug[stufe].z.id;
     }
 
     spiel.nn = nn;

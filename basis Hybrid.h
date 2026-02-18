@@ -50,6 +50,8 @@ int sortiertiefe = 15; // Sortiertiefe - wieviele Z¬?ge werden sortiert
 //int figurenwert_schwarz = 0;
 int figurenwert = 0;
 
+int ttMoveId[ende + 2];
+
 int    KooIch    = 365;  //???
 int    KooEr     = 50;    //???
 double AttackIch = 3.5;
@@ -2770,13 +2772,19 @@ int sort(denkpaar _zugstapel[200], int _n, int _stufe, int _i) {
         for (int k = 0; k < _n; k++) {
             denkpaar& zug = _zugstapel[k];
 
-            // Priorität 1: Ist es der PV-Zug? (Immer ganz oben)
-            if (zug.z.id != 0 && zug.z.id == best_one[_stufe].z.id) {
-                zug.order = 3000000;
+            // Priorität 1: Gibt es in der Transposition Table schon einen best move?
+             if (ttMoveId[_stufe] != 0 && zug.z.id == ttMoveId[_stufe]) {
+                zug.order = 4000000;
                 continue; // Nächster Zug
             }
 
-            // Priorität 2: Ist es ein Schlagzug?
+            // Priorität 2: Ist es der PV-Zug? (Immer ganz oben)
+            if (zug.z.id != 0 && zug.z.id == best_one[_stufe].z.id) {
+                zug.order = 3000000;
+                continue;
+            }
+
+            // Priorität 3: Ist es ein Schlagzug?
             if (zug.kill) {
                 // MVV/LVA ist der Basiswert. Wir packen ihn in einen hohen "Bucket".
                 // Der Wert 2.000.000 sorgt dafür, dass er über allen ruhigen Zügen steht.
@@ -2784,7 +2792,7 @@ int sort(denkpaar _zugstapel[200], int _n, int _stufe, int _i) {
                 continue;
             }
 
-            // Priorität 3: Ist es ein Killer-Zug?
+            // Priorität 4: Ist es ein Killer-Zug?
             if (zug.z.id != 0 && zug.z.id == killerMoves[_stufe][0].z.id) {
                 zug.order = 1000002; // Killer 1 ist besser als Killer 2
                 continue;
@@ -2794,7 +2802,7 @@ int sort(denkpaar _zugstapel[200], int _n, int _stufe, int _i) {
                 continue;
             }
 
-            // Priorität 4: Alle anderen ruhigen Züge (werden nach History sortiert)
+            // Priorität 5: Alle anderen ruhigen Züge (werden nach History sortiert)
             // Wir nehmen den vollen History-Wert.
             zug.order = historyMoves[zug.z.pos.pos1][zug.z.pos.pos2];
         }
