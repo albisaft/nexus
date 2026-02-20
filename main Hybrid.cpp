@@ -23,6 +23,7 @@
 
 #include <random>
 #include <cstdint>
+#include <cassert>
 
 #include "basis Hybrid.h"
 
@@ -233,7 +234,7 @@ beginning:
             // wichtige Initkommandos - wo man antworten muss
 
             if (command == "uci") {
-                cout << "id name NEXUS 260217 TT 2\n";
+                cout << "id name NEXUS 260219 Ink Hash\n";
                 cout << "id author Albrecht Fiebiger & Stefan Werner\n";
                 cout << "uciok\n";
             }

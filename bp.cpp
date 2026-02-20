@@ -38,7 +38,7 @@ int bp (Spielfeld & spiel, int farbe, int alpha, int beta, int stufe, int _stopp
     int verbleibendeTiefe = _stopp - stufe;
     if (verbleibendeTiefe < 0) verbleibendeTiefe = 0;
 
-    uint64_t hash = zobrist_hash_berechnen(Feld[spiel.getStufe()], farbe);
+    uint64_t hash = spiel.hash_wert;
     TTEintrag& tt = tt_tabelle[hash & TT_MASKE];
 
     int alpha_anfang = alpha;  // Merken für späteres Speichern
@@ -81,12 +81,14 @@ int bp (Spielfeld & spiel, int farbe, int alpha, int beta, int stufe, int _stopp
 
         // Null Move: Kein Zug, nur Seite wechseln
         spiel.Farbe = -farbe;
+        spiel.hash_wert ^= zobrist_seite;
 
         // Suche mit Null-Fenster und reduzierter Tiefe
         int nullWert = -bp(spiel, -farbe, -beta, -beta + 1, stufe + 1, nullTiefe, 2);
 
         // Farbe wieder zurücksetzen
         spiel.Farbe = farbe;
+        spiel.hash_wert ^= zobrist_seite;
 
         // Wenn Null Move >= beta: Stellung ist zu gut, sofort abschneiden
         if (nullWert >= beta) {
@@ -186,8 +188,7 @@ int bp (Spielfeld & spiel, int farbe, int alpha, int beta, int stufe, int _stopp
 
 
         else {
-
-            // LATE MOVE REDUCTION mit PVS
+            // ===== LATE MOVE REDUCTION mit PVS =====
             if ((_stopp-stufe)>2) {
                 if (!inCheckNow && i > 4 && !aktueller_zug[stufe].kill) {
                     // Reduzierte Suche

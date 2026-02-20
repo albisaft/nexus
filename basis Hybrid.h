@@ -638,6 +638,8 @@ public:
     void norm_zug(denkpaar&);
 
     bool schach(int _farbe);
+
+    uint64_t hash_wert = 0;  // Zobrist-Hash der Stellung
 };
 
 
@@ -744,6 +746,8 @@ Spielfeld::Spielfeld(int _feld[120], int _farbe = 0, int _stufe = 0)  {
             Feld[Stufe][i] = _feld[i];
         }
     }
+    // Hash für die Startstellung direkt beim Erstellen berechnen!
+    this->hash_wert = zobrist_hash_berechnen(Feld[Stufe], Farbe);
 }
 
 string int_array_to_string(int int_array[], int size_of_array) {
@@ -829,6 +833,7 @@ inline void Spielfeld::copy(Spielfeld& src) {
     // Königsposition inkrementell mitführen
     this->wking = src.wking;
     this->bking = src.bking;
+    this->hash_wert = src.hash_wert;
 }
 
 inline void Spielfeld::setPos(int _feld[], int _farbe, int _stufe, vector<string> & _zuege) {
@@ -843,6 +848,9 @@ inline void Spielfeld::setPos(int _feld[], int _farbe, int _stufe, vector<string
 
     //Koenigsposition initial bestimmen
     find_kings();
+
+    // Einmalige Initial-Berechnung für die Grundstellung
+    this->hash_wert = zobrist_hash_berechnen(Feld[Stufe], Farbe);
 
     return;
 }
@@ -860,10 +868,33 @@ inline int Spielfeld::getStufe()  {
 }
 
 inline void Spielfeld::zug(denkpaar& _zug)  {
+    uint64_t neuer_hash = this->hash_wert; // Start mit aktuellem Hash
+
     setStufe(Stufe + 1);
 
     // Brett von der vorherigen Stufe kopieren
     memcpy(Feld[Stufe], Feld[Stufe - 1], 120 * sizeof(int));
+
+    int p1 = _zug.z.pos.pos1;
+    int p2 = _zug.z.pos.pos2;
+
+    // =========================================================
+    // 1. HASH-UPDATE: Alte Figuren auf den betroffenen Feldern entfernen
+    // =========================================================
+    if (Feld[Stufe][p1] != LEER && Feld[Stufe][p1] != RAND) neuer_hash ^= zobrist_figuren[Feld[Stufe][p1] + 13][p1];
+    if (Feld[Stufe][p2] != LEER && Feld[Stufe][p2] != RAND) neuer_hash ^= zobrist_figuren[Feld[Stufe][p2] + 13][p2];
+    for (int j = 0; j < _zug.nw; j++) {
+        int vp = _zug.verwandelung[j].pos1;
+        // Verhindert Doppel-XOR, falls eine Verwandlung auf dem Zielfeld p2 stattfindet
+        if (vp != p1 && vp != p2) {
+            if (Feld[Stufe][vp] != LEER && Feld[Stufe][vp] != RAND)
+                neuer_hash ^= zobrist_figuren[Feld[Stufe][vp] + 13][vp];
+        }
+    }
+
+    // =========================================================
+    // 2. ZUG AUSFÜHREN
+    // =========================================================
 
     // Welche Figur wurde gezogen
     int bewegte_figur = Feld[Stufe][_zug.z.pos.pos1];
@@ -902,6 +933,26 @@ inline void Spielfeld::zug(denkpaar& _zug)  {
     //Seite am Zug wechseln
     setFarbe(Farbe * -1);
     Z = false;
+
+    // Farbwechsel im Hash vermerken
+    neuer_hash ^= zobrist_seite;
+
+    // =========================================================
+    // 3. HASH-UPDATE: Neue Figuren auf denselben Feldern hinzufügen
+    // =========================================================
+    if (Feld[Stufe][p1] != LEER && Feld[Stufe][p1] != RAND) neuer_hash ^= zobrist_figuren[Feld[Stufe][p1] + 13][p1];
+    if (Feld[Stufe][p2] != LEER && Feld[Stufe][p2] != RAND) neuer_hash ^= zobrist_figuren[Feld[Stufe][p2] + 13][p2];
+    for (int j = 0; j < _zug.nw; j++) {
+        int vp = _zug.verwandelung[j].pos1;
+        if (vp != p1 && vp != p2) {
+            if (Feld[Stufe][vp] != LEER && Feld[Stufe][vp] != RAND)
+                neuer_hash ^= zobrist_figuren[Feld[Stufe][vp] + 13][vp];
+        }
+    }
+
+    // Fertig berechneten Hash speichern
+    this->hash_wert = neuer_hash;
+
 }
 
 inline void Spielfeld::norm_zug(denkpaar& _zug)  {
