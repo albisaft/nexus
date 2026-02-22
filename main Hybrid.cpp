@@ -234,7 +234,7 @@ beginning:
             // wichtige Initkommandos - wo man antworten muss
 
             if (command == "uci") {
-                cout << "id name NEXUS 260219 Ink Hash\n";
+                cout << "id name NEXUS 260220 PingPong Fix\n";
                 cout << "id author Albrecht Fiebiger & Stefan Werner\n";
                 cout << "uciok\n";
             }
@@ -254,12 +254,10 @@ beginning:
                 if (command == "startpos") {
                     spiel.setPos(grundfeld, +1, 0, zuege);
                     zug_nummer = 1;
-                    letzter_zug_weiss.pos1 = 0;
-                    letzter_zug_weiss.pos2 = 0;
-                    letzter_zug_weiss_prev = {0,0};
-                    letzter_zug_schwarz.pos1 = 0;
-                    letzter_zug_schwarz.pos2 = 0;
-                    letzter_zug_schwarz_prev = {0,0};
+                    letzter_zug_weiss = {0,0,false};
+                    letzter_zug_weiss_prev = {0,0,false};
+                    letzter_zug_schwarz = {0,0,false};
+                    letzter_zug_schwarz_prev = {0,0,false};
 
 
                     cin >> command;
@@ -310,10 +308,12 @@ beginning:
                                         letzter_zug_weiss_prev = letzter_zug_weiss;
                                         letzter_zug_weiss.pos1 = played.z.pos.pos1;
                                         letzter_zug_weiss.pos2 = played.z.pos.pos2;
+                                        letzter_zug_weiss.kill = played.kill;
                                     } else {
                                         letzter_zug_schwarz_prev = letzter_zug_schwarz;
                                         letzter_zug_schwarz.pos1 = played.z.pos.pos1;
                                         letzter_zug_schwarz.pos2 = played.z.pos.pos2;
+                                        letzter_zug_schwarz.kill = played.kill;
                                     }
 
 
@@ -490,10 +490,12 @@ beginning:
                     letzter_zug_weiss_prev = letzter_zug_weiss;
                     letzter_zug_weiss.pos1 = bester_zug[0].z.pos.pos1;
                     letzter_zug_weiss.pos2 = bester_zug[0].z.pos.pos2;
+                    letzter_zug_weiss.kill = bester_zug[0].kill;
                 } else {
                     letzter_zug_schwarz_prev = letzter_zug_schwarz;
                     letzter_zug_schwarz.pos1 = bester_zug[0].z.pos.pos1;
                     letzter_zug_schwarz.pos2 = bester_zug[0].z.pos.pos2;
+                    letzter_zug_schwarz.kill = bester_zug[0].kill;
                 }
 
                 zug_nummer += 1;
@@ -546,10 +548,12 @@ beginning:
                             letzter_zug_weiss_prev = letzter_zug_weiss;
                             letzter_zug_weiss.pos1 = played.z.pos.pos1;
                             letzter_zug_weiss.pos2 = played.z.pos.pos2;
+                            letzter_zug_weiss.kill = played.kill;
                         } else {
                             letzter_zug_schwarz_prev = letzter_zug_schwarz;
                             letzter_zug_schwarz.pos1 = played.z.pos.pos1;
                             letzter_zug_schwarz.pos2 = played.z.pos.pos2;
+                            letzter_zug_schwarz.kill = played.kill;
                         }
 
                         //zuege_append(zuege, spiel.hash());

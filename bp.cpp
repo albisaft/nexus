@@ -6,13 +6,14 @@ howitends __end = nothing;
 struct ZugPosition {
     int pos1;
     int pos2;
+    bool kill;
 };
 
-ZugPosition letzter_zug_weiss = {0, 0};
-ZugPosition letzter_zug_schwarz = {0, 0};
+ZugPosition letzter_zug_weiss = {0, 0, false};
+ZugPosition letzter_zug_schwarz = {0, 0, false};
 
-ZugPosition letzter_zug_weiss_prev = {0,0};
-ZugPosition letzter_zug_schwarz_prev = {0,0};
+ZugPosition letzter_zug_weiss_prev = {0,0, false};
+ZugPosition letzter_zug_schwarz_prev = {0,0, false};
 
 int bp (Spielfeld & spiel, int farbe, int alpha, int beta, int stufe, int _stopp, int NullFlag) { // Bewertung, Planung
 
@@ -227,12 +228,14 @@ int bp (Spielfeld & spiel, int farbe, int alpha, int beta, int stufe, int _stopp
                 // Mein Kandidat ist direkte Rücknahme? (B->A)
                 bool selfBack =
                     (lastSelf.pos1 != 0) &&
+                    (!lastSelf.kill) &&
                     (aktueller_zug[0].z.pos.pos1 == lastSelf.pos2) &&
                     (aktueller_zug[0].z.pos.pos2 == lastSelf.pos1);
 
                 // Gegner zeigt bereits Ping-Pong? (… C->D und davor D->C)
                 bool oppPingPong =
                     (oppLast.pos1 != 0) && (oppPrev.pos1 != 0) &&
+                    (!oppLast.kill) && (!oppPrev.kill) &&
                     (oppLast.pos1 == oppPrev.pos2) &&
                     (oppLast.pos2 == oppPrev.pos1);
 
