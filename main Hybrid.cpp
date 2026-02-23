@@ -234,7 +234,7 @@ beginning:
             // wichtige Initkommandos - wo man antworten muss
 
             if (command == "uci") {
-                cout << "id name NEXUS 260220 PingPong Fix\n";
+                cout << "id name NEXUS 260223 Zeit 1.6\n";
                 cout << "id author Albrecht Fiebiger & Stefan Werner\n";
                 cout << "uciok\n";
             }
@@ -408,9 +408,9 @@ beginning:
                         }
 
                         // Zeitkontrolle VOR dem Re-Search
-                        double elapsed_ms = 1000.0 * (double)(clock() - t1) / CLOCKS_PER_SEC;
+                        double verstrichene_ms = 1000.0 * (double)(clock() - t1) / CLOCKS_PER_SEC;
                         int Zeitfaktor = (zug_nummer <= 120) ? (60 - zug_nummer / 4) : 30;
-                        if (elapsed_ms * 1.7 >= (double)Restzeit / (double)Zeitfaktor) {
+                        if (verstrichene_ms * 1.6 >= (double)Restzeit / (double)Zeitfaktor) {
                             stopp_tatsaechlich = _stopp;
                             zeitAbgelaufen = true;
                             break; // aus while, danach auch aus der for-Schleife  // Keine Zeit mehr für Re-Search
@@ -437,8 +437,8 @@ beginning:
                     else
                         Zeitfaktor = 30;
 
-                    double elapsed_ms = 1000.0 * (double)(clock() - t1) / CLOCKS_PER_SEC;
-                    if (elapsed_ms * 1.7 >= (double)Restzeit / (double)Zeitfaktor || wert == MAX_WERT) {
+                    double verstrichene_ms = 1000.0 * (double)(clock() - t1) / CLOCKS_PER_SEC;
+                    if (verstrichene_ms * 1.6 >= (double)Restzeit / (double)Zeitfaktor || wert == MAX_WERT) {
                         stopp_tatsaechlich = _stopp;
                         break;
                     }
