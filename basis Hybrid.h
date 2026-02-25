@@ -88,6 +88,12 @@ const int MAX_WERT      = 99999999;
 
 extern vector<string> stellungsHistorie;
 
+// Zeitkontrolle für die Suche
+bool sucheAbbrechen = false;     // Wird true gesetzt, wenn Zeit abgelaufen ist
+clock_t suchStartzeit;           // Startzeit des aktuellen Zuges
+int suchZeitBudgetMs = 0;        // Zeitbudget in Millisekunden für diesen Zug
+long long knotenZaehler = 0;     // Zählt besuchte Knoten für seltene Zeitchecks
+
 
 enum howitends      { matt       = -MAX_WERT, patt = -1, remis = 0, schaach = 1,
                       schachmatt = +MAX_WERT, nothing

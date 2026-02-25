@@ -234,7 +234,7 @@ beginning:
             // wichtige Initkommandos - wo man antworten muss
 
             if (command == "uci") {
-                cout << "id name NEXUS 260223 Zeit 1.6\n";
+                cout << "id name NEXUS 260225 Zeit + TT Fix\n";
                 cout << "id author Albrecht Fiebiger & Stefan Werner\n";
                 cout << "uciok\n";
             }
@@ -334,8 +334,8 @@ beginning:
             }
 
             if (command == "go") {
-                int Restzeit_W;
-                int Restzeit_S;
+                int Restzeit_W = 0;
+                int Restzeit_S = 0;
                 int Restzeit;
 
                 for (cin >> command; command != "wtime" && command != "btime"; ) {
@@ -353,7 +353,6 @@ beginning:
                     spoken << command << flush << "\n";
                 }
 
-
                 if (spiel.Farbe == 1) {
                     Restzeit = Restzeit_W;
                 } else
@@ -361,6 +360,46 @@ beginning:
 
                 t1 = clock();
                 spiel.setStufe(0);
+
+                // Notfall-Fallback: falls Suche in Tiefe 1 schon abbricht, haben wir einen legalen Zug.
+                spiel.makeZugstapel();
+                if (spiel.n > 0) {
+                    bester_zug[0] = zugstapel[spiel.getStufe()][0];
+                }
+
+                // --- Zeitkontrolle initialisieren ---
+                suchStartzeit   = t1;
+                sucheAbbrechen  = false;
+                knotenZaehler   = 0;
+
+                // Grobes Zeitbudget pro Zug
+                int Zeitfaktor = (zug_nummer <= 120) ? (60 - zug_nummer / 4) : 30;
+                double geplanteZugzeitMs = (double)Restzeit / (double)Zeitfaktor;
+
+                const int zeitReserveMs = 50;
+
+                double notbremseMs = geplanteZugzeitMs * 9.0;
+
+                // Mindestboden: in Zeitnot nicht in Millisekunden-Panik verfallen
+                if (notbremseMs < 200.0)
+                    notbremseMs = 200.0;
+
+                // Spike-Schutz: Kein Zug darf mehr als 2,75 Sek. ODER 17,5%
+                // der Restzeit fressen. Das schützt die Zeit für das Endspiel.
+                double deckelMs = 0.175 * (double)Restzeit;
+                if (deckelMs > 2750.0)
+                    deckelMs = 2750.0;
+                if (notbremseMs > deckelMs)
+                    notbremseMs = deckelMs;
+
+                // Letzte Sicherheit: Immer die Reserve zur Uhr lassen
+                double maximalMs = (double)Restzeit - zeitReserveMs;
+                if (maximalMs < 10.0)
+                    maximalMs = 10.0;
+                if (notbremseMs > maximalMs)
+                    notbremseMs = maximalMs;
+
+                suchZeitBudgetMs = (int)notbremseMs;
 
                 for(int i=21; i<99; i++) {
                     for(int j=21; j<99; j++) {
@@ -373,17 +412,21 @@ beginning:
                     killerMoves[i][1].z.id = 0;
                 }
 
-                int letzterWert = 0;  //Score aus der letzten Iteration
+                int letzterWert = 0;  //Wert aus der letzten Iteration
                 bool habeLetzten = false;
-                bool zeitAbgelaufen = false;
+                denkpaar letzterBesterZug = bester_zug[0];
+                stopp_tatsaechlich = 0;
 
-                for (int _stopp = 1;; _stopp++) {
+                for (int tiefe = 1;; ++tiefe) {
+
+                    // Jede Iteration frisch starten
+                    sucheAbbrechen = false;
 
                     int alpha, beta;
                     int fenster = 100;  // Startbreite Aspiration Windows in Centipawn
 
                     // Ab Tiefe 3: Enges Fenster um den letzten Score
-                    if (habeLetzten && _stopp >= 3) {
+                    if (habeLetzten && tiefe >= 3) {
                         alpha = letzterWert - fenster;
                         beta  = letzterWert + fenster;
                     } else {
@@ -392,10 +435,27 @@ beginning:
                     }
 
                     // Rufe die Suche mit dem aktuellen Fenster auf
-                    wert = bp(spiel, spiel.Farbe, alpha, beta, 0, _stopp, 1);
+                    int wertIteration = bp(spiel, spiel.Farbe, alpha, beta, 0, tiefe, 1);
 
-                    // Bei Fail: Fenster schrittweise verdoppeln
-                    while (habeLetzten && _stopp >= 3 && (wert <= alpha || wert >= beta)) {
+                    // FALL 1: Zeit läuft während der Suche ab: Suche abbrechen und letzte Iteration nehmen
+                    if (sucheAbbrechen || wertIteration == SCORE_TIMEOUT) {
+                        if (habeLetzten) {
+                            // Nimm den letzten fertigen Zug
+                            wert = letzterWert;
+                            bester_zug[0] = letzterBesterZug;
+                            stopp_tatsaechlich = tiefe - 1;
+                            if (stopp_tatsaechlich < 1)
+                                stopp_tatsaechlich = 1;
+                        } else {
+                            // falls schon Tiefe 1 abgebrochen wurde (sehr selten)
+                            wert = 0;
+                            stopp_tatsaechlich = 1;
+                        }
+                        goto suche_fertig;
+                    }
+
+                    // FALL 2: Aspiration Window passte nicht: Fenster schrittweise verdoppeln
+                    while (habeLetzten && tiefe >= 3 && (wertIteration <= alpha || wertIteration >= beta)) {
                         fenster *= 2;
 
                         // Sicherheitsnetz: Ab 800 volles Fenster
@@ -407,42 +467,45 @@ beginning:
                             beta  = letzterWert + fenster;
                         }
 
-                        // Zeitkontrolle VOR dem Re-Search
-                        double verstrichene_ms = 1000.0 * (double)(clock() - t1) / CLOCKS_PER_SEC;
-                        int Zeitfaktor = (zug_nummer <= 120) ? (60 - zug_nummer / 4) : 30;
-                        if (verstrichene_ms * 1.6 >= (double)Restzeit / (double)Zeitfaktor) {
-                            stopp_tatsaechlich = _stopp;
-                            zeitAbgelaufen = true;
-                            break; // aus while, danach auch aus der for-Schleife  // Keine Zeit mehr für Re-Search
-                        }
+                        sucheAbbrechen = false;
+                        wertIteration = bp(spiel, spiel.Farbe, alpha, beta, 0, tiefe, 1);
 
-                        wert = bp(spiel, spiel.Farbe, alpha, beta, 0, _stopp, 1);
-                        if (wert == MAX_WERT) {
-                            // Matt gefunden, Iteration kann beendet werden
+                        if (sucheAbbrechen || wertIteration == SCORE_TIMEOUT) {
+                            // aktuelle Iteration/Re-Search unzuverlässig -> letzte fertige Iteration nutzen
+                            if (habeLetzten) {
+                                wert = letzterWert;
+                                bester_zug[0] = letzterBesterZug;
+                                stopp_tatsaechlich = tiefe - 1;
+                                if (stopp_tatsaechlich < 1)
+                                    stopp_tatsaechlich = 1;
+                            } else
+                                stopp_tatsaechlich = 1;
+                            goto suche_fertig;
+                        }
+                        if (wertIteration == MAX_WERT)
                             break;
-                        }
                     }
 
-                    if (zeitAbgelaufen) {
-                        break; // äußere for(_stopp)-Schleife beenden
-                    }
-
+                    // FALL 3: Iteration erfolgreich abgeschlossen: merken
+                    wert = wertIteration;
                     letzterWert = wert;
                     habeLetzten = true;
+                    letzterBesterZug = bester_zug[0];
+                    stopp_tatsaechlich = tiefe;
 
-                    // Zeitkontrolle nach der Iteration
-                    int Zeitfaktor = 1;
-                    if (zug_nummer <= 120)
-                        Zeitfaktor = 60 - zug_nummer / 4;
-                    else
-                        Zeitfaktor = 30;
-
-                    double verstrichene_ms = 1000.0 * (double)(clock() - t1) / CLOCKS_PER_SEC;
-                    if (verstrichene_ms * 1.6 >= (double)Restzeit / (double)Zeitfaktor || wert == MAX_WERT) {
-                        stopp_tatsaechlich = _stopp;
+                    // Mat gefunden? Dann können wir aufhören, egal wieviel Zeit noch übrig ist
+                    if (wert == MAX_WERT)
                         break;
+
+                    // Reicht die Zeit für eine weitere Iteration?
+                    double verstrichene_ms = 1000.0 * (double)(clock() - t1) / CLOCKS_PER_SEC;
+                    if (verstrichene_ms * 1.6 >= (double)Restzeit / (double)Zeitfaktor) {
+                        break; // Nicht genug Zeit für eine neue Iteration
                     }
                 }
+
+suche_fertig:
+                ;
 
                 t2 = clock();
                 timeline = (double)(timeline * (zug_nummer - 1) / zug_nummer +
@@ -575,15 +638,12 @@ beginning:
         spiel.setStufe(0);
         //  int devwert = 0;
         for (int _stopp = 1; ; _stopp++) {
-
-
-
             cout << "Suchtiefe " << _stopp << "\n";
 
             wert = bp(spiel, spiel.Farbe, -MAX_WERT, MAX_WERT, 0, _stopp, 1);
 
-            double elapsed_ms_user = 1000.0 * (double)(clock() - t1) / CLOCKS_PER_SEC;
-            if (elapsed_ms_user >= 300.0 && _stopp >= stopp)
+            double verstrichene_ms_user = 1000.0 * (double)(clock() - t1) / CLOCKS_PER_SEC;
+            if (verstrichene_ms_user >= 300.0 && _stopp >= stopp)
                 break;
         }
 

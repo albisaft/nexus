@@ -1,7 +1,13 @@
+#include <limits>
+
 // --- Globale Variablen für die Suche ---
 feldtyp * testbrett[ende+1];
 Spielfeld * testspiel[ende+1];
 howitends __end = nothing;
+
+// Der "Sentinel"-Wert: Ein Score, der signalisiert, dass die Zeit abgelaufen ist.
+const int SCORE_TIMEOUT = std::numeric_limits<int>::max() / 4;
+
 
 struct ZugPosition {
     int pos1;
@@ -16,6 +22,27 @@ ZugPosition letzter_zug_weiss_prev = {0,0, false};
 ZugPosition letzter_zug_schwarz_prev = {0,0, false};
 
 int bp (Spielfeld & spiel, int farbe, int alpha, int beta, int stufe, int _stopp, int NullFlag) { // Bewertung, Planung
+
+    // ==========================================================
+    // === ZEITKONTROLLE INNERHALB DER SUCHE ===
+    // ==========================================================
+    // Alle 1024 Knoten prüfen wir, ob die Zeit abgelaufen ist.
+    // Das ist billig genug um die Suche nicht zu bremsen, aber
+    // häufig genug um rechtzeitig abzubrechen.
+
+    // Sofortiger Abbruch, wenn tiefer in der Suche bereits Zeitüberschreitung
+    if (sucheAbbrechen && suchZeitBudgetMs > 0) {
+        return SCORE_TIMEOUT; // Wert wird von der aufrufenden Iteration ignoriert
+    }
+
+    knotenZaehler++;
+    if ((knotenZaehler & 1023) == 0 && suchZeitBudgetMs > 0) {
+        double vergangene_ms = 1000.0 * (double)(clock() - suchStartzeit) / CLOCKS_PER_SEC;
+        if (vergangene_ms >= suchZeitBudgetMs) {
+            sucheAbbrechen = true;
+            return SCORE_TIMEOUT;
+        }
+    }
 
     //Farbe setzen
     spiel.Farbe = farbe;
@@ -34,10 +61,11 @@ int bp (Spielfeld & spiel, int farbe, int alpha, int beta, int stufe, int _stopp
     const int ext = (inCheckNow && (_stopp < ende - 1)) ? 1 : 0;    // Check Extension
 
     // ============================================================
-    // === TRANSPOSITION TABLE – Nachschlagen
+    // === TRANSPOSITION TABLE – Nachschlagen (Sortieren & Cutoff)
     // ============================================================
     int verbleibendeTiefe = _stopp - stufe;
-    if (verbleibendeTiefe < 0) verbleibendeTiefe = 0;
+    if (verbleibendeTiefe < 0)
+        verbleibendeTiefe = 0;
 
     uint64_t hash = spiel.hash_wert;
     TTEintrag& tt = tt_tabelle[hash & TT_MASKE];
@@ -45,23 +73,27 @@ int bp (Spielfeld & spiel, int farbe, int alpha, int beta, int stufe, int _stopp
     int alpha_anfang = alpha;  // Merken für späteres Speichern
     ttMoveId[stufe] = 0;
 
-    // Nur in Nicht-Root-Knoten den TT-Treffer verwenden
-    if (stufe > 0 && tt.schluessel == hash
-            && tt.typ != TT_LEER
-            && tt.tiefe >= verbleibendeTiefe) {
+    // Falls ein Eintrag in der Tabelle existiert (nur nicht-Root)
+    if (stufe > 0 && tt.schluessel == hash && tt.typ != TT_LEER) {
 
+        // Besten Zug aus TT immer zum Sortieren benutzen.
+        // Auch wenn die Tiefe nicht für einen Cutoff reicht,
+        // ist dieser Zug statistisch der beste Startpunkt
         if (tt.bpiZugId != 0) {
             ttMoveId[stufe] = tt.bpiZugId;
         }
 
-        if (tt.typ == TT_EXAKT) {
-            return tt.wert;
-        }
-        if (tt.typ == TT_BETA && tt.wert >= beta) {
-            return beta;
-        }
-        if (tt.typ == TT_ALPHA && tt.wert <= alpha) {
-            return alpha;
+        // Ein echter Cutoff erfolgt nur bei ausreichender Tiefe
+        if (tt.tiefe >= verbleibendeTiefe) {
+            if (tt.typ == TT_EXAKT) {
+                return tt.wert;
+            }
+            if (tt.typ == TT_BETA && tt.wert >= beta) {
+                return beta;
+            }
+            if (tt.typ == TT_ALPHA && tt.wert <= alpha) {
+                return alpha;
+            }
         }
     }
 
@@ -85,11 +117,17 @@ int bp (Spielfeld & spiel, int farbe, int alpha, int beta, int stufe, int _stopp
         spiel.hash_wert ^= zobrist_seite;
 
         // Suche mit Null-Fenster und reduzierter Tiefe
-        int nullWert = -bp(spiel, -farbe, -beta, -beta + 1, stufe + 1, nullTiefe, 2);
+        int nullChild = bp(spiel, -farbe, -beta, -beta + 1, stufe + 1, nullTiefe, 2);
 
         // Farbe wieder zurücksetzen
         spiel.Farbe = farbe;
         spiel.hash_wert ^= zobrist_seite;
+
+        if (nullChild == SCORE_TIMEOUT) {
+            return SCORE_TIMEOUT;
+        }
+
+        int nullWert = -nullChild;
 
         // Wenn Null Move >= beta: Stellung ist zu gut, sofort abschneiden
         if (nullWert >= beta) {
@@ -173,10 +211,12 @@ int bp (Spielfeld & spiel, int farbe, int alpha, int beta, int stufe, int _stopp
                 wertung += (double) 0.09 *  zuganzahl  (Feld[testspiel[stufe]->getStufe()], farbe); //0,8;0.076
             }
 
-
             if ((wertung*farbe > alpha-50 && wertung*farbe < beta + 500) && aktueller_zug[stufe].kill && stufe < _stopp + 2 && (stufe + 1 < ende)) {
+                int child = bp(*testspiel[stufe], farbe*-1, -beta, -alpha, stufe + 1, _stopp, 1);
 
-                wertung = - bp(*testspiel[stufe], farbe*-1, -beta, -alpha, stufe + 1, _stopp, 1);
+                if (child == SCORE_TIMEOUT)
+                    return SCORE_TIMEOUT;
+                wertung = -child;
 
             } else {
                 wertung = wertung * (farbe);
@@ -186,29 +226,38 @@ int bp (Spielfeld & spiel, int farbe, int alpha, int beta, int stufe, int _stopp
             }
         }
 
-
-
         else {
             // ===== LATE MOVE REDUCTION mit PVS =====
             if ((_stopp-stufe)>2) {
                 if (!inCheckNow && i > 4 && !aktueller_zug[stufe].kill) {
                     // Reduzierte Suche
-                    wertung = - bp(*testspiel[stufe], farbe*-1, -alpha-1, -alpha, stufe + 1, _stopp-2, 4);
+                    int child = bp(*testspiel[stufe], farbe*-1, -alpha-1, -alpha, stufe + 1, _stopp-2, 4);
+                    if (child == SCORE_TIMEOUT)
+                        return SCORE_TIMEOUT;
+                    wertung = -child;
                 } else
                     wertung = alpha + 1;
 
                 if (wertung > alpha) {
-                    wertung = - bp(*testspiel[stufe], -farbe, -beta, -alpha, stufe + 1, _stopp + ext, 4);
+                    int child = bp(*testspiel[stufe], -farbe, -beta, -alpha, stufe + 1, _stopp + ext, 4);
+                    if (child == SCORE_TIMEOUT)
+                        return SCORE_TIMEOUT;
+                    wertung = -child;
                 }
             } else {
                 if (!inCheckNow && i > 4 && (_stopp-stufe > 2) && !aktueller_zug[stufe].kill) {
-                    wertung = - bp(*testspiel[stufe], farbe*-1, -alpha-1, -alpha, stufe + 1, _stopp-2, 1);
-
+                    int child = bp(*testspiel[stufe], farbe*-1, -alpha-1, -alpha, stufe + 1, _stopp-2, 1);
+                    if (child == SCORE_TIMEOUT)
+                        return SCORE_TIMEOUT;
+                    wertung = -child;
                 } else
                     wertung = alpha + 1;
 
                 if(wertung > alpha) {
-                    wertung = - bp(*testspiel[stufe], farbe*-1, -beta, -alpha, stufe + 1, _stopp + ext, 1);
+                    int child = bp(*testspiel[stufe], farbe*-1, -beta, -alpha, stufe + 1, _stopp + ext, 1);
+                    if (child == SCORE_TIMEOUT)
+                        return SCORE_TIMEOUT;
+                    wertung = -child;
                 }
             }
 
@@ -268,13 +317,12 @@ int bp (Spielfeld & spiel, int farbe, int alpha, int beta, int stufe, int _stopp
         //else { if (stufe == 0) cout << "*" << flush;}
 
         if (wertung > alpha) {
-
             bester_zug[stufe] = zugstapel[spiel.getStufe()][i];
             best_one[stufe] = zugstapel[spiel.getStufe()][i]; //Aktueller PV-Zug f�r jede Stufe inkl. Zuginformationen
             //  best_one[stufe].bewertung *= 0.5; //ACHTUNG 5
 
             if (wertung >= beta) {
-
+                // Killer/History Updates
                 if(!aktueller_zug[stufe].kill) {
                     int from = aktueller_zug[stufe].z.pos.pos1;
                     int to = aktueller_zug[stufe].z.pos.pos2;
@@ -293,18 +341,16 @@ int bp (Spielfeld & spiel, int farbe, int alpha, int beta, int stufe, int _stopp
                 }
 
                 // TT speichern bei Beta-Cutoff
-                if (tt.typ == TT_LEER || verbleibendeTiefe >= tt.tiefe) {
+                if (!sucheAbbrechen && (tt.typ == TT_LEER || verbleibendeTiefe >= tt.tiefe)) {
                     tt.schluessel = hash;
                     tt.wert       = beta;
                     tt.tiefe      = verbleibendeTiefe;
                     tt.typ        = TT_BETA;
                     tt.bpiZugId   = zugstapel[spiel.getStufe()][i].z.id; //Cutoff-Zug
                 }
-
                 spiel.nn = nn;
                 return beta;
             }
-
             alpha = wertung;
         }
     }
@@ -312,7 +358,6 @@ int bp (Spielfeld & spiel, int farbe, int alpha, int beta, int stufe, int _stopp
     // ===== PATT/MATT-ERKENNUNG  =====
     if (nn == 0) {
         // Prüfe DIREKT ob im Schach:
-
         spiel.find_kings();
         int king = (farbe > 0) ? spiel.wking : spiel.bking;
 
@@ -326,9 +371,10 @@ int bp (Spielfeld & spiel, int farbe, int alpha, int beta, int stufe, int _stopp
     // ============================================================
     // Nur speichern wenn wir mindestens so tief gesucht haben
     // wie ein eventuell vorhandener alter Eintrag
-    if (tt.typ == TT_LEER || verbleibendeTiefe >= tt.tiefe) {
+    if (!sucheAbbrechen && (tt.typ == TT_LEER || verbleibendeTiefe >= tt.tiefe)) {
         tt.schluessel = hash;
         tt.tiefe      = verbleibendeTiefe;
+        tt.wert = alpha;
 
         if (alpha <= alpha_anfang) {
             tt.typ  = TT_ALPHA;  // Fail-low: kein Zug besser als alpha
