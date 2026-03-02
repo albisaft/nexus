@@ -234,7 +234,7 @@ beginning:
             // wichtige Initkommandos - wo man antworten muss
 
             if (command == "uci") {
-                cout << "id name NEXUS 260225 Zeit + TT Fix\n";
+                cout << "id name NEXUS 260227 Time Universal\n";
                 cout << "id author Albrecht Fiebiger & Stefan Werner\n";
                 cout << "uciok\n";
             }
@@ -376,23 +376,20 @@ beginning:
                 int Zeitfaktor = (zug_nummer <= 120) ? (60 - zug_nummer / 4) : 30;
                 double geplanteZugzeitMs = (double)Restzeit / (double)Zeitfaktor;
 
-                const int zeitReserveMs = 50;
+                // Wir schätzen die ursprüngliche Bedenkzeit
+                double prognose = (double)Restzeit + ((double)zug_nummer * 2.0 / 3.0 - 1.0) * geplanteZugzeitMs;
 
-                double notbremseMs = geplanteZugzeitMs * 9.0;
+                double Schwelle_1 = 0.044 * prognose;
+                double Schwelle_2 = 0.175 * (double)Restzeit;
+
+                 double notbremseMs = std::min(Schwelle_1, Schwelle_2);
 
                 // Mindestboden: in Zeitnot nicht in Millisekunden-Panik verfallen
                 if (notbremseMs < 200.0)
                     notbremseMs = 200.0;
 
-                // Spike-Schutz: Kein Zug darf mehr als 2,75 Sek. ODER 17,5%
-                // der Restzeit fressen. Das schützt die Zeit für das Endspiel.
-                double deckelMs = 0.175 * (double)Restzeit;
-                if (deckelMs > 2750.0)
-                    deckelMs = 2750.0;
-                if (notbremseMs > deckelMs)
-                    notbremseMs = deckelMs;
-
                 // Letzte Sicherheit: Immer die Reserve zur Uhr lassen
+                const int zeitReserveMs = 50;
                 double maximalMs = (double)Restzeit - zeitReserveMs;
                 if (maximalMs < 10.0)
                     maximalMs = 10.0;
